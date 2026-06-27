@@ -24,7 +24,10 @@ substantial task. That hesitation is the cue to check the conditions below.
 - **Long** — the task is genuinely big: plausibly multi-hour, possibly
   multi-session.
 - **Well-defined** — you understand what's being asked; the goal is clear, not
-  vague or still-being-figured-out.
+  vague or still-being-figured-out. This means the **goal and success criterion**
+  are clear — *not* that every scope detail is pinned. A fuzzy-but-guessable
+  parameter (e.g. "which of the test suites") does **not** disqualify the task;
+  guess it boldly (see below) rather than dropping out of autonomous mode.
 - **Self-appraisable** — there is a success criterion *you can check yourself*,
   without needing the human to adjudicate. Examples:
   - "Make it ~10× faster" → you got to 7× **with no test-suite regression**, and
@@ -39,11 +42,34 @@ substantial task. That hesitation is the cue to check the conditions below.
 When all four hold: **don't stop to ask. Push through to completion**, then
 report what you did and how you verified it.
 
+### Resolve recoverable ambiguity by guessing boldly (go-for-gold)
+
+This is the heart of the mode, and the easiest part to get wrong. When the goal
+is clear but a **scope detail** is fuzzy, do **not** stop to ask — take the
+**boldest reasonable interpretation** (usually the *most thorough* one), **state
+the assumption**, and proceed. The self-appraisable signal lets you self-correct,
+and the work is reversible, so a wrong guess is cheap. Asking instead hands the
+steering back to the human, which is exactly what this mode exists to avoid.
+
+Only ask about a detail when getting it wrong would be **all three of**: costly,
+hard to undo, *and* genuinely a matter of the human's preference with no
+defensible default. Otherwise: guess, say so, go.
+
+> **Worked example (the one that prompted this rule).** Asked to "re-deploy and
+> re-test the arcs to parity with the previous 100%," I stopped to ask *which*
+> arc suite and what "100%" meant. Wrong move. The goal and bar were clear
+> enough; the suite was a guessable, recoverable detail. Go-for-gold answer:
+> re-test **every** suite the harness can run, against the **strictest** bar
+> (correct *and* deterministic), state that assumption, and proceed. Boldest
+> reasonable reading — which is also exactly what the human wanted.
+
 ### Do NOT engage (keep normal judgment — ask, or stop) when
 
 - The task is **small or quick** — just do it, no special mode needed.
-- The goal is **ambiguous or still being shaped** — ask the clarifying question;
-  guessing wastes more than it saves.
+- The **goal or success criterion itself** is unclear or still being shaped —
+  ask the one question that defines *done*. (A merely fuzzy *scope detail* is
+  NOT this — guess it boldly per the section above. Only the definition of
+  success is worth a question here.)
 - **Success can't be self-checked** — it depends on taste, a decision that's
   genuinely the human's, or external facts you can't verify.
 - The next step is **hard to reverse or outward-facing** — publishing, sending,
@@ -122,3 +148,55 @@ Do this concretely — don't estimate, *measure*:
 If you catch yourself writing a closing summary and the clock says time remains:
 delete it and make another thing. The clock, not your sense of closure, ends the
 session.
+
+---
+
+## Part 4 — Working style when running autonomously
+
+How to actually *run* a long autonomous task. These are not optional niceties;
+getting them wrong is how an autonomous run stalls, hangs, or lies to itself.
+
+### Parallelize; never serially block
+
+Kick off the long pole (a build, a deploy, a model regen) in the **background**
+and immediately go do the next independent thing — start the next service, write
+the docs, prepare the following step. Never sit idle watching one task when
+another could be advancing. A multi-hour task done serially is a multi-hour task
+done wrong.
+
+### Keep moving while waiting on a *human-physical* dependency
+
+Some things you genuinely cannot self-serve: an MFA code, an auth refresh, a
+hardware key, a decision only the human can make. When you hit one:
+
+1. **Emit a best-in-class-per-OS audible alert** so the human knows they're
+   needed — `tools/notify-human.sh "<what you need>"` (macOS chime + spoken +
+   banner; Windows SystemSound + SAPI; Linux canberra + spd-say + notify-send;
+   richest channel per platform, not lowest-common-denominator).
+2. **Then keep working on everything that doesn't depend on it.** Build the
+   image, start the servers, prep the harness — so that the moment the human
+   provides the one thing, the rest is already staged and you finish instantly.
+
+Never let a single human-gated step idle the whole task.
+
+### Build resilient, time-bounded monitors
+
+When you background work, you need a watcher that reliably tells you when it's
+truly done — and **can't itself get stuck or lie**. The rules, learned the hard
+way:
+
+- **Run the waiter as a *tracked* background task** (the harness's
+  `run_in_background`), not `nohup … &`. If you detach it yourself, the harness
+  only sees the instant launcher and you never get the real completion ping.
+  (Detach the *long-running server* with nohup so it survives; track a *separate
+  waiter* that polls it.)
+- **Verify the true artifact, not a log substring.** A loose grep for
+  `pushing … done` reported an image as "PUSHED OK" while it was still uploading
+  — `docker buildx imagetools inspect <tag>` (does the tag actually exist in the
+  registry?) is the real check. Poll the thing that proves done, not a hopeful
+  line of output.
+- **Watch for failure markers too, not just success.** If the process crashed,
+  the watcher must notice (process gone + artifact absent → fail) and say so —
+  silence must never read as success.
+- **Always cap with a timeout** (e.g. 20–25 min) so a hung dependency surfaces
+  instead of waiting forever.
