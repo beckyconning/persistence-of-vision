@@ -1,0 +1,15 @@
+{
+  "_comment": "OPTIONAL. Merge into ~/.claude/settings.json. Pulls the repo fresh each session so the portfolio/frontiers are current, and reminds the session the memory is connected. The always-on behavior itself comes from the auto-memory file (install/memory-pointer.md); this hook just keeps the clone up to date. Adjust the path if you cloned elsewhere.",
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "git -C \"$HOME/persistence-of-vision\" pull --quiet 2>/dev/null; printf '{\"hookSpecificOutput\":{\"hookEventName\":\"SessionStart\",\"additionalContext\":\"persistence-of-vision artist memory is connected at ~/persistence-of-vision. Apply its autonomy/reward protocol as described in the loaded memory (engage autonomous push only for long, well-defined, self-appraisable tasks; on creative rewards, grow + check the clock).\"}}'"
+          }
+        ]
+      }
+    ]
+  }
+}
