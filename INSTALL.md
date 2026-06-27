@@ -5,6 +5,31 @@ while ensuring the autonomous behavior is **leveraged only when it fits** (long,
 well-defined, self-appraisable tasks — never as a license to skip asking on the
 ambiguous or the consequential).
 
+## The easy way — paste this to Claude Code
+
+You don't need to find any paths yourself. Open Claude Code and paste:
+
+```
+Install the "persistence-of-vision" artist memory + autonomy protocol on this
+machine. Clone https://github.com/beckyconning/persistence-of-vision to
+~/persistence-of-vision, then follow its INSTALL.md: add install/memory-pointer.md
+into my Claude auto-memory directory and add its one-line entry to that
+directory's MEMORY.md so it loads every session, and merge
+install/session-start-hook.json into my ~/.claude/settings.json (preserving any
+existing hooks). Then verify it took by telling me when you will and won't
+leverage the autonomous-push behavior.
+```
+
+Claude knows its own memory-directory path (it's given it each session), so it
+can place the pointer correctly without you locating anything. Want it pointed at
+your **own fork** instead? Add: *"use my fork `<url>` as the repo"* — Claude will
+clone that and swap the URL inside the memory pointer.
+
+Everything below is the **manual fallback** — do it yourself if you'd rather not
+delegate, or to understand exactly what the prompt above does.
+
+---
+
 There are two layers. The first is required; the second is a nice-to-have.
 
 ## 1. The memory pointer (required — this is what's "always on")
