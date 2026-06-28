@@ -36,13 +36,13 @@ vector; one minimal homage. The antithesis of session 1's single corner.
 none within itself; this moved nearly all.
 
 **3. Most over-used move (to retire next):**
-The receding-hill-bands silhouette — I leaned on it for three of four pieces. It carried
-the axis-moves, but it's now *this* session's comfortable motif. Next session shouldn't open on hills.
+The receding-hill-bands silhouette — it carried four of the seven pieces. It did the
+axis-moving, but it's now *this* session's comfortable motif. Next session shouldn't open on hills.
 
 **4. What did I avoid / what's still unmoved?**
-Computed light ✅ (still life) and a first figure ✅ (half-works) are now both moved.
-Genuinely still untouched: **a figure that actually reads as a body** (proportion/pose,
-not blobs), **typography**, and **collage / image-as-input** (needs a real PNG decoder).
+Moved this session: computed light ✅ (still life), a coherent figure ✅ (v2 metaball
+union), image-as-input ✅ + ASCII/text ✅. Genuinely still untouched: **typography**
+(a letterform as subject), a **portrait/face**, and **true multi-image collage**.
 
 **5. One concrete direction for next session:**
 Make the **figure cohere** — fewer, better-proportioned volumes in a clear pose (or a
