@@ -25,9 +25,10 @@ it now) — change the *environment* next, not just the subject. Still genuinely
 2. **Image-as-input / collage.** Take an existing image and transform it — never
    done; would exercise a real PNG *decoder* beyond filter-0. (Still the cleanest
    genuinely-untouched axis.)
-3. **Push the ray-marcher further** (now that it exists): reflections / a second GI
-   bounce (mirror floor), a genuinely sculpted `smin` composition (not a blob), or
-   **hard interior light in the dark** — escape the dusk-gradient comfort zone.
+3. **Push the ray-marcher further** (s4 already did reflections ✅ + hard-key
+   chiaroscuro ✅): next = a genuinely *designed* `smin` composition (not one blob), a
+   **true interior** (walls + bounced fill, not an open void), or **inter-reflection**
+   (the reflected ray reflects again).
 4. **An off-centre / asymmetric composition.** Deliberately break the middle-of-frame
    habit — rule-of-thirds subject, a crop, a diptych, tension via empty space.
 

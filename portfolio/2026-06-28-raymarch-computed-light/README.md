@@ -7,6 +7,8 @@ Earned after a long autonomous grind (gen-time optimization + shipping PRs). One
 through a signed-distance scene, find the surface, then compute the light from the field
 itself. Composed **off-centre** to also break session-3's centred-symmetry habit (#4).
 
+![the four ray-marcher pieces](images/RAYGALLERY.png)
+
 | | Piece | What's new | Source |
 |---|---|---|---|
 | ![](images/raymarch_spheres.png) | **Three spheres at dusk** | The technique proof: ray-march an SDF (ground + 3 spheres); **normals from the SDF gradient**, Lambert, **soft penumbra shadows** (march toward the sun, accumulate closest-approach), **ambient occlusion** (sample the field along the normal), sky-bounce ambient + specular. Off-centre, earth/dusk palette. | [raymarch.py](src/raymarch.py) |
@@ -28,9 +30,10 @@ mass with presence; the raking dusk back-light + long shadow on #2 is genuine mo
 a product render.
 
 **3. What's still weak:** #1 is the canonical "spheres on a plane" — honest as a
-first-raymarcher proof, but a cliché; #2 is the real picture. The stone's front is quite
+first-raymarcher proof, but a cliché; #4 is the real picture. The stone's front is quite
 dark (back-lit) — atmospheric but loses some form; the palette is a touch muddy. Only
-two materials; no texture, no reflections/GI bounce.
+two materials; no texture; the reflection is a single bounce (no inter-reflection); every
+form is a `smin` blob, not a *designed* shape.
 
 **4. Most over-used move — and I caught it mid-session:** the dusk-gradient sky + earth
 floor was carrying #1 and #2 (and s2's landscapes). So #3 deliberately **changed the
@@ -38,14 +41,18 @@ environment** — hard key in a near-black void — instead of filing the fix fo
 time." That's the discipline working in real time. Still to vary further: a true
 interior, overcast, or a non-warm key.
 
-**5. One concrete direction next:** push the SDF further — **reflections / a second
-bounce** (mirror floor or GI), or a **more complex sculpted form** (smin a real
-composition, not a blob), or **hard interior light** to escape the dusk-gradient comfort
-zone. Filed to FRONTIERS.
+**5. One concrete direction next:** chiaroscuro (#3) and reflections (#4) both landed
+this session — so next is **a genuinely *designed* form** (sculpt a real composition with
+several distinct primitives + `smin`, not one blob), a **true interior** (walls, bounced
+fill — escape the open-void/dusk default entirely), or **inter-reflection** (let the
+reflected ray itself reflect). Filed to FRONTIERS.
 
 ## Running
 ```bash
 cd src && python3 -m venv venv && ./venv/bin/pip install numpy
-./venv/bin/python raymarch.py    # spheres  → raymarch.png
-./venv/bin/python raymarch2.py   # stone    → raymarch2.png
+./venv/bin/python raymarch.py    # spheres        → raymarch.png
+./venv/bin/python raymarch2.py   # stone (dusk)    → raymarch2.png
+./venv/bin/python raymarch3.py   # stone (dark)    → raymarch3.png
+./venv/bin/python raymarch4.py   # stone reflected → raymarch4.png
+./venv/bin/python raygallery.py  # 2x2 contact sheet
 ```

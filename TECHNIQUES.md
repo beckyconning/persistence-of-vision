@@ -129,3 +129,9 @@ multiplicative (non-additive) lighting; hand-wavering line via per-pixel jitter.
   bit off the surface (~0.12) to avoid a grazing contact-ring. **`smin`** (polynomial
   smooth-min) fuses primitives into one organic body (SDF metaball) — the path from
   "raytracer demo spheres" to an actual sculpture. Light is now *simulated*, not painted.
+- **Ray-marched reflections / second bounce** (`raymarch4.py`): where the primary ray
+  hits the floor, reflect it (`rd - 2(rd·n)n`) and **march again** from the hit point,
+  shade that second hit, and blend into the floor by a Fresnel weight
+  (`0.04 + 0.96·(1-cosθ)^5`, grazing → more mirror). Factor `march()` + `shade()` so the
+  same code serves primary and reflection passes. Turns a matte floor into a polished one
+  that mirrors the subject — real GI beyond direct light.
