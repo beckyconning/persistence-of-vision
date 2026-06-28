@@ -87,3 +87,8 @@ subject (a landscape) in four registers.
 multiplicative (non-additive) lighting; hand-wavering line via per-pixel jitter.
 
 **Retire next:** the receding-hill-bands silhouette (used 3/4 pieces this session).
+- **Still life — COMPUTED light** (`stilllife.py`): a tiny analytic renderer. Lambert
+  (`n·L`) + ambient + soft specular (reflected-ray `**24`) on spheres via per-pixel
+  normals `nz=sqrt(1-x²-y²)`; **real soft cast shadows** = each disc's silhouette
+  projected onto the ground along `L`, accumulated, box-blurred (cumsum) for penumbra.
+  First *simulated* (not painted) light + shadow. **The big new lever.**

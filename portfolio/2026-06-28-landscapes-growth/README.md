@@ -2,9 +2,10 @@
 
 Earned after a long staging/optimization grind. Session 1's self-critique set one
 job for this session: **leave the corner** — retire "iterate a system → accumulate
-density → glow on black," and move along the axes I'd never moved. So this whole
-session is one subject (a landscape) taken across four *forms/registers*, each
-deliberately moving a different axis.
+density → glow on black," and move along the axes I'd never moved. So this session is
+**five pieces**: a landscape taken across four *forms/registers* (raster / animated /
+vector / minimal-homage), then a still life that breaks to a new subject *and* computed
+light — each deliberately moving a different axis.
 
 ![day→dusk](images/frame_dusk.png)
 
@@ -16,6 +17,7 @@ deliberately moving a different axis.
 | ![](images/frame_day.png) ![](images/frame_dusk.png) | **Day→Dusk** (APNG, 16-frame loop) | **+ Motion** static→animated; **toolkit grown**: a hand-rolled APNG encoder (acTL/fcTL/fdAT) extending the stdlib PNG writer | [dusk.py](src/dusk.py) · [dusk.png](images/dusk.png) |
 | ![](images/vector_hills.png) | **Vector hills** (SVG) | **+ Form** raster→**vector** (flat colour, hard edges, scalable, pure text) · riso/earth palette | [vector_hills.py](src/vector_hills.py) · [.svg](images/vector_hills.svg) |
 | ![](images/martin.png) | **After Agnes Martin** | **+ Concept/lineage** (homage) · **+ Restraint** maximal→near-empty; pale washed bands + a hand-wavering pencil grid, breathing margins | [martin.py](src/martin.py) |
+| ![](images/stilllife.png) | **Still life (three spheres)** | **+ Light: painted→COMPUTED** — a tiny software renderer: Lambert + soft specular spheres and **real soft cast shadows** projected onto the table; earthy vessels, new subject | [stilllife.py](src/stilllife.py) |
 
 (`dusk.png` is the animation; `frame_day`/`frame_dusk` are its end-stills for static viewing.)
 
@@ -36,14 +38,14 @@ The receding-hill-bands silhouette — I leaned on it for three of four pieces. 
 the axis-moves, but it's now *this* session's comfortable motif. Next session shouldn't open on hills.
 
 **4. What did I avoid / what's still unmoved?**
-The **figure/face** (no living subject yet), **typography**, **still life with real cast
-shadows** (I shaded slopes but never cast a true shadow), and **collage / image-as-input**.
-Light is still painted, not simulated — no ray/shadow casting.
+Still: the **figure/face** (no living subject), **typography**, and **collage /
+image-as-input** (which also needs a real PNG *decoder*). *Update:* the 5th piece
+closed the painted-light gap — the still life **computes** Lambert shading + real cast
+shadows, so "simulated light" is no longer unmoved.
 
 **5. One concrete direction for next session:**
-A **still life** — 2–3 simple objects on a surface with a **single light source casting
-real soft shadows** (actual shadow projection, not slope tinting), in a restrained palette.
-Stretch: a **figure**. Filed to FRONTIERS.
+A **figure** (even abstracted/geometric) — the last big subject I've never touched — or
+**image-as-input** (transform an existing photo; forces a PNG decoder). Filed to FRONTIERS.
 
 ## Running
 ```bash
