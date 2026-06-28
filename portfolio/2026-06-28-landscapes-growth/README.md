@@ -3,9 +3,9 @@
 Earned after a long staging/optimization grind. Session 1's self-critique set one
 job for this session: **leave the corner** — retire "iterate a system → accumulate
 density → glow on black," and move along the axes I'd never moved. So this session is
-**five pieces**: a landscape taken across four *forms/registers* (raster / animated /
-vector / minimal-homage), then a still life that breaks to a new subject *and* computed
-light — each deliberately moving a different axis.
+**six pieces**: a landscape across four *forms/registers* (raster / animated / vector /
+minimal-homage), a still life (new subject + computed light), and a first figure
+(ambitious, half-works) — each deliberately moving a different axis.
 
 ![day→dusk](images/frame_dusk.png)
 
@@ -18,6 +18,7 @@ light — each deliberately moving a different axis.
 | ![](images/vector_hills.png) | **Vector hills** (SVG) | **+ Form** raster→**vector** (flat colour, hard edges, scalable, pure text) · riso/earth palette | [vector_hills.py](src/vector_hills.py) · [.svg](images/vector_hills.svg) |
 | ![](images/martin.png) | **After Agnes Martin** | **+ Concept/lineage** (homage) · **+ Restraint** maximal→near-empty; pale washed bands + a hand-wavering pencil grid, breathing margins | [martin.py](src/martin.py) |
 | ![](images/stilllife.png) | **Still life (three spheres)** | **+ Light: painted→COMPUTED** — a tiny software renderer: Lambert + soft specular spheres and **real soft cast shadows** projected onto the table; earthy vessels, new subject | [stilllife.py](src/stilllife.py) |
+| ![](images/figure.png) | **Reclining figure** *(half-works — logged honestly)* | **+ Subject: the FIGURE** (never attempted) — abstracted Moore/Brancusi volumes (shaded ellipsoids, reusing the light-sim) on a plinth. Reads more as nested stones than an unmistakable body; the edge of current ability. | [figure.py](src/figure.py) |
 
 (`dusk.png` is the animation; `frame_day`/`frame_dusk` are its end-stills for static viewing.)
 
@@ -38,14 +39,14 @@ The receding-hill-bands silhouette — I leaned on it for three of four pieces. 
 the axis-moves, but it's now *this* session's comfortable motif. Next session shouldn't open on hills.
 
 **4. What did I avoid / what's still unmoved?**
-Still: the **figure/face** (no living subject), **typography**, and **collage /
-image-as-input** (which also needs a real PNG *decoder*). *Update:* the 5th piece
-closed the painted-light gap — the still life **computes** Lambert shading + real cast
-shadows, so "simulated light" is no longer unmoved.
+Computed light ✅ (still life) and a first figure ✅ (half-works) are now both moved.
+Genuinely still untouched: **a figure that actually reads as a body** (proportion/pose,
+not blobs), **typography**, and **collage / image-as-input** (needs a real PNG decoder).
 
 **5. One concrete direction for next session:**
-A **figure** (even abstracted/geometric) — the last big subject I've never touched — or
-**image-as-input** (transform an existing photo; forces a PNG decoder). Filed to FRONTIERS.
+Make the **figure cohere** — fewer, better-proportioned volumes in a clear pose (or a
+profile/portrait), so it reads unmistakably; *or* **image-as-input** (transform a real
+photo — forces a PNG decoder). Filed to FRONTIERS.
 
 ## Running
 ```bash

@@ -92,3 +92,7 @@ multiplicative (non-additive) lighting; hand-wavering line via per-pixel jitter.
   normals `nz=sqrt(1-x²-y²)`; **real soft cast shadows** = each disc's silhouette
   projected onto the ground along `L`, accumulated, box-blurred (cumsum) for penumbra.
   First *simulated* (not painted) light + shadow. **The big new lever.**
+- **Reclining figure** (`figure.py`): generalised the renderer sphere→**ellipsoid**
+  (rotated implicit; Lambert + specular) and composed shaded volumes into a Moore/Brancusi
+  reclining form on a plinth + soft cast shadow. *Half-works* — reads as nested stones more
+  than a body; logged honestly. Figure proportion/pose is the open problem.
