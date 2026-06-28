@@ -99,3 +99,7 @@ multiplicative (non-additive) lighting; hand-wavering line via per-pixel jitter.
 - **Figure v2 — metaball union** (`figure2.py`): the fix for v1's "nested stones". Per
   pixel keep the nearest (max surface-height) ellipsoid and shade ONE unified normal →
   overlapping volumes fuse into a single continuous body. Key lever for organic forms.
+- **ASCII art / image-as-input** (`ascii_art.py`): first time an image is an *input* —
+  a filter-0 PNG **decoder** reads my own landscape, block-averages to a char grid,
+  contrast-stretches, maps luminance→70-char ramp → text canvas (`landscape_ascii.txt`).
+  New axes: image-as-input + ASCII/text form.
