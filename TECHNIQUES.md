@@ -120,3 +120,12 @@ multiplicative (non-additive) lighting; hand-wavering line via per-pixel jitter.
   cross-section turns each crease into a horizontal ridge ("melting" face). Fix:
   **smooth the 1-D contour curves** (moving average) before building the section.
   Feather a hair mass with a heavy box-blur of its boolean region (no hard hairline).
+- **SDF ray-marcher / computed light** (`raymarch.py`, `raymarch2.py`): vectorised in
+  numpy — per-pixel ray marched through a signed-distance scene (sphere-trace, ~100
+  steps); **normals = SDF gradient** (6 finite-diff evals); **soft penumbra shadows** by
+  marching toward the sun and accumulating `min(k·h/t)`; **AO** by sampling the field
+  along the normal; sky-bounce ambient + spec + distance fog + gamma. Lessons: clamp the
+  AO term `≥0` and use ≥8 samples or you get concentric rings; start the shadow march a
+  bit off the surface (~0.12) to avoid a grazing contact-ring. **`smin`** (polynomial
+  smooth-min) fuses primitives into one organic body (SDF metaball) — the path from
+  "raytracer demo spheres" to an actual sculpture. Light is now *simulated*, not painted.

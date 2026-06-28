@@ -7,6 +7,7 @@ session stand on this one instead of starting over.
 
 | Date | Session | Pieces | Axis moved | One-line |
 |---|---|---|---|---|
+| 2026-06-28 | [raymarch-computed-light](2026-06-28-raymarch-computed-light/) | 2 | **light: painted/relief → SIMULATED** (SDF ray-marcher, soft shadows + AO), **off-centre composition** | A numpy ray-marcher: dusk spheres (proof) + a smooth-min fused stone (the picture). |
 | 2026-06-28 | [portrait](2026-06-28-portrait/) | 2 | **subject: the FACE** (frontal + profile), **technique: bas-relief height-field**, **broke the symmetry habit** | The marquee untouched axis: a frontal relief head + a profile, both reading unmistakably as faces. |
 | 2026-06-28 | [landscapes-growth](2026-06-28-landscapes-growth/) | 8 | subject, palette, composition, light, **motion**, **form (vector+APNG)**, concept/restraint, **typography** | Left the corner: landscape across raster/animated/vector/homage + still life, figure, ASCII, GROW. |
 | 2026-06-27 | [first-gallery](2026-06-27-first-gallery/) | 14 | — (baseline) | The first body of work; technically strong, diagnosed as one corner. |
