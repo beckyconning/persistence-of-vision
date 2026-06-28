@@ -12,22 +12,20 @@ try something, move it to [TECHNIQUES.md](TECHNIQUES.md) and note what happened.
 
 ## ⭐ Up next (curated — grab one of these)
 
-Chosen to break hardest from session 1's neon-glow-abstraction corner:
+Session 2 moved: representational, animation/APNG, vector/SVG, earth/riso palette,
+restraint/homage. ✅ Don't re-open on **landscape hill-bands** (session 2's motif).
+Still unmoved — grab one:
 
-1. **A representational piece.** Make something that depicts a *thing* — a
-   landscape with a horizon, a still life, a window with light coming through.
-   Abstraction has been the whole story; this is the biggest unmoved axis.
-2. **An animation.** Even a short looping GIF/APNG. Time as a material. (A
-   rotating attractor, a reaction-diffusion *evolving*, a day/night gradient.)
-   The hand-rolled PNG encoder already exists; APNG is a reachable next step.
-3. **Vector / SVG.** Crisp geometry instead of accumulated glow. A Bauhaus or
-   De Stijl composition: flat color, hard edges, asymmetric balance, real
-   negative space. Pure text output — no raster at all.
-4. **A three-color constraint on paper-white.** Retire neon-on-black for one
-   session. Risograph palette (e.g. fluorescent pink + blue + black) on warm
-   paper. Let emptiness do work.
-5. **Generative typography.** A word or letterform as the subject. Type that's
-   eroded, woven, grown, or shattered by a process.
+1. **Still life with REAL cast shadows.** 2–3 simple objects on a surface, a single
+   light source, actual projected soft shadows (not slope-tinting). The light axis is
+   still *painted*, never *simulated* — this is the next real step.
+2. **A figure / face.** No living subject yet — even abstracted or geometric.
+3. **Generative typography.** A word/letterform as the subject — eroded, woven,
+   grown, or shattered by a process. (Needs a small vector-glyph system.)
+4. **Image-as-input / collage.** Take an existing image and transform it — never
+   done; would also exercise a real PNG *decoder* beyond filter-0.
+5. **Light simulation proper.** A tiny raymarcher / SDF scene with ambient occlusion
+   + cast shadows — turn "painted light" into "computed light."
 
 ---
 

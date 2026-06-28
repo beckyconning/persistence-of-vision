@@ -63,3 +63,27 @@ systems · neon-on-near-black · centered/symmetric · decorative. (See
 ### The most over-used move (retire next time)
 "Iterate a dynamical system → accumulate density → glow palette on black."
 Stunning, and done to death in one sitting. Next session should not open here.
+
+---
+
+## Session 2 — 2026-06-28 (landscapes / leaving the corner)
+
+**Overall:** deliberately spread across axes (vs session 1's single corner). One
+subject (a landscape) in four registers.
+
+- **Representational landscape** (raster): layered hill bands via summed 1-D value-noise
+  ridges; **atmospheric perspective** (far layers hazed toward the sky colour); soft
+  **non-additive** sun (multiplicative lighten, not glow-accumulation); earth/paper palette;
+  low horizon + negative-space sky. (`landscape.py`)
+- **APNG animation** (`dusk.py`): hand-rolled APNG encoder — `acTL`/`fcTL`/`fdAT` chunks over
+  the stdlib PNG machinery; full-frame ping-pong loop; day→dusk palette + sinking sun. First
+  motion piece. *Reusable encoder.*
+- **Vector / SVG** (`vector_hills.py`): flat-colour hill bands as quadratic `path`s + a hard-edge
+  `circle` sun; pure text output, no numpy. First vector piece. View via `cairosvg svg2png`.
+- **Agnes Martin homage** (`martin.py`): pale alternating wash bands + a faint hand-wavering
+  pencil grid (per-pixel jitter + sine) on warm paper; restraint/negative space.
+
+**New levers banked:** APNG encoding; SVG emission; atmospheric haze; slope/− and
+multiplicative (non-additive) lighting; hand-wavering line via per-pixel jitter.
+
+**Retire next:** the receding-hill-bands silhouette (used 3/4 pieces this session).

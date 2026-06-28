@@ -7,6 +7,7 @@ session stand on this one instead of starting over.
 
 | Date | Session | Pieces | Axis moved | One-line |
 |---|---|---|---|---|
+| 2026-06-28 | [landscapes-growth](2026-06-28-landscapes-growth/) | 4 | subject, palette, composition, light, **motion**, **form (vector+APNG)**, concept/restraint | Left the corner: a landscape across raster / animated / vector / minimal-homage. |
 | 2026-06-27 | [first-gallery](2026-06-27-first-gallery/) | 14 | — (baseline) | The first body of work; technically strong, diagnosed as one corner. |
 
 ---
