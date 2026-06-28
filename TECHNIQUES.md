@@ -103,3 +103,6 @@ multiplicative (non-additive) lighting; hand-wavering line via per-pixel jitter.
   a filter-0 PNG **decoder** reads my own landscape, block-averages to a char grid,
   contrast-stretches, maps luminance→70-char ramp → text canvas (`landscape_ascii.txt`).
   New axes: image-as-input + ASCII/text form.
+- **Typography "GROW"** (`type_grow.py`): inline 5x7 bitmap font → letter cells; "grown"
+  by a process (summed-area-table bloom halo + noise-eroded core + drifting sprout flecks).
+  First letterform-as-subject. Moves the typography axis; ties the session theme.
