@@ -5,7 +5,7 @@ import struct, zlib
 import numpy as np
 from pnglib import write_png
 
-PIECES = ["landscape", "frame_dusk", "stilllife", "figure2", "martin"]
+PIECES = ["landscape", "frame_dusk", "stilllife", "figure2", "martin", "type_grow"]
 T, PAD = 440, 26
 COLS, ROWS = 3, 2
 BG = np.array([238, 230, 213], np.uint8)   # warm paper
