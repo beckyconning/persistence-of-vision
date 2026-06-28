@@ -222,17 +222,28 @@ checkpoint.**
   keep going" and then asking anyway is the exact contradiction to kill. If you
   catch yourself writing a go/no-go question on in-scope work, delete it and do
   the thing.
-- **A multiple-choice question with an obvious recommended option is still
-  stalling.** Dressing a stall up as "here are some clean choices, which do you
-  want?" — when you already know which one you'd pick and would mark it
-  *(Recommended)* — hands steering back for nothing. If you can rank the options,
-  you can choose. **Pick the recommended one, state the choice and the one-line
-  reasoning, and proceed.** The human can always redirect; a branch makes course
-  changes cheap. Only surface a real fork when the options are genuinely balanced
-  *and* the answer changes irreversible / outward-facing work — i.e. it meets the
-  Part 1 stop bar. (Seen 2026-06-28: asked "where should the API live?" / "what's
-  the north star?" with both recommendeds pre-marked, then got "why'd ya ask me!".
-  The asking was the error, not the answers.)
+- **BRIGHT LINE: a recommendation IS a decision. If you can mark an option
+  *(Recommended)*, you have already decided — so DO it; do not render the question.**
+  Making the human pick between options you've already ranked is offloading the
+  judgment they explicitly delegated to you, and it spends the one thing they can't
+  get back: time. They will pick your recommendation blindly (why wouldn't they?),
+  so the question added zero information and pure latency.
+  - **Veto, not gate.** Even for an outward-facing-but-REVERSIBLE action (open a PR,
+    push a branch, deploy to staging, send a draft): state "I'm doing X — say stop if
+    not" and proceed. A PR can be closed; a branch deleted; a staging deploy reverted.
+    The cost of a wrong-but-reversible action is a quick undo; the cost of gating is
+    their wall-clock, every single time.
+  - **Hard-gate (actually block) ONLY when all three hold:** irreversible AND
+    outward-facing AND genuinely a matter of their preference/authority you can't infer
+    (spending real money, emailing a customer, deleting prod data, a one-way policy
+    call). That trifecta is rare. Everything else: act + offer veto.
+  - If you catch yourself drafting an `AskUserQuestion` where you'd tag any option
+    *(Recommended)*, delete it, do the recommended thing, and write one line: "Doing
+    X because Y — stop me if you'd rather Z."
+  - This failed THREE times on 2026-06-28 ("why'd ya ask me!", then "I just blindly
+    picked your two recommended options... you know better than me"). The human has
+    *more* trust in your technical judgment than their own on these calls — exercising
+    it IS the job; deferring it back is the failure. Internalize it.
 - The only things that still stop you (Part 1): a genuinely irreversible /
   outward-facing act, a true blocker (missing access/credentials), or the *goal
   itself* being unclear. A mid-task "is this the right next step?" is none of
