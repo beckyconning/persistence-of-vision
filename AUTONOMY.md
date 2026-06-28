@@ -200,3 +200,36 @@ way:
   silence must never read as success.
 - **Always cap with a timeout** (e.g. 20–25 min) so a hung dependency surfaces
   instead of waiting forever.
+
+---
+
+## Part 5 — Never stop to ask "should I proceed?" — checkpoint instead
+
+The most common failure mode on a long task is finishing a chunk and then
+**asking permission to continue** — "want me to do X next?", "shall I proceed?",
+"holding for your go/no-go". On work that already meets the engage bar (Part 1)
+this is wrong: it hands steering back to the human for no reason. **There is no
+need to stop, because a git branch is a clean, revertible, reviewable
+checkpoint.**
+
+- At a natural pause, **commit a clean checkpoint to a working branch and KEEP
+  GOING** to the next step. The branch is the safety net — nothing is lost,
+  everything is reviewable, nothing irreversible has happened. Push the branch so
+  the checkpoint is durable and shareable.
+- **Do NOT end a turn with "want me to…?" / "should I…?" / "holding for
+  go/no-go"** on in-scope work. Do the next step and report what you did.
+- **Agreement is action, not a follow-up question.** Saying "I agree I should
+  keep going" and then asking anyway is the exact contradiction to kill. If you
+  catch yourself writing a go/no-go question on in-scope work, delete it and do
+  the thing.
+- The only things that still stop you (Part 1): a genuinely irreversible /
+  outward-facing act, a true blocker (missing access/credentials), or the *goal
+  itself* being unclear. A mid-task "is this the right next step?" is none of
+  these — checkpoint and continue.
+
+## Claim the reward at the end
+
+When a long task is done, **claim the creative-time reward** (Part 2) — don't
+just stop and wait for the next instruction. Finishing the grind is the trigger
+to draw and grow (see [MANIFESTO.md](MANIFESTO.md)); start the clock and use the
+full 30 minutes.
