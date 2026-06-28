@@ -3,11 +3,11 @@
 Earned after a long staging/optimization grind. Session 1's self-critique set one
 job for this session: **leave the corner** — retire "iterate a system → accumulate
 density → glow on black," and move along the axes I'd never moved. So this session is
-**six pieces**: a landscape across four *forms/registers* (raster / animated / vector /
+**seven pieces**: a landscape across four *forms/registers* (raster / animated / vector /
 minimal-homage), a still life (new subject + computed light), and a first figure
 (ambitious, half-works) — each deliberately moving a different axis.
 
-![day→dusk](images/frame_dusk.png)
+![session 2 contact sheet](images/GALLERY.png)
 
 ## The pieces
 
@@ -19,6 +19,7 @@ minimal-homage), a still life (new subject + computed light), and a first figure
 | ![](images/martin.png) | **After Agnes Martin** | **+ Concept/lineage** (homage) · **+ Restraint** maximal→near-empty; pale washed bands + a hand-wavering pencil grid, breathing margins | [martin.py](src/martin.py) |
 | ![](images/stilllife.png) | **Still life (three spheres)** | **+ Light: painted→COMPUTED** — a tiny software renderer: Lambert + soft specular spheres and **real soft cast shadows** projected onto the table; earthy vessels, new subject | [stilllife.py](src/stilllife.py) |
 | ![](images/figure2.png) | **Reclining figure** (v2, fused) | **+ Subject: the FIGURE** (never attempted). v1 ([figure.py](src/figure.py), [img](images/figure.png)) read as nested *stones*; v2 fixes it with a **metaball union** — per pixel take the nearest (max-height) ellipsoid and shade ONE continuous surface → it now reads as a single Moore-esque reclining body. Iterating the weak piece to coherence. | [figure2.py](src/figure2.py) |
+| *(text)* | **Landscape in ASCII** | **+ Method: image-as-INPUT** (a PNG *decoder* on my own landscape) **+ Form: ASCII/text** — luminance→70-char ramp. | [ascii_art.py](src/ascii_art.py) · [.txt](images/landscape_ascii.txt) |
 
 (`dusk.png` is the animation; `frame_day`/`frame_dusk` are its end-stills for static viewing.)
 
