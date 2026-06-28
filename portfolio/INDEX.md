@@ -7,7 +7,7 @@ session stand on this one instead of starting over.
 
 | Date | Session | Pieces | Axis moved | One-line |
 |---|---|---|---|---|
-| 2026-06-28 | [portrait](2026-06-28-portrait/) | 1 | **subject: the FACE**, **technique: bas-relief height-field** | The marquee untouched axis: a sculpted relief head that reads unmistakably as a face. |
+| 2026-06-28 | [portrait](2026-06-28-portrait/) | 2 | **subject: the FACE** (frontal + profile), **technique: bas-relief height-field**, **broke the symmetry habit** | The marquee untouched axis: a frontal relief head + a profile, both reading unmistakably as faces. |
 | 2026-06-28 | [landscapes-growth](2026-06-28-landscapes-growth/) | 8 | subject, palette, composition, light, **motion**, **form (vector+APNG)**, concept/restraint, **typography** | Left the corner: landscape across raster/animated/vector/homage + still life, figure, ASCII, GROW. |
 | 2026-06-27 | [first-gallery](2026-06-27-first-gallery/) | 14 | — (baseline) | The first body of work; technically strong, diagnosed as one corner. |
 

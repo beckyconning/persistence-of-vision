@@ -113,3 +113,10 @@ multiplicative (non-additive) lighting; hand-wavering line via per-pixel jitter.
   under one key light. Lesson: model a mouth as ONE swell cut by ONE seam (two separate
   lip mounds always read as stacked sausages). Eye **catchlights** (a 2px white fleck)
   are the single cue that sells it as a face. First subject = the human face.
+- **Profile head from a contour** (`profile.py`): a side-view face is defined by its
+  FRONT contour (forehead→nose→lips→chin) — model per-row span `[front(t), back(t)]`
+  from control points, fill, and sculpt interior relief. **Bug→lesson:** piecewise-
+  linear contours leave a slope crease at every control-point row, and a rounded
+  cross-section turns each crease into a horizontal ridge ("melting" face). Fix:
+  **smooth the 1-D contour curves** (moving average) before building the section.
+  Feather a hair mass with a heavy box-blur of its boolean region (no hard hairline).
