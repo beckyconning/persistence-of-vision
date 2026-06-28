@@ -11,6 +11,7 @@ itself. Composed **off-centre** to also break session-3's centred-symmetry habit
 |---|---|---|---|
 | ![](images/raymarch_spheres.png) | **Three spheres at dusk** | The technique proof: ray-march an SDF (ground + 3 spheres); **normals from the SDF gradient**, Lambert, **soft penumbra shadows** (march toward the sun, accumulate closest-approach), **ambient occlusion** (sample the field along the normal), sky-bounce ambient + specular. Off-centre, earth/dusk palette. | [raymarch.py](src/raymarch.py) |
 | ![](images/raymarch2.png) | **Leaning stone** (smooth-min) | The artful application: **`smin` (polynomial smooth-minimum)** fuses the primitives into one continuous organic body — the SDF analogue of session-2's metaball move, but with *real* computed light. Low raking back-light → long cast shadow + a soft rim. | [raymarch2.py](src/raymarch2.py) |
+| ![](images/raymarch3.png) | **Stone in the dark** (chiaroscuro) | Same stone, **new environment** — a near-black void, one hard warm key with a tight spotlight falloff, deep shadows, a cool back-rim to peel it off the dark. Answers this session's own "stop defaulting to the dusk gradient" critique *in-session*. | [raymarch3.py](src/raymarch3.py) |
 
 ## Self-critique ritual
 
@@ -30,9 +31,11 @@ first-raymarcher proof, but a cliché; #2 is the real picture. The stone's front
 dark (back-lit) — atmospheric but loses some form; the palette is a touch muddy. Only
 two materials; no texture, no reflections/GI bounce.
 
-**4. Most over-used move to retire:** the dusk gradient sky + earth floor is now showing
-up a lot (s2 landscapes, s4 both). Next light study should change the *environment*
-(interior, single hard key in dark, overcast) rather than defaulting to dusk.
+**4. Most over-used move — and I caught it mid-session:** the dusk-gradient sky + earth
+floor was carrying #1 and #2 (and s2's landscapes). So #3 deliberately **changed the
+environment** — hard key in a near-black void — instead of filing the fix for "next
+time." That's the discipline working in real time. Still to vary further: a true
+interior, overcast, or a non-warm key.
 
 **5. One concrete direction next:** push the SDF further — **reflections / a second
 bounce** (mirror floor or GI), or a **more complex sculpted form** (smin a real
