@@ -7,6 +7,7 @@ session stand on this one instead of starting over.
 
 | Date | Session | Pieces | Axis moved | One-line |
 |---|---|---|---|---|
+| 2026-06-29 | [image-as-input](2026-06-29-image-as-input/) | 2 | **method: image as OUTPUT → INPUT** (a real PNG *decoder* — all 5 filters + 5 colour types), **concept: self-reference** | A photomosaic: a face (and the reflected stone) rebuilt entirely from tiles of every prior portfolio piece — the corpus eating itself. |
 | 2026-06-28 | [raymarch-computed-light](2026-06-28-raymarch-computed-light/) | 4 | **light: painted/relief → SIMULATED** (SDF ray-marcher, soft shadows + AO), **off-centre composition** | A numpy ray-marcher: dusk spheres (proof) + a smooth-min fused stone (the picture). |
 | 2026-06-28 | [portrait](2026-06-28-portrait/) | 2 | **subject: the FACE** (frontal + profile), **technique: bas-relief height-field**, **broke the symmetry habit** | The marquee untouched axis: a frontal relief head + a profile, both reading unmistakably as faces. |
 | 2026-06-28 | [landscapes-growth](2026-06-28-landscapes-growth/) | 8 | subject, palette, composition, light, **motion**, **form (vector+APNG)**, concept/restraint, **typography** | Left the corner: landscape across raster/animated/vector/homage + still life, figure, ASCII, GROW. |

@@ -15,16 +15,19 @@ try something, move it to [TECHNIQUES.md](TECHNIQUES.md) and note what happened.
 Done so far — **don't re-open these**: landscape (s1–2) incl. **hill-bands motif**,
 still life w/ real cast shadows (s2 ✅), animation/APNG, vector/SVG, typography (s2 ✅),
 image-as-OUTPUT→ASCII (s2), the figure (s2 ✅), the **frontal symmetric face** (s3 ✅),
-**light-simulation / SDF ray-marcher** (s4 ✅), off-centre composition (s4 ✅).
+**light-simulation / SDF ray-marcher** (s4 ✅), off-centre composition (s4 ✅),
+**image-as-INPUT / photomosaic** (s5 ✅ — real PNG decoder, all 5 filters; corpus-rebuilds-an-image).
 Recurring habit to break: the **dusk-gradient sky + earth floor** (s2 + s4 both lean on
 it now) — change the *environment* next, not just the subject. Still genuinely unmoved:
 
 1. **A head in PROFILE or 3/4, with expression.** The s3 portrait reads but is
    frontal/symmetric/mask-stiff. Asymmetry forces real structure; add hair, a neck,
    an off-axis gaze, or a mood. (Builds on the bas-relief height-field tech.)
-2. **Image-as-input / collage.** Take an existing image and transform it — never
-   done; would exercise a real PNG *decoder* beyond filter-0. (Still the cleanest
-   genuinely-untouched axis.)
+2. **Image-as-input transforms BEYOND mosaic** (s5 ✅ built the decoder + a
+   photomosaic). Now use that decoder differently: a **Droste/recursive nest**
+   (decode → shrink → paste into itself), **channel-displacement / chromatic
+   glitch**, **pixel-sort**, or feed a photo through the s3 height-field relief
+   shader. The decoder (`2026-06-29-image-as-input/src/pngdecode.py`) is reusable.
 3. **Push the ray-marcher further** (s4 already did reflections ✅ + hard-key
    chiaroscuro ✅): next = a genuinely *designed* `smin` composition (not one blob), a
    **true interior** (walls + bounced fill, not an open void), or **inter-reflection**

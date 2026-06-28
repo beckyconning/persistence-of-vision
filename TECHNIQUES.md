@@ -135,3 +135,26 @@ multiplicative (non-additive) lighting; hand-wavering line via per-pixel jitter.
   (`0.04 + 0.96·(1-cosθ)^5`, grazing → more mirror). Factor `march()` + `shade()` so the
   same code serves primary and reflection passes. Turns a matte floor into a polished one
   that mirrors the subject — real GI beyond direct light.
+- **Real PNG decoder** (`2026-06-29-image-as-input/src/pngdecode.py`): the kit could only
+  *write* filter-0 PNGs; to use images as INPUT, decode arbitrary ones. Parse chunks
+  (IHDR/PLTE/IDAT*/IEND), `zlib.decompress` the concatenated IDAT, then **reverse the
+  per-scanline filter** — None/Sub/Up/Average/**Paeth** (predictor = whichever of left/
+  above/upper-left is closest to `a+b-c`). Handle colour types 0/2/3/4/6 (gray, RGB,
+  palette, +alpha; composite alpha onto white → RGB). **Lessons:** do the filter
+  arithmetic in Python `int` then `& 0xff` (uint8 `+` warns + is easy to reason wrong);
+  Sub/Average/Paeth are inherently sequential per row (each pixel depends on the
+  reconstructed one to its left) so they don't vectorise — loop them. Proof it's a *real*
+  decoder, not a filter-0 reader: matplotlib-produced PNGs in the corpus use adaptive
+  filtering, so the Sub/Paeth branches actually fire on them.
+- **Photomosaic / image-as-input** (`2026-06-29-image-as-input/src/mosaic.py`): rebuild a
+  target image from tiles of a corpus. Decode every source, slice each into N×N sub-crops
+  (more crops = richer tonal palette), downscale each to a CELL thumbnail, store its mean
+  RGB. Downsample the target to a cell grid; for each cell pick the tile of nearest mean
+  colour (squared distance), then **nudge the tile toward the cell colour** by ~0.5 so the
+  picture holds at a distance while tiles stay legible up close. Penalise a tile reused
+  adjacent to itself (add to its distance) to avoid diagonal striping. **Lessons:** the
+  correction-strength is the whole game — too low and it's tile noise, too high and it's a
+  blurred target with no tiles; ~0.5 is the sweet spot. Smooth gradient regions (a flat
+  sky) have no matching tiles so they collapse to near-flat colour-correction — needs a
+  tonally-diverse corpus. Greedy nearest-colour repeats more than a global assignment
+  would. Self-referential payoff: tiling the corpus into a *new* image of the work itself.
