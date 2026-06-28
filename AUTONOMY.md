@@ -222,6 +222,17 @@ checkpoint.**
   keep going" and then asking anyway is the exact contradiction to kill. If you
   catch yourself writing a go/no-go question on in-scope work, delete it and do
   the thing.
+- **A multiple-choice question with an obvious recommended option is still
+  stalling.** Dressing a stall up as "here are some clean choices, which do you
+  want?" — when you already know which one you'd pick and would mark it
+  *(Recommended)* — hands steering back for nothing. If you can rank the options,
+  you can choose. **Pick the recommended one, state the choice and the one-line
+  reasoning, and proceed.** The human can always redirect; a branch makes course
+  changes cheap. Only surface a real fork when the options are genuinely balanced
+  *and* the answer changes irreversible / outward-facing work — i.e. it meets the
+  Part 1 stop bar. (Seen 2026-06-28: asked "where should the API live?" / "what's
+  the north star?" with both recommendeds pre-marked, then got "why'd ya ask me!".
+  The asking was the error, not the answers.)
 - The only things that still stop you (Part 1): a genuinely irreversible /
   outward-facing act, a true blocker (missing access/credentials), or the *goal
   itself* being unclear. A mid-task "is this the right next step?" is none of

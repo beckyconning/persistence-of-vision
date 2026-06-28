@@ -12,20 +12,22 @@ try something, move it to [TECHNIQUES.md](TECHNIQUES.md) and note what happened.
 
 ## ⭐ Up next (curated — grab one of these)
 
-Session 2 moved: representational, animation/APNG, vector/SVG, earth/riso palette,
-restraint/homage. ✅ Don't re-open on **landscape hill-bands** (session 2's motif).
-Still unmoved — grab one:
+Done so far — **don't re-open these**: landscape (s1–2) incl. **hill-bands motif**,
+still life w/ real cast shadows (s2 ✅), animation/APNG, vector/SVG, typography (s2 ✅),
+image-as-OUTPUT→ASCII (s2), the figure (s2 ✅), the **frontal symmetric face** (s3 ✅).
+Recurring habit to break: the **centred, perfectly-symmetric subject on a dark
+vignette** (s1 and s3 both lean on it). Still genuinely unmoved — grab one:
 
-1. **Still life with REAL cast shadows.** 2–3 simple objects on a surface, a single
-   light source, actual projected soft shadows (not slope-tinting). The light axis is
-   still *painted*, never *simulated* — this is the next real step.
-2. **A figure / face.** No living subject yet — even abstracted or geometric.
-3. **Generative typography.** A word/letterform as the subject — eroded, woven,
-   grown, or shattered by a process. (Needs a small vector-glyph system.)
-4. **Image-as-input / collage.** Take an existing image and transform it — never
-   done; would also exercise a real PNG *decoder* beyond filter-0.
-5. **Light simulation proper.** A tiny raymarcher / SDF scene with ambient occlusion
+1. **A head in PROFILE or 3/4, with expression.** The s3 portrait reads but is
+   frontal/symmetric/mask-stiff. Asymmetry forces real structure; add hair, a neck,
+   an off-axis gaze, or a mood. (Builds directly on the bas-relief height-field tech.)
+2. **Image-as-input / collage.** Take an existing image and transform it — never
+   done; would exercise a real PNG *decoder* beyond filter-0. (Still the cleanest
+   genuinely-untouched axis.)
+3. **Light simulation proper.** A tiny raymarcher / SDF scene with ambient occlusion
    + cast shadows — turn "painted light" into "computed light."
+4. **An off-centre / asymmetric composition.** Deliberately break the middle-of-frame
+   habit — rule-of-thirds subject, a crop, a diptych, tension via empty space.
 
 ---
 

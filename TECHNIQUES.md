@@ -106,3 +106,10 @@ multiplicative (non-additive) lighting; hand-wavering line via per-pixel jitter.
 - **Typography "GROW"** (`type_grow.py`): inline 5x7 bitmap font → letter cells; "grown"
   by a process (summed-area-table bloom halo + noise-eroded core + drifting sprout flecks).
   First letterform-as-subject. Moves the typography axis; ties the session theme.
+- **Bas-relief portrait** (`portrait.py`): sculpt a face as a height field `z(x,y)` by
+  summing smooth mounds/recesses for each structure (dome, brow, nose ridge+bulb+alae,
+  recessed eye sockets + raised eyeballs, cheeks, a single lip-mass split by one groove,
+  jaw-tapered chin), then derive **normals from `np.gradient(z)`** and Lambert+specular
+  under one key light. Lesson: model a mouth as ONE swell cut by ONE seam (two separate
+  lip mounds always read as stacked sausages). Eye **catchlights** (a 2px white fleck)
+  are the single cue that sells it as a face. First subject = the human face.
