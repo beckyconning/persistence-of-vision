@@ -18,7 +18,7 @@ minimal-homage), a still life (new subject + computed light), and a first figure
 | ![](images/vector_hills.png) | **Vector hills** (SVG) | **+ Form** raster→**vector** (flat colour, hard edges, scalable, pure text) · riso/earth palette | [vector_hills.py](src/vector_hills.py) · [.svg](images/vector_hills.svg) |
 | ![](images/martin.png) | **After Agnes Martin** | **+ Concept/lineage** (homage) · **+ Restraint** maximal→near-empty; pale washed bands + a hand-wavering pencil grid, breathing margins | [martin.py](src/martin.py) |
 | ![](images/stilllife.png) | **Still life (three spheres)** | **+ Light: painted→COMPUTED** — a tiny software renderer: Lambert + soft specular spheres and **real soft cast shadows** projected onto the table; earthy vessels, new subject | [stilllife.py](src/stilllife.py) |
-| ![](images/figure.png) | **Reclining figure** *(half-works — logged honestly)* | **+ Subject: the FIGURE** (never attempted) — abstracted Moore/Brancusi volumes (shaded ellipsoids, reusing the light-sim) on a plinth. Reads more as nested stones than an unmistakable body; the edge of current ability. | [figure.py](src/figure.py) |
+| ![](images/figure2.png) | **Reclining figure** (v2, fused) | **+ Subject: the FIGURE** (never attempted). v1 ([figure.py](src/figure.py), [img](images/figure.png)) read as nested *stones*; v2 fixes it with a **metaball union** — per pixel take the nearest (max-height) ellipsoid and shade ONE continuous surface → it now reads as a single Moore-esque reclining body. Iterating the weak piece to coherence. | [figure2.py](src/figure2.py) |
 
 (`dusk.png` is the animation; `frame_day`/`frame_dusk` are its end-stills for static viewing.)
 

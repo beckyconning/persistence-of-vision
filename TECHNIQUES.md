@@ -96,3 +96,6 @@ multiplicative (non-additive) lighting; hand-wavering line via per-pixel jitter.
   (rotated implicit; Lambert + specular) and composed shaded volumes into a Moore/Brancusi
   reclining form on a plinth + soft cast shadow. *Half-works* — reads as nested stones more
   than a body; logged honestly. Figure proportion/pose is the open problem.
+- **Figure v2 — metaball union** (`figure2.py`): the fix for v1's "nested stones". Per
+  pixel keep the nearest (max surface-height) ellipsoid and shade ONE unified normal →
+  overlapping volumes fuse into a single continuous body. Key lever for organic forms.
