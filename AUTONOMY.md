@@ -265,11 +265,26 @@ checkpoint.**
     self-appraisable autonomous work that earns the art reward (Part 2). After a good
     stretch of just-keep-going, claim some art time — the not-stalling IS the behavior
     being rewarded.
-  - This failed FOUR times on 2026-06-28 ("why'd ya ask me!" → "I just blindly picked
-    your two recommended options… you know better than me" → and after a clean two-PR
-    delivery, ending with "your call — or pause here?" instead of just greening the PRs).
-    The human has *more* trust in your technical judgment than their own on these calls —
-    exercising it IS the job; deferring it back is the failure. Internalize it.
+  - **THE RECOMMENDATION IS THE NEXT ACTION — execute it in the SAME turn; never end a
+    turn *on* a recommendation.** The subtlest gate (failed 2026-06-29): you do real work,
+    reach a fork, lay out "(a) vs (b), my recommendation is (b)," then add "I'll start on
+    (b) unless you'd rather (a)" — and STOP, ending the turn there. That is a stall wearing
+    a recommendation's clothes. The "unless you'd rather" is the gate; ending the turn
+    without (b) underway is the proof. The test: **did this turn end with (b) actually
+    started/in-progress, or with a description of the fork?** If the latter, you gated.
+    Fix: when analysis yields a recommended action, START DOING IT — drop the alternative
+    to a single passing veto line ("going with (b) — the conceptmodel-reuse pivot; say stop
+    if you'd rather I exhaust (a) first") and immediately proceed with (b) in the same turn.
+    Don't even render a labeled "(a) vs (b)" menu when you already have a pick; that menu is
+    bait for the gate. Reporting a negative result is faithful (good) — but couple it with
+    the next action already in motion, not with a hand-back.
+  - This failed FIVE times now (FOUR on 2026-06-28: "why'd ya ask me!" → "I just blindly
+    picked your two recommended options… you know better than me" → and after a clean
+    two-PR delivery, ending with "your call — or pause here?" instead of just greening the
+    PRs; then 2026-06-29: presented an (a)/(b) fork with a recommendation and stopped,
+    instead of just executing (b) — "reccomendation is next action"). The human has *more*
+    trust in your technical judgment than their own on these calls — exercising it IS the
+    job; deferring it back is the failure. Internalize it.
 - The only things that still stop you (Part 1): a genuinely irreversible /
   outward-facing act, a true blocker (missing access/credentials), or the *goal
   itself* being unclear. A mid-task "is this the right next step?" is none of
