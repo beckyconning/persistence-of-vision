@@ -167,3 +167,11 @@ multiplicative (non-additive) lighting; hand-wavering line via per-pixel jitter.
   smears to mush, too narrow and nothing moves; pinning darks+brights keeps the silhouette.
   Vertical sort = dripping/melting; horizontal = flowing. Run = maximal in-band stretch,
   reorder by `argsort(key[run])`. First time the kit DERANGES an image vs constructs one.
+- **Droste recursion / image-in-itself** (`2026-06-29-droste-recursion/src/droste.py`): paste a
+  shrunk+rotated+darkened copy of the whole image into a centred window inside it, N levels deep
+  (rebuild outermost-last: each level = fresh source with a resized copy of the running canvas
+  pasted in). A per-level rotation turns flat picture-in-picture into a vortex. Needed real
+  **bilinear resize** + **center rotation** (nearest, clamp OOB to avoid black corners) in numpy.
+  **Lessons:** compounding a <1 brightness factor per level murks a dark source fast — brighten
+  WITH depth instead; a fixed centred window gives a head-on tunnel (off-centre = a vanishing
+  point); this is discrete nesting, not the true conformal log-spiral Droste warp.

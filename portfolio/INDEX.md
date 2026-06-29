@@ -7,6 +7,7 @@ session stand on this one instead of starting over.
 
 | Date | Session | Pieces | Axis moved | One-line |
 |---|---|---|---|---|
+| 2026-06-29 | [droste-recursion](2026-06-29-droste-recursion/) | 2 | **method: image-as-input RECURSION** (Droste nest), toolkit (bilinear resize + rotate) | An image inside itself: a vortex of the corpus-portrait, a window-in-window stone. |
 | 2026-06-29 | [pixelsort-image-input](2026-06-29-pixelsort-image-input/) | 3 | **method: image-as-input compose → TRANSFORM** (pixel-sorting), **new aesthetic (glitch/dissolution)** | Re-order an image's own pixels: a dissolving portrait, a luminous monolith, a combed Mandelbrot. |
 | 2026-06-29 | [image-as-input](2026-06-29-image-as-input/) | 2 | **method: image as OUTPUT → INPUT** (a real PNG *decoder* — all 5 filters + 5 colour types), **concept: self-reference** | A photomosaic: a face (and the reflected stone) rebuilt entirely from tiles of every prior portfolio piece — the corpus eating itself. |
 | 2026-06-28 | [raymarch-computed-light](2026-06-28-raymarch-computed-light/) | 4 | **light: painted/relief → SIMULATED** (SDF ray-marcher, soft shadows + AO), **off-centre composition** | A numpy ray-marcher: dusk spheres (proof) + a smooth-min fused stone (the picture). |
