@@ -16,7 +16,7 @@ Done so far — **don't re-open these**: landscape (s1–2) incl. **hill-bands m
 still life w/ real cast shadows (s2 ✅), animation/APNG, vector/SVG, typography (s2 ✅),
 image-as-OUTPUT→ASCII (s2), the figure (s2 ✅), the **frontal symmetric face** (s3 ✅),
 **light-simulation / SDF ray-marcher** (s4 ✅), off-centre composition (s4 ✅),
-**image-as-INPUT / photomosaic** (s5 ✅), **image-as-input TRANSFORM / pixel-sort** (s6 ✅), **image-as-input RECURSION / Droste** (s7 ✅), **true INTERIOR** (s8 ✅ — enclosed room + bounced fill, dusk-void habit broken).
+**image-as-INPUT / photomosaic** (s5 ✅), **image-as-input TRANSFORM / pixel-sort** (s6 ✅), **image-as-input RECURSION / Droste** (s7 ✅), **true INTERIOR** (s8 ✅), **cellular automata / emergence** (s9 ✅ — Wolfram 1D tapestries).
 Recurring habit to break: the **dusk-gradient sky + earth floor** (s2 + s4 both lean on
 it now) — change the *environment* next, not just the subject. Still genuinely unmoved:
 

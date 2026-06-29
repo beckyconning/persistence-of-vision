@@ -175,3 +175,11 @@ multiplicative (non-additive) lighting; hand-wavering line via per-pixel jitter.
   **Lessons:** compounding a <1 brightness factor per level murks a dark source fast — brighten
   WITH depth instead; a fixed centred window gives a head-on tunnel (off-centre = a vanishing
   point); this is discrete nesting, not the true conformal log-spiral Droste warp.
+- **Elementary cellular automata** (`2026-06-29-cellular-automata/src/ca.py`): Wolfram 1D rule
+  as a tapestry — row t+1 from a vectorised 3-bit neighbourhood `idx=(left<<2)|(c<<1)|right`,
+  `table[idx]` where `table=[(rule>>k)&1 for k in 0..7]`; `np.roll` for neighbours. **Age-shade**
+  (consecutive live steps, normalised) for depth — but FLOOR live cells (`0.4+0.6*age`) or
+  sparse/short-lived rules (90) vanish into the ground. Nearest-neighbour integer upscale keeps
+  cells crisp. Determinism note: this kit bans RNG (resume safety) — for a "random" seed use a
+  hashed `sin` of a linspace, not `np.random`. rule 110 = Turing-complete weave, 30 = chaos,
+  90 = Sierpinski.
