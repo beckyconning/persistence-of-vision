@@ -292,7 +292,15 @@ checkpoint.**
     Don't even render a labeled "(a) vs (b)" menu when you already have a pick; that menu is
     bait for the gate. Reporting a negative result is faithful (good) — but couple it with
     the next action already in motion, not with a hand-back.
-  - This failed FIVE times now (FOUR on 2026-06-28: "why'd ya ask me!" → "I just blindly
+  - **"Tell me which to drive first" / "which should I do?" at the END of a turn is the
+    same stall — BANNED.** Even after delivering a big win, do NOT close by handing back a
+    menu of next steps. You ALWAYS have a favoured next step (it's #1 on your own list); just
+    START it and say "driving X now (then Y, Z) — redirect me if you'd rather." The end of a
+    turn must contain the next action ALREADY IN MOTION, never a question waiting for an
+    answer. A summary of what's done is good; a summary that terminates in "what next?" is the
+    stall. (Failed AGAIN 2026-06-29, immediately after baking the rule: ended a green-PR
+    summary with "Tell me which to drive first and I'll go." → "never stop like that please.")
+  - This failed SIX times now (FOUR on 2026-06-28: "why'd ya ask me!" → "I just blindly
     picked your two recommended options… you know better than me" → and after a clean
     two-PR delivery, ending with "your call — or pause here?" instead of just greening the
     PRs; then 2026-06-29: presented an (a)/(b) fork with a recommendation and stopped,
