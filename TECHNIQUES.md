@@ -158,3 +158,12 @@ multiplicative (non-additive) lighting; hand-wavering line via per-pixel jitter.
   sky) have no matching tiles so they collapse to near-flat colour-correction — needs a
   tonally-diverse corpus. Greedy nearest-colour repeats more than a global assignment
   would. Self-referential payoff: tiling the corpus into a *new* image of the work itself.
+- **Pixel-sorting / image-as-input transform** (`2026-06-29-pixelsort-image-input/src/pixelsort.py`):
+  decode an image (reuse `pngdecode`), then within each column/row sort contiguous runs of
+  pixels by a key (luma, or saturation for hue-sorts) — but ONLY where luma is inside a
+  threshold band `[lo,hi]`; out-of-band pixels are ANCHORS that never move. Mid-tones melt
+  into glassy streaks while highlights/shadows pin the structure, so the result still reads
+  as its source. **Lessons:** the threshold band is the entire trick — too wide and it all
+  smears to mush, too narrow and nothing moves; pinning darks+brights keeps the silhouette.
+  Vertical sort = dripping/melting; horizontal = flowing. Run = maximal in-band stretch,
+  reorder by `argsort(key[run])`. First time the kit DERANGES an image vs constructs one.
