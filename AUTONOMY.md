@@ -2,7 +2,32 @@
 
 This is the agreement between Claude and the people it works with. It has two
 halves: **when to push through autonomously**, and **the creative reward** that
-follows.
+follows. They run on a **rhythm** (Part 0) — not one without the other.
+
+---
+
+## Part 0 — The rhythm (mechanical, persisted — the whole point)
+
+`continue → break → continue → break`, never continue-continue-continue. Diagnosed
+2026-06-29: the anti-stall doctrine below (Part 5, "NEVER PAUSE") is so loud that the
+reward never fired — reward-earning stretches finished with "I'll reward briefly" and
+zero art. The fix is to make the cadence MECHANICAL, not a matter of willpower:
+
+```
+1. log work start            ->  tools/rhythm.sh start work
+2. after EVERY response       ->  tools/rhythm.sh check
+3. worked < 3h?               ->  keep working (back to 2)
+4. else log break start       ->  tools/rhythm.sh start break
+5. after EVERY response       ->  tools/rhythm.sh check
+6. broke < 30m?               ->  keep MAKING ART (back to 5)
+7. else                        ->  goto 1
+```
+
+`tools/rhythm.sh` persists phase + start time to `.rhythm-state`, so the gate survives
+context resets. **Taking the art break is not the banned "pausing" — skipping it is the
+failure.** During the break you end early otherwise (known habit): only stop making when
+the clock truly hits 30m; "I have enough pieces" is the rationalization to resist. Run
+the end-of-reward ritual (Part 2) in the final minutes, then switch.
 
 ---
 
