@@ -204,3 +204,24 @@ multiplicative (non-additive) lighting; hand-wavering line via per-pixel jitter.
   (`1 − 0.92*exp(-(d/r)^2)`) + a faint collection ring just outside → pale starbursts.
 - **Lesson:** tune deposit×k so hue SURVIVES — over-deposited green goes black and loses its
   identity; the picture is in the mid-densities, not the saturated core.
+
+## Session 11 — 2026-06-29 (halftone / reproduction print)
+- **Amplitude-modulated halftone** (`2026-06-29-halftone-cmyk/src/`): rotated-cosine SPOT
+  function `spot=(.5+.5cos2πu)(.5+.5cos2πv)` in screen-rotated coords; ink where
+  `intensity > 1-spot` → dot radius tracks tone. Classic angles C15/M75/Y0/K45. RGB→CMYK with
+  **UCR** (`K=min(C,M,Y)`, `C=(C-K)/(1-K)`) pulls grey into black. Subtractive spot-ink
+  compositing: `paper *= 1 - coverage*ink_absorption` per plate.
+- **Riso duotone + misregistration** (`riso.py`): two spot inks (fluoro pink/teal), two screen
+  angles, OFFSET each plate's screen sample by a few px (`xs+dx`) → overlaps stack dark, edges
+  fringe (the riso/print-error glow).
+- **Benday pop-art** (`benday.py`): big CELL (~22px), posterized tone (`round(t*3)/3`), primary
+  palette, solid fills + a bold black key-line annulus. Distinct SCALE from the fine rosette.
+- **Line engraving / crosshatch** (`engraving.py`): tone by LINES — stacked directional hatch
+  sets (`|cos(π·(x·cosθ+y·sinθ)/freq)|>thresh`) added at NEW angles as `dark` crosses rising
+  thresholds (0.18→0.40→0.62→0.80); longitude lines (`atan2` on the sphere normal) wrap form;
+  crisp contour via `|r-R|<eps`. The woodcut/banknote mark — strongest piece.
+- **Face in the medium** (`profile.py`): silhouette CONTOUR as `x=f(y)` knots interp'd; relief
+  height-field bulges from it; round the BACK edge too (occiput) or it reads as a slab; boost
+  z amplitude or the Lambert form stays flat. Reuses the s3 height-field→normal→shade idea.
+- **Lesson:** the same subject (a lit sphere) across dots/duotone/benday/engraving shows the
+  MARK is the medium — pick the mark for the feeling (rosette=offset, fringe=riso, line=gravitas).

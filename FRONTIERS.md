@@ -16,7 +16,8 @@ Done so far — **don't re-open these**: landscape (s1–2) incl. **hill-bands m
 still life w/ real cast shadows (s2 ✅), animation/APNG, vector/SVG, typography (s2 ✅),
 image-as-OUTPUT→ASCII (s2), the figure (s2 ✅), the **frontal symmetric face** (s3 ✅),
 **light-simulation / SDF ray-marcher** (s4 ✅), off-centre composition (s4 ✅),
-**image-as-INPUT / photomosaic** (s5 ✅), **image-as-input TRANSFORM / pixel-sort** (s6 ✅), **image-as-input RECURSION / Droste** (s7 ✅), **true INTERIOR** (s8 ✅), **cellular automata / emergence** (s9 ✅ — Wolfram 1D tapestries), **physical-media: SUBTRACTIVE watercolour** (s10 ✅ — Beer–Lambert washes, mixing/confluence, animated bloom, salt, dry-brush, glazing, torn/deckle edge).
+**image-as-INPUT / photomosaic** (s5 ✅), **image-as-input TRANSFORM / pixel-sort** (s6 ✅), **image-as-input RECURSION / Droste** (s7 ✅), **true INTERIOR** (s8 ✅), **cellular automata / emergence** (s9 ✅ — Wolfram 1D tapestries), **physical-media: SUBTRACTIVE watercolour** (s10 ✅ — Beer–Lambert washes, mixing/confluence, animated bloom, salt, dry-brush, glazing, torn/deckle edge), **reproduction PRINT / halftone** (s11 ✅ — CMYK rosette, riso duotone+misregistration, benday pop, line-engraving/crosshatch, profile-relief face in dots).
+NEXT (s11 left open): full-colour halftone of a real photo (feed the s5 PNG decoder → CMYK screens); ENGRAVE a face (engraving was the strongest mark — apply to the profile relief); mezzotint/stipple (random-dot, softer). The **frontal/expressive face** is now touched in profile-relief twice (s3, s11) but never in full front-3/4 with a MOOD — still the marquee open subject.
 Recurring habit to break: the **dusk-gradient sky + earth floor** (s2 + s4 both lean on
 it now) — change the *environment* next, not just the subject. New (s10): I default to
 **over-density** (washes drift to black — the picture is in the mid-tones) and to **too-round
