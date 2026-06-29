@@ -42,14 +42,18 @@ z += g(0.0, 0.44, 0.13, 0.035, 0.09)           # upper lip
 z += g(0.0, 0.50, 0.14, 0.045, 0.11)           # lower lip
 z -= g(0.02, 0.47, 0.10, 0.012, 0.05)          # mouth line (faint downturn via +x offset)
 z += g(0.0, 0.60, 0.16, 0.07, 0.10)            # chin
+z += g(-0.30, 0.16, 0.12, 0.14, 0.07)          # L cheekbone (modelling → less mask-like)
+z += g(0.30, 0.17, 0.12, 0.14, 0.07)           # R cheekbone
+z += g(-0.40, -0.10, 0.08, 0.18, 0.05)         # L temple
+z += g(0.40, -0.09, 0.08, 0.18, 0.05)          # R temple
 z = smooth(np.where(inside, z, 0), 3)
 
 gx = np.gradient(z, axis=1) * W * 0.5
 gy = np.gradient(z, axis=0) * H * 0.5
 ln = np.sqrt(gx * gx + gy * gy + 1)
-L = np.array([-0.5, -0.45, 0.74]); L /= np.linalg.norm(L)
+L = np.array([-0.32, -0.40, 0.86]); L /= np.linalg.norm(L)
 lam = np.clip((-gx * L[0] - gy * L[1] + L[2]) / ln, 0, 1)
-tone = np.where(inside, 0.05 + 0.95 * lam ** 1.25, 0.04 + 0.05 * (v + 1))
+tone = np.where(inside, 0.14 + 0.86 * lam ** 1.1, 0.04 + 0.05 * (v + 1))
 dark = np.clip(1 - tone, 0, 1)
 
 gr = smooth(rng.random((H, W)), 1)
