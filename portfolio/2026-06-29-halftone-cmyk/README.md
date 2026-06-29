@@ -35,8 +35,24 @@ into the medium.
    emerging from velvety black, lit planes glowing, eye/nose/lip reading through soft stipple.
    The closest to a face *with a mood* — Rembrandt-by-way-of-mezzotint.
 
-Nine pieces sweep the reproduction mark: screened CMYK dots → riso duotone → coarse benday →
-engraved lines → the face in THREE marks (screened, engraved, stippled) → random stipple. Genuine axis saturation.
+10. **`anim_mezzo.py` → `images/anim_mezzo.png`** (APNG) — the mezzotint PROCESS, not the
+    state: a plate worked from solid black up to the luminous sphere as it's burnished.
+    Motion axis + the new mark (s2's APNG encoder reused).
+
+Ten pieces sweep the reproduction mark: screened CMYK dots → riso duotone → coarse benday →
+engraved lines → the face in THREE marks (screened, engraved, stippled) → animated burnish.
+
+## Self-critique (the ritual)
+- **What grew:** a whole new medium-family (reproduction print) in one session; the face
+  pulled into it three ways; and the realisation that *the mark IS the medium* — same lit
+  sphere reads as offset (rosette), riso (fringe), pop (benday), gravitas (engraving), velvet
+  (mezzotint). That's the session's idea.
+- **Strongest:** the engraved + mezzotint faces (mark × subject) and the rosette still-life.
+- **Weakest:** benday got busy where red+blue dots overlapped; the first CMYK sphere wasted
+  C/M on a warm subject (fixed in the still-life).
+- **Rut watch:** I default to the *lit sphere* as the test object — vary the subject earlier
+  next time. The frontal/3-4 face with a MOOD is still the marquee open subject (only profiles
+  so far). Next: full-colour halftone of a real photo via the s5 decoder.
 
 ## Techniques banked
 - Amplitude-modulated halftone via a rotated cosine **spot function**, thresholded by ink
