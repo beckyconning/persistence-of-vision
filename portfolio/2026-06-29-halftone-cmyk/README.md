@@ -31,8 +31,12 @@ into the medium.
    dot density (not a screen) — burnished-smooth highlight, dense-grain shadow. A luminous
    sphere out of velvety black; the softest, most atmospheric mark.
 
-Eight pieces sweep the reproduction mark: screened CMYK dots → riso duotone → coarse benday →
-engraved lines → the face in two marks → random stipple. Hit genuine axis saturation at 8.
+9. **`mezzotint_face.py` → `images/mezzotint_face.png`** — mezzotint on the FACE: a profile
+   emerging from velvety black, lit planes glowing, eye/nose/lip reading through soft stipple.
+   The closest to a face *with a mood* — Rembrandt-by-way-of-mezzotint.
+
+Nine pieces sweep the reproduction mark: screened CMYK dots → riso duotone → coarse benday →
+engraved lines → the face in THREE marks (screened, engraved, stippled) → random stipple. Genuine axis saturation.
 
 ## Techniques banked
 - Amplitude-modulated halftone via a rotated cosine **spot function**, thresholded by ink
