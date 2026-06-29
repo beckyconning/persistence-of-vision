@@ -7,7 +7,7 @@ session stand on this one instead of starting over.
 
 | Date | Session | Pieces | Axis moved | One-line |
 |---|---|---|---|---|
-| 2026-06-29 | [halftone-cmyk](2026-06-29-halftone-cmyk/) | 6 | **medium: reproduction PRINT** — tone from discrete marks + separated colour (CMYK rosette, riso duotone, benday, line engraving); + face subject in the medium | A lit-sphere CMYK halftone, a 4-hue rosette still-life, a profile-relief portrait, a misregistered riso duotone, pop benday sun, and a crosshatch line-engraving orb. |
+| 2026-06-29 | [halftone-cmyk](2026-06-29-halftone-cmyk/) | 8 | **medium: reproduction PRINT** — tone from discrete marks + separated colour (CMYK rosette, riso duotone, benday, line engraving); + face subject in the medium | A lit-sphere CMYK halftone, a 4-hue rosette still-life, a profile-relief portrait, a misregistered riso duotone, pop benday sun, and a crosshatch line-engraving orb. |
 | 2026-06-29 | [watercolor-bleed](2026-06-29-watercolor-bleed/) | 5 | **medium: physical-media simulation** — SUBTRACTIVE pigment (Beer–Lambert, washes multiply), paper ground, negative space | Wet-on-wet washes that mix where they overlap (estuary), an **animated bloom** (APNG), salt-texture starbursts — the additive-glow-on-black rut inverted. |
 | 2026-06-29 | [cellular-automata](2026-06-29-cellular-automata/) | 3 | **method: emergence/automata** (grow from a rule, not paint) | Wolfram 1D tapestries: rule-110 ember weave, rule-30 chaos, rule-90 Sierpinski. |
 | 2026-06-29 | [interior](2026-06-29-interior/) | 1 | **environment: open void → TRUE INTERIOR** (enclosed room + bounced fill) | A box room with a lit altar-form under a single warm key — the dusk-void habit broken. |

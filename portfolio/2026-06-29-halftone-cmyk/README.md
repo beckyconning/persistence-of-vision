@@ -23,7 +23,16 @@ into the medium.
    *Critique:* a touch busy where red+blue dots overlap.
 6. **`engraving.py` → `images/engraving.png`** — line **engraving / crosshatch**: tone by
    LINES not dots — hatch sets added at new angles as tone darkens, plus longitude lines
-   wrapping the sphere. The woodcut/banknote mark. **The most refined of the set.**
+   wrapping the sphere. The woodcut/banknote mark.
+7. **`engraved_face.py` → `images/engraved_face.png`** — the strongest MARK on the growth
+   SUBJECT: the profile-relief face rendered in crosshatch engraving. Lit front planes catch
+   the paper; shadow side is dense hatch — woodcut chiaroscuro. **The capstone.**
+8. **`mezzotint.py` → `images/mezzotint.png`** — **mezzotint / stipple**: tone from RANDOM
+   dot density (not a screen) — burnished-smooth highlight, dense-grain shadow. A luminous
+   sphere out of velvety black; the softest, most atmospheric mark.
+
+Eight pieces sweep the reproduction mark: screened CMYK dots → riso duotone → coarse benday →
+engraved lines → the face in two marks → random stipple. Hit genuine axis saturation at 8.
 
 ## Techniques banked
 - Amplitude-modulated halftone via a rotated cosine **spot function**, thresholded by ink
