@@ -16,9 +16,17 @@ Done so far — **don't re-open these**: landscape (s1–2) incl. **hill-bands m
 still life w/ real cast shadows (s2 ✅), animation/APNG, vector/SVG, typography (s2 ✅),
 image-as-OUTPUT→ASCII (s2), the figure (s2 ✅), the **frontal symmetric face** (s3 ✅),
 **light-simulation / SDF ray-marcher** (s4 ✅), off-centre composition (s4 ✅),
-**image-as-INPUT / photomosaic** (s5 ✅), **image-as-input TRANSFORM / pixel-sort** (s6 ✅), **image-as-input RECURSION / Droste** (s7 ✅), **true INTERIOR** (s8 ✅), **cellular automata / emergence** (s9 ✅ — Wolfram 1D tapestries).
+**image-as-INPUT / photomosaic** (s5 ✅), **image-as-input TRANSFORM / pixel-sort** (s6 ✅), **image-as-input RECURSION / Droste** (s7 ✅), **true INTERIOR** (s8 ✅), **cellular automata / emergence** (s9 ✅ — Wolfram 1D tapestries), **physical-media: SUBTRACTIVE watercolour** (s10 ✅ — Beer–Lambert washes, mixing/confluence, animated bloom, salt, dry-brush, glazing, torn/deckle edge).
 Recurring habit to break: the **dusk-gradient sky + earth floor** (s2 + s4 both lean on
-it now) — change the *environment* next, not just the subject. Still genuinely unmoved:
+it now) — change the *environment* next, not just the subject. New (s10): I default to
+**over-density** (washes drift to black — the picture is in the mid-tones) and to **too-round
+outer silhouettes** (warp/deckle only partly fixed it). Still genuinely unmoved:
+
+0. **Capillary "tree/fern" bleeds** via directional flow advection (semi-Lagrangian warp at
+   high frequency) — s10's plume stretched the blob but never grew thin reaching fingers.
+   And **a representational subject rendered IN watercolour** (still life / botanical did NOT
+   cohere as line-work — the medium wants washes; try a wash-built subject). CMYK/halftone print
+   and cyanotype are still untouched physical media.
 
 1. **A head in PROFILE or 3/4, with expression.** The s3 portrait reads but is
    frontal/symmetric/mask-stiff. Asymmetry forces real structure; add hair, a neck,

@@ -183,3 +183,24 @@ multiplicative (non-additive) lighting; hand-wavering line via per-pixel jitter.
   cells crisp. Determinism note: this kit bans RNG (resume safety) — for a "random" seed use a
   hashed `sin` of a linspace, not `np.random`. rule 110 = Turing-complete weave, 30 = chaos,
   90 = Sierpinski.
+
+## Session 10 — 2026-06-29 (watercolour / ink-bleed — physical-media, SUBTRACTIVE)
+- **Subtractive pigment compositing** (`2026-06-29-watercolor-bleed/src/`): the inverse of
+  every prior additive piece. Light is *absorbed*: `img *= exp(-density * k_channel)` per wash,
+  so overlapping washes MULTIPLY → they darken and shift hue (green×sienna→olive,
+  +payne's→umber) exactly like real pigment. Ground is warm **paper**, not black. `k` per
+  pigment = per-channel absorption (raw sienna `[.32,1.0,2.4]`, payne's grey `[1.55,1.3,1.0]`,
+  sap green `[1.45,.65,1.9]`, burnt umber `[1.0,1.7,2.6]`).
+- **Edge-blooming (cauliflower rim):** `ring = relu(wet − blur(wet))` accumulates pigment at the
+  drying boundary → dark rim, paler centre. **Granulation:** multiply density by paper-tooth
+  noise (`0.65+0.7*tooth`) so washes are grainy, not flat — the most convincing "real" cue.
+- **Ragged wet front:** threshold an fbm (`smoothstep(0,t, fbm*.5 + (R−r)*s)`) instead of a
+  radial/angular-harmonic blob — gives fingered, feathery coastlines. (Angular-harmonic blobs
+  read as inflated balloons + a repeated stamped lobe motif — retired.)
+- **Confined bleed (diffusion):** `p = wet * blur(p, r) * flow` iterated — pigment spreads only
+  into wet paper, along an fbm `flow` field for uneven channels; `p += edge*blur(p)` migrates it
+  to the rim. Animatable: snapshot `p` each step → APNG (`bloom.py`, reuses s2 encoder).
+- **Salt texture** (`salt.py`): pigment *wicked away* = SUBTRACT density at scattered points
+  (`1 − 0.92*exp(-(d/r)^2)`) + a faint collection ring just outside → pale starbursts.
+- **Lesson:** tune deposit×k so hue SURVIVES — over-deposited green goes black and loses its
+  identity; the picture is in the mid-densities, not the saturated core.
