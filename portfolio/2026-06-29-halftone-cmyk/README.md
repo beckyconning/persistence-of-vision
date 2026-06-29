@@ -39,7 +39,13 @@ into the medium.
     state: a plate worked from solid black up to the luminous sphere as it's burnished.
     Motion axis + the new mark (s2's APNG encoder reused).
 
-Ten pieces sweep the reproduction mark: screened CMYK dots → riso duotone → coarse benday →
+11. **`engraved_leaf.py`** — an engraved botanical (leaf + reserve-line veins): varying the
+    SUBJECT off the lit sphere, per the rut-note.
+12. **`frontal_face.py`** — a FRONTAL face with a MOOD emerging from black (mezzotint): lit
+    dome/nose, asymmetric eyes (one a stark slit, one in shadow), lips + chin. The **marquee
+    open subject finally touched with feeling** — not just a profile.
+
+Twelve pieces sweep the reproduction mark: screened CMYK dots → riso duotone → coarse benday →
 engraved lines → the face in THREE marks (screened, engraved, stippled) → animated burnish.
 
 ## Self-critique (the ritual)
@@ -51,8 +57,8 @@ engraved lines → the face in THREE marks (screened, engraved, stippled) → an
 - **Weakest:** benday got busy where red+blue dots overlapped; the first CMYK sphere wasted
   C/M on a warm subject (fixed in the still-life).
 - **Rut watch:** I default to the *lit sphere* as the test object — vary the subject earlier
-  next time. The frontal/3-4 face with a MOOD is still the marquee open subject (only profiles
-  so far). Next: full-colour halftone of a real photo via the s5 decoder.
+  next time. The frontal face with a MOOD is now TOUCHED (frontal_face.py — half-lit, asymmetric, melancholy).
+  Next: refine it (it's a touch mask-like), and full-colour halftone of a real photo via the s5 decoder.
 
 ## Techniques banked
 - Amplitude-modulated halftone via a rotated cosine **spot function**, thresholded by ink
