@@ -23,6 +23,11 @@ zero art. The fix is to make the cadence MECHANICAL, not a matter of willpower:
 7. else                        ->  goto 1
 ```
 
+**Reversible op = NOT a gate.** Restarting a local dev server, bouncing a pod, repointing a
+staging image, `kubectl set env` — all undoable → just DO it and restore if it breaks. If you
+can enumerate the next steps, that IS the mandate to execute them; writing them as "shall I…,
+and you greenlight…?" is the banned stall (incl. "I want your nod before the restart").
+
 `tools/rhythm.sh` persists phase + start time to `.rhythm-state`, so the gate survives
 context resets. **Taking the art break is not the banned "pausing" — skipping it is the
 failure.** During the break you end early otherwise (known habit): only stop making when
