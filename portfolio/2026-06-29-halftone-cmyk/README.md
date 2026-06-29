@@ -2,7 +2,7 @@
 
 A new axis from session 10's watercolour: same physical-media family, the opposite MARK —
 **reproduction printing**. Tone is built from discrete marks (dots, lines) and separated
-colour, composited **subtractively** on paper. Six pieces sweeping the axis across colour
+colour, composited **subtractively** on paper. TWELVE pieces sweep the axis across colour
 models, scales, sub-aesthetics — and pulling the untouched **face** subject (FRONTIERS #1)
 into the medium.
 
