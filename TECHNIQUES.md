@@ -306,10 +306,17 @@ multiplicative (non-additive) lighting; hand-wavering line via per-pixel jitter.
   café-au-lait ground; HIGHLIGHTS = the identical hatch engine gated on `light` (not `D`) painted
   in white chalk. Two gated hatch passes (one on darkness, one on light) over a mid-tone = the
   red-and-white-chalk-on-toned-paper look for free.
-- **Iso-VALUE contours ≠ engraving** (the half-fail, `contour_face.png`): hatching the level-sets
-  of the value field (`phase = light·K`) makes every feature close into concentric LOOPS → a
-  topographic-map / thumbprint, not parallel engraving. Banked: engraving keeps strokes roughly
-  PARALLEL and varies their SPACING with tone; "follow the form" means rotating stroke DIRECTION by
-  the local value-gradient — NOT drawing the iso-contours. That rotation is the next experiment.
+- **Iso-VALUE contours ≠ engraving** (`contour_face.png`): hatching the level-sets of the value
+  field (`phase = light·K`) makes every feature close into concentric LOOPS → a topographic-map /
+  thumbprint, not parallel engraving.
+- **Form-following ENGRAVING via LIC** (`engraved_face.png`, the frontier — got it): strokes that
+  run ALONG the surface like a banknote portrait. The two dead-ends first: (a) iso-contours →
+  topo-map; (b) `phase=(x·cosθ(x,y)+y·sinθ(x,y))/s` with spatially-varying θ → MOIRÉ (x,y up to 900,
+  so any local θ change explodes the phase). The fix is LINE INTEGRAL CONVOLUTION: tangent field
+  `t=(-∂yL,∂xL)/|∇L|` (perpendicular to the gradient of a box-blurred value field) → walk ±N steps
+  along t resampling the field, averaging sparse impulse-noise (`rng>0.62`) → streaks lie on the
+  form. Threshold into discrete lines with `thr = a + b·D` (RISES with darkness → lines crowd in
+  shadow; watch the sign — ink where `S<thr`, I inverted it first and the lit side went solid). A
+  second LIC along the NORMAL (`∇L`) cross-engraves only the darks. `box_blur` via 2-D cumsum.
 - **First FULL-FRONT face** (prior faces: frontal-relief s3, profile-relief s11, 3/4 charcoal s13).
   Mood (pensive/melancholy) from lowered eye-masses + down-bowed mouth-line + shadow-side weight.

@@ -20,6 +20,11 @@ never touches the paper. Three registers of the same head.
   contours** of the value field instead of fixed angles. Wraps the face like a
   topographic engraving and crowds where the form turns fast — but reads more as
   a thumbprint/wood-grain topo-map than an engraving (see lesson 3).
+- **`engraved_face.png`** — the form-following engraving (the frontier, achieved).
+  Strokes run ALONG the surface like a banknote/wood-engraving, via **Line
+  Integral Convolution**: smear sparse noise along the value field's *tangent*
+  (contour) direction, then threshold into discrete lines whose closeness tracks
+  tone. This is the correct fix for the topo-map AND the moiré (see lesson 4).
 
 ## How it works
 
@@ -47,15 +52,15 @@ never touches the paper. Three registers of the same head.
 3. **Most over-used move to retire:** the egg/oval silhouette on an empty ground
    — three faces this session and the figure/portrait sessions all sit in a
    centred vignette. Next face wants a real crop, shoulders, or an environment.
-4. **What I avoided / scared of:** true form-following engraving strokes (lines
-   that run *along* the surface like a banknote portrait). The contour attempt
-   went for it and half-missed — see lesson 3. Also avoided: hands, and a
-   *second distinct expression* to prove control.
-5. **Next constraint:** make the strokes **engraving-correct** — parallel
-   directional lines whose *spacing/weight* tracks tone and whose *direction*
-   follows the form locally (rotate the hatch angle by the value-gradient
-   normal), NOT iso-value contours. And crop the head (shoulders / off-centre /
-   out-of-frame) to kill the centred-oval habit.
+4. **What I went after and (eventually) got:** true form-following engraving —
+   lines that run *along* the surface like a banknote portrait. Two dead-ends
+   first (iso-contour → topo-map, lesson 3; global-coord rotated-angle → moiré,
+   lesson 4) before LIC nailed it. Still avoided: hands, and a *second distinct
+   expression* (every face this repo has made is melancholy — that's the tell).
+5. **Next constraint:** a *non*-melancholy face (serene / defiant / mid-laugh) to
+   prove the value-blocking + hatch kit isn't a one-mood trick. And **crop the
+   head** — shoulders, off-centre, out-of-frame — to finally kill the
+   centred-oval-on-empty-ground vignette that every portrait session defaults to.
 
 ## Lessons banked
 
@@ -69,9 +74,19 @@ never touches the paper. Three registers of the same head.
   *light* over a toned ground (trois-crayons).
 - **Iso-VALUE contours ≠ engraving.** Hatching the level-sets of the value field
   makes every feature close into concentric loops (whorls) — a topographic /
-  thumbprint look, not parallel engraving. Real engraving keeps strokes roughly
-  parallel and varies their *spacing* with tone; form-following means rotating
-  the stroke *direction* by the local gradient, which is the next experiment.
+  thumbprint look, not parallel engraving.
+- **You can't rotate a global-coordinate hatch to follow the form.** `phase =
+  (x·cosθ(x,y) + y·sinθ(x,y))/s` with a spatially-varying θ explodes into moiré:
+  x,y are large (up to 900) so any local change in θ multiplies into huge phase
+  jumps. Form-following strokes need **streamline integration**, not a global
+  projection.
+- **LIC is the right tool for form-following strokes.** Build a tangent field
+  (perpendicular to ∇value), smear sparse impulse-noise *along* it (walk ±N steps
+  resampling the field, average), then threshold into discrete lines with the
+  threshold *raised by darkness* so lines crowd in shadow. Strokes then lie on the
+  form like a banknote/wood-engraving. (Watch the threshold SIGN — inking where
+  `S < thr` with `thr` rising in darkness; I had it inverted first → lit areas
+  went solid black.)
 
 ## Run
 

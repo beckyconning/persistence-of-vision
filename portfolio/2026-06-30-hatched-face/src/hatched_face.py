@@ -210,3 +210,64 @@ rgb3 = paper3_t * (1 - cink[..., None]) + ink3[None, None, :] * cink[..., None]
 rgb3 = np.clip(rgb3, 0, 1)
 write_png(os.path.join(OUT, "contour_face.png"), (rgb3 * 255).astype(np.uint8))
 print("wrote contour_face.png  ink coverage = %.3f" % cink.mean())
+
+
+# ── VARIANT: form-following engraving — parallel strokes whose DIRECTION is
+#    rotated by the local value-gradient (strokes run ALONG the surface), so the
+#    hatch lies on the form like a banknote portrait — the fix for the contour
+#    topo-map. Spacing stays ~uniform (tone drives stroke WEIGHT, not spacing).
+def box_blur(a, k):
+    pad = np.pad(a, k, mode="edge")
+    c = np.cumsum(np.cumsum(pad, 0), 1)
+    c = np.pad(c, ((1, 0), (1, 0)))
+    s = 2 * k + 1
+    out = (c[s:, s:] - c[:-s, s:] - c[s:, :-s] + c[:-s, :-s]) / (s * s)
+    return out[: a.shape[0], : a.shape[1]]
+
+
+Lb = box_blur(np.where(inside, light, 1.0), 9)          # smooth orientation field
+gby, gbx = np.gradient(Lb)
+mag = np.sqrt(gbx ** 2 + gby ** 2) + 1e-6
+tx, ty = -gby / mag, gbx / mag                          # tangent = ALONG contours
+
+# Line Integral Convolution: smear a banded noise ALONG the tangent field, so
+# streaks lie on the form (the correct fix for the moiré of global-coord angles).
+seed = (rng.random((H, W)) > 0.62).astype(float)        # sparse impulses → LIC
+#                                                         smears them into spaced
+#                                                         engraving lines w/ gaps
+
+
+def sample(arr, fy, fx):
+    iy = np.clip(np.round(fy).astype(int), 0, H - 1)
+    ix = np.clip(np.round(fx).astype(int), 0, W - 1)
+    return arr[iy, ix]
+
+
+def lic(field_x, field_y, steps=14, h=1.3):
+    acc = seed.copy(); cnt = np.ones_like(seed)
+    for sgn in (1.0, -1.0):
+        fx = xs.astype(float).copy(); fy = ys.astype(float).copy()
+        for _ in range(steps):
+            vx = sample(field_x, fy, fx); vy = sample(field_y, fy, fx)
+            fx = fx + sgn * h * vx; fy = fy + sgn * h * vy
+            acc = acc + sample(seed, fy, fx); cnt = cnt + 1
+    return acc / cnt
+
+
+S = lic(tx, ty, steps=16, h=1.25)                       # streaks following the form
+S = (S - S.min()) / (S.max() - S.min() + 1e-9)
+# threshold into discrete dark LINES; darker tone RAISES the threshold so more
+# of each streak inks (closer/heavier lines), capped so darks never go fully solid
+thr = 0.21 + 0.44 * np.clip(D, 0, 1)
+eink = np.clip((thr - S) / 0.10, 0, 1)
+# cross-engrave the darks with a second pass along the NORMAL (down-slope)
+S2 = lic(gbx / mag, gby / mag, steps=14, h=1.25)
+S2 = (S2 - S2.min()) / (S2.max() - S2.min() + 1e-9)
+thr2 = 0.18 + 0.34 * np.clip((D - 0.45) / 0.5, 0, 1)
+eink2 = np.clip((thr2 - S2) / 0.10, 0, 1) * np.clip((D - 0.5) / 0.4, 0, 1)
+eink = np.where(inside, np.clip(eink + eink2, 0, 1), 0.0)
+
+rgb4 = paper_t * (1 - eink[..., None]) + inkc[None, None, :] * eink[..., None]
+rgb4 = np.clip(rgb4, 0, 1)
+write_png(os.path.join(OUT, "engraved_face.png"), (rgb4 * 255).astype(np.uint8))
+print("wrote engraved_face.png  ink coverage = %.3f" % eink.mean())
