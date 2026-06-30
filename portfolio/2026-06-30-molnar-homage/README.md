@@ -30,6 +30,11 @@ based geometry, not value-blocked tone) and a new **technique** (3D wireframe).
   olive-gold in both panels but reads cool/receding on the warm-ochre grounds and
   warm/glowing on the cool-teal grounds — the book's thesis in one image. No tone,
   no line: just flat interacting fields.
+- **`flowfield_strokes.png`** — a **flow field as discrete pen strokes** (the one
+  classic system not revisited since s1 — but reclaimed from the s1 density-glow-on-
+  black corner): 1700 short tapered ink strokes advected along a smooth value-noise
+  vector field, hue by direction over blue→green→amber, on paper. Reads as marbled
+  paper / wind currents — plotter ink, not accumulated glow.
 - **`lsystem_plant.png`** — an **L-system plant**: a formal-grammar method (axiom +
   rules iterated to depth 6, then turtle-interpreted) — recursion, not a grid; the
   organic counterpoint to the rigid homages. Branch width tapers and hue runs
