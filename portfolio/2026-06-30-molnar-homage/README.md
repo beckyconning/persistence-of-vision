@@ -23,6 +23,13 @@ based geometry, not value-blocked tone) and a new **technique** (3D wireframe).
   that warp, so the static image reads optical movement. Band frequency rises down
   the field (the "fall"); a low-frequency horizontal warp bows them. Op art —
   perceptual lineage, not algorithmic plotter line.
+- **`albers_interaction.png`** — after **Josef Albers**, *Homage to the Square* /
+  *Interaction of Color*. The **colour** piece (breaks the paper-ink-plus-one-red
+  habit). A diptych: nested flat squares in Albers' geometry (equal sides, ~3× more
+  space above than below, so they sit low); the innermost square is the **identical**
+  olive-gold in both panels but reads cool/receding on the warm-ochre grounds and
+  warm/glowing on the cool-teal grounds — the book's thesis in one image. No tone,
+  no line: just flat interacting fields.
 - **`cube_rotating.png`** — the Mohr cube **animated** (48-frame seamless APNG):
   one large "Cubic Limit" cube completing a full rotation, space-diagonals in red.
   Adds the **motion** axis I'd flagged as avoided below — same wireframe + line
@@ -59,14 +66,15 @@ based geometry, not value-blocked tone) and a new **technique** (3D wireframe).
    primitives* — that became its own mini-rut within the session (the Riley was
    the conscious break from it). Next time: a single large composition, or a
    non-grid generative system (L-system, flow field, packing).
-4. **What I avoided → then didn't:** motion was the gap — so I took it: the Mohr
-   cube now rotates as a seamless APNG (`cube_rotating.png`). Still avoided:
-   **colour** — everything here is monochrome-plus-one-red; the paper-ink habit is
-   now very deep across many sessions.
-5. **Next constraint:** break the paper-ink-plus-one-red palette with a genuine
-   COLOUR system — Josef Albers *Interaction of Color* (one square reading as two),
-   or Molnár's later colour period — and retire the grid-of-rotated-primitives move
-   (a non-grid generative system: L-system, flow field, packing).
+4. **What I avoided → then didn't:** both gaps got taken this session — **motion**
+   (the Mohr cube rotates as a seamless APNG) and **colour** (the Albers diptych is
+   real interacting hue, no tone/line). The long-standing paper-ink-plus-one-red
+   habit is finally broken.
+5. **Next constraint:** retire the grid-of-rotated-primitives move (still 2 of the
+   5 pieces) — a non-grid generative system (L-system garden, flow field, circle/
+   rect packing) or one large unified composition. And push colour further than a
+   static demo (an Albers/Itten colour study that's also a *subject*, or animated
+   colour interaction).
 
 ## Lessons banked
 
