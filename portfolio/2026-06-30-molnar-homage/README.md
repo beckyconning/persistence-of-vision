@@ -30,6 +30,10 @@ based geometry, not value-blocked tone) and a new **technique** (3D wireframe).
   olive-gold in both panels but reads cool/receding on the warm-ochre grounds and
   warm/glowing on the cool-teal grounds — the book's thesis in one image. No tone,
   no line: just flat interacting fields.
+- **`circle_packing.png`** — the **non-grid coda** (retiring the grid-of-primitives
+  rut). A largest-empty-circle packing: 1887 circles, each grown to just touch its
+  nearest neighbour; hue by radius (big warm-red focal circles floating in a sea of
+  small cool teal). Organic space-filling + colour, distinct from the s1 density-glow.
 - **`cube_rotating.png`** — the Mohr cube **animated** (48-frame seamless APNG):
   one large "Cubic Limit" cube completing a full rotation, space-diagonals in red.
   Adds the **motion** axis I'd flagged as avoided below — same wireframe + line
