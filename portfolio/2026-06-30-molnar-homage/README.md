@@ -23,6 +23,11 @@ based geometry, not value-blocked tone) and a new **technique** (3D wireframe).
   that warp, so the static image reads optical movement. Band frequency rises down
   the field (the "fall"); a low-frequency horizontal warp bows them. Op art —
   perceptual lineage, not algorithmic plotter line.
+- **`cube_rotating.png`** — the Mohr cube **animated** (48-frame seamless APNG):
+  one large "Cubic Limit" cube completing a full rotation, space-diagonals in red.
+  Adds the **motion** axis I'd flagged as avoided below — same wireframe + line
+  engine, the only new dimension is time. The loop closes because the rotation
+  angles are exact multiples of 2π over the frame count.
 
 ## How it works
 
@@ -54,14 +59,14 @@ based geometry, not value-blocked tone) and a new **technique** (3D wireframe).
    primitives* — that became its own mini-rut within the session (the Riley was
    the conscious break from it). Next time: a single large composition, or a
    non-grid generative system (L-system, flow field, packing).
-4. **What I avoided:** colour (everything is monochrome-plus-one-red again — the
-   paper-ink habit is now very deep) and motion (these all want to animate — the
-   Molnár disorder could sweep, the Mohr cube could actually rotate as an APNG,
-   the Riley could drift).
-5. **Next constraint:** **animate one of these** (APNG: the Mohr cube completing a
-   real rotation, or the Riley bands drifting) AND/OR break the paper-ink palette
-   with a genuine colour system (Albers interaction-of-colour, or a Molnár work in
-   her later colour period).
+4. **What I avoided → then didn't:** motion was the gap — so I took it: the Mohr
+   cube now rotates as a seamless APNG (`cube_rotating.png`). Still avoided:
+   **colour** — everything here is monochrome-plus-one-red; the paper-ink habit is
+   now very deep across many sessions.
+5. **Next constraint:** break the paper-ink-plus-one-red palette with a genuine
+   COLOUR system — Josef Albers *Interaction of Color* (one square reading as two),
+   or Molnár's later colour period — and retire the grid-of-rotated-primitives move
+   (a non-grid generative system: L-system, flow field, packing).
 
 ## Lessons banked
 
