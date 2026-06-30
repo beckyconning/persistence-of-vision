@@ -225,3 +225,28 @@ multiplicative (non-additive) lighting; hand-wavering line via per-pixel jitter.
   z amplitude or the Lambert form stays flat. Reuses the s3 height-field→normal→shade idea.
 - **Lesson:** the same subject (a lit sphere) across dots/duotone/benday/engraving shows the
   MARK is the medium — pick the mark for the feeling (rosette=offset, fringe=riso, line=gravitas).
+
+## Session 12 — 2026-06-30 (cyanotype / the photogram)
+- **Contact-print model** (`2026-06-30-cyanotype/src/`): the image is made by *blocked light*,
+  not paint. Accumulate a `block` mask (1=specimen blocks UV→paper-white, 0=full exposure→
+  Prussian blue), then `img = blue*(1-m) + pale*m`. Fixed two-tone chemistry only — no additive
+  glow, no black. **Uneven sun:** `expo = base + k*blur(vnoise) + tilt` so the blue ground is
+  never a flat fill (reads as paper under a lamp).
+- **Light-leak halo** = the signature: `halo = (blur(block,r) - block).clip(0,1)`; under thin
+  specimen edges push the white back toward blue (`img = img*(1-.5halo) + blue*.5halo`). This is
+  the *thin-part-transmits* physics that distinguishes cyanotype from a stencil.
+- **TRANSLUCENT SPECIMEN as the subject** (`dragonfly.py`) — the session's real axis. Keep TWO
+  masks: `opaque` (body→full white) and `gauze` (wing membrane). Compose the gauze at low block
+  (`veil = 0.30*gauze`) so wings print as faint blue veils, with `opaque*0.85` cross-veins +
+  pterostigma darker on top. Tone = *how much light the layer passes*, not on/off.
+- **Tapered primitives** reused throughout: `stroke()` (rachis/stems/legs, width w0→w1 along a
+  projected segment), `pinna()` (pointed serrated leaflet via `taper=1-(u/len)^2`, `lobes` cos
+  ripple on the edge). Fern needs THIN swept pinnae (`pw=plen*0.14`, `droop=0.95`) or it merges
+  into solid wedges.
+- **Polar openwork** (`lace.py`): build filigree in (r,θ) — `ring(rad,w)`, radial spokes via
+  `((θ·N/2π)%1)`, a fine lattice `max(r-lines, θ-lines)` thresholded to thin cores, a scalloped
+  picot edge `R + a·cos(Nθ)·[cos>0]`, central 8-ring rosette. Clip everything to the scallop
+  disc so nothing prints beyond the doily.
+- **Lesson:** cyanotype's defining trick is *partial transmission* — the strongest pieces
+  (dragonfly, lace) are the ones where tone comes from degrees of translucency, not opaque
+  silhouettes. An opaque fern is just a stencil; a gauze wing is a cyanotype.
