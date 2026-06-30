@@ -30,6 +30,11 @@ based geometry, not value-blocked tone) and a new **technique** (3D wireframe).
   olive-gold in both panels but reads cool/receding on the warm-ochre grounds and
   warm/glowing on the cool-teal grounds — the book's thesis in one image. No tone,
   no line: just flat interacting fields.
+- **`island_map.png`** — an invented **island map**: cartography, the one major
+  SUBJECT untouched across the whole portfolio. A fractal value-noise elevation
+  field pulled into an island by a radial falloff, quantised into tinted relief
+  bands (deep sea → shoal → beach → lowland → upland → peak) with a thin contour
+  line at every band edge — the hand-tinted topographic-atlas look, on aged paper.
 - **`flowfield_strokes.png`** — a **flow field as discrete pen strokes** (the one
   classic system not revisited since s1 — but reclaimed from the s1 density-glow-on-
   black corner): 1700 short tapered ink strokes advected along a smooth value-noise
