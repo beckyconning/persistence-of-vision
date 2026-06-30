@@ -1,6 +1,6 @@
 # 2026-06-30 — Cyanotype (the photogram)
 
-Ten pieces in the **cyanotype** medium: UV-sensitised paper turns deep Prussian
+Eleven pieces in the **cyanotype** medium: UV-sensitised paper turns deep Prussian
 blue where light hits it; a specimen laid on top **blocks** the light and prints
 as a pale silhouette. No glow-on-black, no additive light — this is a *physical
 contact print* with a fixed two-colour chemistry (Prussian blue + paper white)
@@ -21,6 +21,7 @@ what the chemistry is uniquely good at (translucent specimens, openwork):
 | `dragonfly.png` | Dragonfly | **Translucent specimen** — wings print as faint blue-veined veils, not solid white; opaque body white. The light-leak halo *as the subject*. |
 | `lace.png` | Lace doily | **Human-made openwork** — a white filigree of rings/spokes/picot scallops + central rosette, deep blue through every hole. |
 | `petals.png` | Pressed petals | **Tone from translucency ALONE** — no opaque blocks; overlapping thin petals stack (Beer–Lambert), so crossings print paler. The frontier the dragonfly opened. |
+| `toned.png` | Sprig (tannin-toned) | **The second hue** — a tea/tannin-toned print: warm aubergine→sepia ground + cream paper instead of cold blue/white. An arching laurel-like sprig, mottled toning bath. |
 
 ## Self-critique ritual
 
