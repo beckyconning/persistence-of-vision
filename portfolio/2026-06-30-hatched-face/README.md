@@ -20,6 +20,10 @@ never touches the paper. Three registers of the same head.
   contours** of the value field instead of fixed angles. Wraps the face like a
   topographic engraving and crowds where the form turns fast — but reads more as
   a thumbprint/wood-grain topo-map than an engraving (see lesson 3).
+- **`serene_face.png`** — the mood-control. Same value-blocking + hatch engine,
+  a DIFFERENT expression: level open eyes, unfurrowed brow, an upturned half-smile
+  (mouth parabola flipped, raised cheeks, nasolabial creases), an even high key.
+  Proves the kit renders more than one mood (every prior face was melancholy).
 - **`engraved_face.png`** — the form-following engraving (the frontier, achieved).
   Strokes run ALONG the surface like a banknote/wood-engraving, via **Line
   Integral Convolution**: smear sparse noise along the value field's *tangent*
@@ -55,12 +59,13 @@ never touches the paper. Three registers of the same head.
 4. **What I went after and (eventually) got:** true form-following engraving —
    lines that run *along* the surface like a banknote portrait. Two dead-ends
    first (iso-contour → topo-map, lesson 3; global-coord rotated-angle → moiré,
-   lesson 4) before LIC nailed it. Still avoided: hands, and a *second distinct
-   expression* (every face this repo has made is melancholy — that's the tell).
-5. **Next constraint:** a *non*-melancholy face (serene / defiant / mid-laugh) to
-   prove the value-blocking + hatch kit isn't a one-mood trick. And **crop the
-   head** — shoulders, off-centre, out-of-frame — to finally kill the
-   centred-oval-on-empty-ground vignette that every portrait session defaults to.
+   lesson 4) before LIC nailed it. Also went after a *second distinct expression*
+   — `serene_face.png`, a calm half-smile — to break the all-melancholy streak,
+   and it reads as a different mood from the same kit. Still avoided: hands.
+5. **Next constraint:** **crop the head** — shoulders, off-centre, out-of-frame —
+   to finally kill the centred-oval-on-empty-ground vignette every portrait
+   session defaults to (s2/s3/s11/s13/s14). And a face with a STRONGER affect
+   (defiant / mid-laugh) — serene is only one step off neutral.
 
 ## Lessons banked
 
