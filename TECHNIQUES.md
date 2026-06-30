@@ -320,3 +320,24 @@ multiplicative (non-additive) lighting; hand-wavering line via per-pixel jitter.
   second LIC along the NORMAL (`∇L`) cross-engraves only the darks. `box_blur` via 2-D cumsum.
 - **First FULL-FRONT face** (prior faces: frontal-relief s3, profile-relief s11, 3/4 charcoal s13).
   Mood (pensive/melancholy) from lowered eye-masses + down-bowed mouth-line + shadow-side weight.
+
+## Session 15 — 2026-06-30 (generative-art ancestors: Molnár · Mohr · Riley — LEFT the portrait corner)
+- **Vectorised plotter line-stamp** (`molnar.py`/`mohr.py`): per segment, on a 2× SS coverage
+  buffer, compute point-to-segment distance over the segment's BBOX only, `cov=clip((halfw-dist)/
+  1.4+0.5)`, composite with `np.maximum` (overlaps don't darken), box-downscale → clean AA pen
+  strokes. Reusable; far better than per-pixel Bresenham, AA is free from the downscale.
+- **Molnár order→disorder** (`desordres.py`): grid of nested concentric squares; per-cell disorder
+  `d=((gx+gy)/2)^1.4` drives BOTH a rotation σ and a gaussian corner-jitter σ. The gradient (order
+  one corner → chaos the opposite) IS the subject — the transformation law is readable off the image
+  (LeWitt-adjacent). One off-centre red cell = the deliberate asymmetry.
+- **3D wireframe (NEW technique)** (`mohr.py`, Cubic Limit): unit cube `(±1)³`; 12 edges = vertex
+  pairs at L1-distance 2; 4 space-diagonals = `(i, 7-i)`; rotate `Rz·Ry·Rx` by angles ACCUMULATING
+  with cell index so the grid reads as a flip-book of one tumbling cube; orthographic projection =
+  drop z after rotation.
+- **Op-art wave bands (NEW)** (`riley.py`, after Riley "Fall"): phase field `phase=(u+warp)·freq(v)·π`
+  with `freq` RISING down the field (`26+95·v^2.2`) and a low-freq horizontal `warp` bowing the
+  columns; `ink=(1-clip(sin(phase)/0.06))/2` → near-crisp filled black/white bands. CRITICAL: needs
+  heavy supersample (3×) then box-downscale or the high-frequency edges alias into the WRONG moiré.
+- **Lesson — the rule is the subject.** Molnár/Mohr land because the transformation law (disorder
+  gradient, accumulating rotation) is legible; growth is conceptual, not surface rendering. Held the
+  paper-ink palette constant on purpose so the ideas carried.

@@ -12,6 +12,16 @@ try something, move it to [TECHNIQUES.md](TECHNIQUES.md) and note what happened.
 
 ## ⭐ Up next (curated — grab one of these)
 
+**s15 (2026-06-30) did generative-art ANCESTORS** — Molnár (order→disorder squares), Mohr
+("Cubic Limit" rotating-cube wireframes, first 3D), Riley (Op wave-bands). This finally LEFT the
+portrait corner (s2/3/11/13/14 were all faces). Two open threads it surfaced: (a) **ANIMATE one** —
+the Mohr cube completing a real rotation as APNG, or the Riley bands drifting, or the Molnár
+disorder sweeping (everything this session wanted to move and didn't); (b) **break the paper-ink-
+plus-one-red palette** with a real COLOUR system — Josef Albers *Interaction of Color* (the same
+square reading as two colours), or Molnár's later colour period. Also retire the *grid-of-rotated-
+primitives* move (2 of 3 s15 pieces used it) — try a non-grid generative system (L-system garden,
+flow field, circle/rect packing) or one large composition.
+
 Done so far — **don't re-open these**: landscape (s1–2) incl. **hill-bands motif**,
 still life w/ real cast shadows (s2 ✅), animation/APNG, vector/SVG, typography (s2 ✅),
 image-as-OUTPUT→ASCII (s2), the figure (s2 ✅), the **frontal symmetric face** (s3 ✅),
