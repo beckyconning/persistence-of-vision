@@ -34,6 +34,10 @@ never touches the paper. Three registers of the same head.
   (contour) direction, then threshold into discrete lines whose closeness tracks
   tone. This is the correct fix for the topo-map AND the moiré (see lesson 4).
 
+- **`contact_sheet.png`** — the series, assembled: all six treatments of the one
+  head in a 3×2 grid (decoded back via the s5 PNG decoder + tiled). "One head,
+  six hands" — the session as a single composed statement.
+
 ## How it works
 
 1. **Value-blocking** (the s13 lesson, applied): the face is composed as
