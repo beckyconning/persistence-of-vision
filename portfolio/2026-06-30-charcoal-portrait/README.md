@@ -1,14 +1,15 @@
 # 2026-06-30 — Charcoal portrait (tonal drawing + the expressive face)
 
-Two pieces in a **charcoal-drawing medium** — soft smudged graphite darks, directional stick
+Three pieces in a **charcoal-drawing medium** — soft smudged graphite darks, directional stick
 strokes, kneaded-eraser highlights on warm toned paper. Two firsts in one session: a *tonal
 drawing* medium (vs. the photogram/print/pigment media of recent sessions), and a real attempt
 at the portfolio's marquee untouched subject — the **expressive, off-axis face with a mood**
-(the s3 portrait was frontal/symmetric/mask-stiff).
+(the s3 portrait was frontal/symmetric/mask-stiff) — rendered two ways, *smudged* and *hatched*.
 
 | File | Subject | What it explores |
 |---|---|---|
-| `charcoal.png` | 3/4 head, melancholy | The face frontier: a turned head with hair, neck, lowered (downcast) gaze and a soft-downturned mouth → a quiet, sad mood. Value-blocked like a charcoal artist, not modelled from relief. |
+| `charcoal.png` | 3/4 head, melancholy (smudge) | The face frontier: a turned head with hair, neck, lowered (downcast) gaze and a soft-downturned mouth → a quiet, sad mood. Value-blocked like a charcoal artist, not modelled from relief. |
+| `hatched.png` | 3/4 head, calm (hatched) | The SAME value-blocking method, but tone built from visible cross-hatch strokes (thickening with darkness) instead of smudge — and a different mood: mirrored turn, eyes OPEN with a level mouth. The draughtsman's hatch on a face. |
 | `drapery.png` | Hanging cloth folds | The atelier fold study — full black-to-paper tonal range: deep core shadows in the valleys, bright lit ridge-crests, raking side light. Showcases the medium. |
 
 ## Self-critique ritual
@@ -42,6 +43,8 @@ not a symmetric mask.
 than as a frontal mask. The downcast gaze + the shadow-side weight of the 3/4 turn carry it.
 
 **5. What would the next session do?**
-Push the face further: a second, *different* expression to prove it's controllable (a serene or
-defiant gaze), and **hatched** charcoal (visible directional stroke-shading building the tone)
-rather than smudge-only. Also still open: a full-front face, and a charcoal study of **hands**.
+This session already did the second-expression + hatched goals (`hatched.png`: a calmer,
+eyes-open hatched head vs. the melancholy smudge one) — proving the value-blocking method is
+controllable across mood AND mark-style. Still open: a **full-front** expressive face; pushing
+the hatched lit-side to read with faint form-following strokes (it goes a touch empty); and a
+charcoal study of **hands**.
