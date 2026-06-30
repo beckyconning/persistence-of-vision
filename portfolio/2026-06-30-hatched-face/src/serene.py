@@ -120,3 +120,35 @@ paper_t = paper[None, None, :] * (1.0 + 0.03 * vnoise(40)[..., None])
 rgb = np.clip(paper_t * (1 - ink[..., None]) + inkc[None, None, :] * ink[..., None], 0, 1)
 write_png(os.path.join(OUT, "serene_face.png"), (rgb * 255).astype(np.uint8))
 print("wrote serene_face.png  ink coverage = %.3f" % ink.mean())
+
+
+# ── SCRATCHBOARD (scraperboard) — the engraver's inverse: a solid BLACK ground,
+#    WHITE strokes scratched out to build the LIGHTS. Shadows stay untouched
+#    black. Strokes are gated on lightness (1-D) instead of darkness. New medium.
+Ln = np.where(inside, 1.0 - D, 0.0)            # lightness drives the scratching
+
+
+def scratch(th, sp, t, soft=0.10, width=0.34, breakup=0.5):
+    c, s = np.cos(th), np.sin(th)
+    phase = (xs * s - ys * c + waver) / sp
+    d = np.abs(phase - np.round(phase))
+    line = np.clip((width - d) / width, 0, 1) ** 0.6
+    line = line * (1.0 - breakup * np.clip(grain * 0.5 + 0.5, 0, 1))
+    return line * np.clip((Ln - t) / soft, 0, 1)
+
+
+white = np.zeros_like(Ln)
+for th, sp, t in [(np.radians(28), 6.2, 0.52), (np.radians(-34), 6.0, 0.66),
+                  (np.radians(80), 5.4, 0.78), (np.radians(6), 4.8, 0.87),
+                  (np.radians(-58), 4.2, 0.93)]:
+    white = white + scratch(th, sp, t, soft=0.12)
+white = np.clip(white, 0, 1) * np.where(inside, 1.0, 0.0)
+
+board = np.array([0.06, 0.06, 0.08])           # india-ink black board
+scr = np.array([0.95, 0.93, 0.86])             # the white revealed beneath
+board_t = board[None, None, :] + 0.02 * vnoise(40)[..., None]
+# faint dark surround so the head sits on the board, not floats
+rgb_s = board_t * (1 - white[..., None]) + scr[None, None, :] * white[..., None]
+rgb_s = np.clip(rgb_s, 0, 1)
+write_png(os.path.join(OUT, "scratchboard_face.png"), (rgb_s * 255).astype(np.uint8))
+print("wrote scratchboard_face.png  scratch coverage = %.3f" % white.mean())

@@ -24,6 +24,10 @@ never touches the paper. Three registers of the same head.
   a DIFFERENT expression: level open eyes, unfurrowed brow, an upturned half-smile
   (mouth parabola flipped, raised cheeks, nasolabial creases), an even high key.
   Proves the kit renders more than one mood (every prior face was melancholy).
+- **`scratchboard_face.png`** — scraperboard, the engraver's inverse: a solid
+  black india-ink ground with WHITE strokes scratched out to build the *lights*
+  (strokes gated on lightness, not darkness; shadows stay untouched black). A
+  luminous calm face emerging from the dark — new medium.
 - **`engraved_face.png`** — the form-following engraving (the frontier, achieved).
   Strokes run ALONG the surface like a banknote/wood-engraving, via **Line
   Integral Convolution**: smear sparse noise along the value field's *tangent*
