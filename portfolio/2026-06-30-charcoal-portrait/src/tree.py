@@ -43,7 +43,9 @@ def branch(x, y, ang, length, width, depth):
         branch(x2, y2, ang + rng.uniform(-0.18, 0.18), length * 0.8, width * 0.7, depth - 1)
 
 
-# trunk base lower-centre, growing up (negative y)
+# trunk base lower-centre, growing up (negative y). Root the trunk at the ground line so it
+# doesn't float: a short straight base segment from the soil up to the first fork.
+ink = np.maximum(ink, stroke(0.46, 0.985, 0.46, 0.92, 0.016, 0.013))
 branch(0.46, 0.92, -np.radians(90), 0.20, 0.013, 8)
 
 # soften (charcoal) + a little broken-stroke texture
