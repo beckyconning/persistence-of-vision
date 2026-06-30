@@ -30,9 +30,12 @@ outer silhouettes** (warp/deckle only partly fixed it). Still genuinely unmoved:
    cohere as line-work — the medium wants washes; try a wash-built subject). CMYK/halftone print
    and cyanotype are still untouched physical media.
 
-1. **A head in PROFILE or 3/4, with expression.** The s3 portrait reads but is
-   frontal/symmetric/mask-stiff. Asymmetry forces real structure; add hair, a neck,
-   an off-axis gaze, or a mood. (Builds on the bas-relief height-field tech.)
+1. **A head in PROFILE or 3/4, with expression.** ✅ TOUCHED s13 (charcoal): a melancholy
+   downcast 3/4 head with hair + neck + off-axis turn — and the key lesson that faces want
+   VALUE-BLOCKING (paint the lit-plane/core-shadow structure) NOT a relief height-field (which
+   read as a mask). STILL OPEN: a *full-front* expressive face; a *second, different* expression
+   to prove control (serene/defiant); a HATCHED charcoal face (visible directional stroke-shading
+   building tone, not smudge-only); a charcoal study of HANDS.
 2. **Image-as-input transforms BEYOND mosaic** (s5 ✅ built the decoder + a
    photomosaic). Now use that decoder differently: a **Droste/recursive nest**
    (decode → shrink → paste into itself), **channel-displacement / chromatic

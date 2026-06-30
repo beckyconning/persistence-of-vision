@@ -250,3 +250,27 @@ multiplicative (non-additive) lighting; hand-wavering line via per-pixel jitter.
 - **Lesson:** cyanotype's defining trick is *partial transmission* — the strongest pieces
   (dragonfly, lace) are the ones where tone comes from degrees of translucency, not opaque
   silhouettes. An opaque fern is just a stencil; a gauze wing is a cyanotype.
+
+## Session 13 — 2026-06-30 (charcoal / tonal drawing + the expressive face)
+- **Charcoal palette** (`2026-06-30-charcoal-portrait/src/`): warm toned paper
+  `[.81,.78,.72]` → cool-black charcoal `[.10,.10,.12]`; `img = charc + (paper-charc)*val`.
+  Paper tooth via faint vnoise multiply; soft vignette. Reads as a drawing, not a render.
+- **FACE = paint the VALUE STRUCTURE, do NOT simulate geometry** (the load-bearing lesson). v1
+  built the face as a relief height-field of Gaussian bumps + Lambert → a blurry symmetric MASK
+  with all-over crosshatch. v2 BLOCKED IN VALUES like a charcoal artist: (1) face mask = two
+  blended ellipses (head + jaw), facial midline LEFT of head-centre for the 3/4 turn; (2) base
+  skin = a left→right key-light ramp; (3) `shade(region, amt)` multiplies darks into core
+  shadows (sockets, nose-side, under-nose/lip/jaw, far cheek recede); (4) hair = thresholded
+  blobs with a `sin` stroke field, sitting outside the face mask; (5) crisp accents (eyelid,
+  nostril, lip-crease) applied with `np.minimum` AFTER a `blur` smudge so they survive; (6)
+  eraser highlights = additive lifts on the lit planes. MOOD from downcast eye-lines (lowered),
+  soft-downturned mouth, shadow-side weight.
+- **Connect the neck UNDER the jaw** or it floats as a disc: a tall column ellipse overlapping
+  the jaw + a value ramp (darkest under the jaw, easing down) + a soft shoulder.
+- **Drapery folds** (`drapery.py`): height field = sum of vertical `exp(-((gather-phase)/w)^2)`
+  ridges, `gather` fanning wider lower down, `sag` bellying the middle, phase wandering with `ny`;
+  NARROW `w` (~0.03) + low blur + high light-scale (SC~135) = crisp deep folds (wide+blurry = mush).
+  Raking low side-light; deepen valleys by `z`; accent darkest valleys; lift crests. Full
+  black→paper tonal range — the charcoal range showcase.
+- **Lesson:** procedural *faces* want value-blocking (artist's method), not physically-based
+  relief; procedural *cloth/forms* are the opposite — a height-field + raking light nails folds.
