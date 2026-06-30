@@ -1,6 +1,6 @@
 # 2026-06-30 — Charcoal portrait (tonal drawing + the expressive face)
 
-Three pieces in a **charcoal-drawing medium** — soft smudged graphite darks, directional stick
+Four pieces in a **charcoal-drawing medium** — soft smudged graphite darks, directional stick
 strokes, kneaded-eraser highlights on warm toned paper. Two firsts in one session: a *tonal
 drawing* medium (vs. the photogram/print/pigment media of recent sessions), and a real attempt
 at the portfolio's marquee untouched subject — the **expressive, off-axis face with a mood**
@@ -11,6 +11,7 @@ at the portfolio's marquee untouched subject — the **expressive, off-axis face
 | `charcoal.png` | 3/4 head, melancholy (smudge) | The face frontier: a turned head with hair, neck, lowered (downcast) gaze and a soft-downturned mouth → a quiet, sad mood. Value-blocked like a charcoal artist, not modelled from relief. |
 | `hatched.png` | 3/4 head, calm (hatched) | The SAME value-blocking method, but tone built from visible cross-hatch strokes (thickening with darkness) instead of smudge — and a different mood: mirrored turn, eyes OPEN with a level mouth. The draughtsman's hatch on a face. |
 | `drapery.png` | Hanging cloth folds | The atelier fold study — full black-to-paper tonal range: deep core shadows in the valleys, bright lit ridge-crests, raking side light. Showcases the medium. |
+| `stilllife.png` | Egg on draped cloth | A composed still life: an ovoid with the full lighting vocabulary (highlight → light → core shadow → reflected light → cast/contact shadow) on folded cloth. Tests that value-blocking reads as believable 3D form, not only a face — it does. |
 
 ## Self-critique ritual
 
