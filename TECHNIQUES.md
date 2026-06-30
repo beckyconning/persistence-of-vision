@@ -274,3 +274,17 @@ multiplicative (non-additive) lighting; hand-wavering line via per-pixel jitter.
   black→paper tonal range — the charcoal range showcase.
 - **Lesson:** procedural *faces* want value-blocking (artist's method), not physically-based
   relief; procedural *cloth/forms* are the opposite — a height-field + raking light nails folds.
+- **Ovoid form-shading** (`stilllife.py` egg, `skull.py` cranium): analytic sphere/ovoid normal
+  `N=(u,v,sqrt(1-u^2-v^2))`, Lambert → light/core-shadow; then the full vocabulary that sells 3D
+  form — a tiny `lam**14` SPECULAR highlight (eraser-bright), a faint REFLECTED-light lift on the
+  shadow side (bounce from the lit ground), a soft elliptical CAST shadow offset toward the light's
+  opposite + a darker CONTACT shadow right under the object. This reads as believable solid form,
+  not just a silhouette — and it's the same kit for an egg or a skull.
+- **Skull** (`skull.py`): value-blocking again — the readability ANCHORS are the deep dark voids
+  (`carve` eye sockets ×0.82, nasal aperture ×0.78) + a bright superior brow rim over each socket;
+  teeth = a lifted light band × `cos(x*freq)^6` gap-mask. Emerging from a dark graded ground reads
+  as memento-mori without crisp edges.
+- **Atmospheric branches** (`tree.py`): recursive `branch()` of tapered `stroke()`s; fine high
+  twigs FADE by `0.55+0.45*y` (atmospheric perspective) so the crown dissolves into a blurred
+  low-freq MIST gradient — charcoal's breathing register. Recursion depth 8, 2–3 children + a
+  jittered continuation per node.
