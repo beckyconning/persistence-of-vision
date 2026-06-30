@@ -30,6 +30,11 @@ based geometry, not value-blocked tone) and a new **technique** (3D wireframe).
   olive-gold in both panels but reads cool/receding on the warm-ochre grounds and
   warm/glowing on the cool-teal grounds — the book's thesis in one image. No tone,
   no line: just flat interacting fields.
+- **`lsystem_plant.png`** — an **L-system plant**: a formal-grammar method (axiom +
+  rules iterated to depth 6, then turtle-interpreted) — recursion, not a grid; the
+  organic counterpoint to the rigid homages. Branch width tapers and hue runs
+  trunk-brown → leaf-green with nesting depth; per-turn angle jitter makes it read
+  grown. Botanical subject + generous negative space.
 - **`circle_packing.png`** — the **non-grid coda** (retiring the grid-of-primitives
   rut). A largest-empty-circle packing: 1887 circles, each grown to just touch its
   nearest neighbour; hue by radius (big warm-red focal circles floating in a sea of
@@ -74,11 +79,12 @@ based geometry, not value-blocked tone) and a new **technique** (3D wireframe).
    (the Mohr cube rotates as a seamless APNG) and **colour** (the Albers diptych is
    real interacting hue, no tone/line). The long-standing paper-ink-plus-one-red
    habit is finally broken.
-5. **Next constraint:** retire the grid-of-rotated-primitives move (still 2 of the
-   5 pieces) — a non-grid generative system (L-system garden, flow field, circle/
-   rect packing) or one large unified composition. And push colour further than a
-   static demo (an Albers/Itten colour study that's also a *subject*, or animated
-   colour interaction).
+5. **Next constraint:** the grid rut got retired this session (circle-packing +
+   L-system are both non-grid), so next is composition at a different scale: ONE
+   large unified composition rather than a field of many elements, and push colour
+   past a static demo (an Albers/Itten study that's also a *subject*, or animated
+   colour interaction). A flow-field remains the one classic generative system not
+   yet revisited outside the s1 corner.
 
 ## Lessons banked
 
