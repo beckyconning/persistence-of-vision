@@ -30,6 +30,10 @@ based geometry, not value-blocked tone) and a new **technique** (3D wireframe).
   olive-gold in both panels but reads cool/receding on the warm-ochre grounds and
   warm/glowing on the cool-teal grounds — the book's thesis in one image. No tone,
   no line: just flat interacting fields.
+- **`truchet.png`** — **Truchet tiles** (Smith arcs): each cell flips a coin to
+  place one of two quarter-arc pairs; neighbours connect into long flowing loops —
+  a maze of curves from pure local randomness. Multi-scale (some cells subdivide),
+  ink + amber on paper. A classic generative tradition, not previously touched.
 - **`island_map.png`** — an invented **island map**: cartography, the one major
   SUBJECT untouched across the whole portfolio. A fractal value-noise elevation
   field pulled into an island by a radial falloff, quantised into tinted relief
