@@ -288,3 +288,28 @@ multiplicative (non-additive) lighting; hand-wavering line via per-pixel jitter.
   twigs FADE by `0.55+0.45*y` (atmospheric perspective) so the crown dissolves into a blurred
   low-freq MIST gradient — charcoal's breathing register. Recursion depth 8, 2–3 children + a
   jittered continuation per node.
+
+## Session 14 — 2026-06-30 (hatching / tone from discrete ink strokes + the full-front face)
+- **TONE FROM HATCHING — the new method** (`2026-06-30-hatched-face/src/hatched_face.py`): tone is
+  *quantised into directional line-strokes*, not a continuous field (every prior face was a smooth
+  value field — relief or charcoal smudge). The engine: `hatch_layer(θ, spacing, threshold)` =
+  parallel lines `line = clip((width-d)/width)` where `d=|phase-round(phase)|`, `phase=(x·sinθ−
+  y·cosθ+waver)/spacing`, GATED by tone `clip((D−t)/soft)`. Sum 6 layers at RISING thresholds
+  (32°,−32°,78°,8°,−60°,50°) → cross-hatch density grows with darkness. Hand feel = low-freq
+  `waver` vnoise bends the lines + high-freq `grain` vnoise breaks strokes (ink skips). Reusable.
+- **Value-blocking is STILL the prerequisite** (re-confirmed, third session running): first render
+  keyed a smooth summed-Gaussian height-field → darkest hatch pooled at the silhouette rim = a
+  STONE, not a face. Fix = paint explicit lit-plane/core-shadow masses (`dark()`/`lit()` Gaussians:
+  sockets, lash-lines, brow, nose ridge/side/nostrils, lip-line bowed for mood, jaw/temple) over a
+  clean analytic-sphere form-turn. Hatching only renders the value map — it can't invent structure.
+- **Trois-crayons from the same engine** (`sanguine_face.png`): darks = sanguine red on a toned
+  café-au-lait ground; HIGHLIGHTS = the identical hatch engine gated on `light` (not `D`) painted
+  in white chalk. Two gated hatch passes (one on darkness, one on light) over a mid-tone = the
+  red-and-white-chalk-on-toned-paper look for free.
+- **Iso-VALUE contours ≠ engraving** (the half-fail, `contour_face.png`): hatching the level-sets
+  of the value field (`phase = light·K`) makes every feature close into concentric LOOPS → a
+  topographic-map / thumbprint, not parallel engraving. Banked: engraving keeps strokes roughly
+  PARALLEL and varies their SPACING with tone; "follow the form" means rotating stroke DIRECTION by
+  the local value-gradient — NOT drawing the iso-contours. That rotation is the next experiment.
+- **First FULL-FRONT face** (prior faces: frontal-relief s3, profile-relief s11, 3/4 charcoal s13).
+  Mood (pensive/melancholy) from lowered eye-masses + down-bowed mouth-line + shadow-side weight.
