@@ -38,6 +38,8 @@ never touches the paper. Three registers of the same head.
   input) into a tight 3:4 portrait that bleeds off the top and sides, weighted
   off-centre — the first portrait here NOT floating as a centred oval on empty
   ground (the habit flagged below).
+- **`cropped_sanguine.png`** — the same off-centre crop on the red-chalk version:
+  an intimate trois-crayons detail (composition + palette together).
 - **`contact_sheet.png`** — the series, assembled: all six treatments of the one
   head in a 3×2 grid (decoded back via the s5 PNG decoder + tiled). "One head,
   six hands" — the session as a single composed statement.
