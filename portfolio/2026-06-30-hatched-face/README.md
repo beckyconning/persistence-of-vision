@@ -34,6 +34,10 @@ never touches the paper. Three registers of the same head.
   (contour) direction, then threshold into discrete lines whose closeness tracks
   tone. This is the correct fix for the topo-map AND the moiré (see lesson 4).
 
+- **`cropped_face.png`** — the composition move: reframe the engraving (image-as-
+  input) into a tight 3:4 portrait that bleeds off the top and sides, weighted
+  off-centre — the first portrait here NOT floating as a centred oval on empty
+  ground (the habit flagged below).
 - **`contact_sheet.png`** — the series, assembled: all six treatments of the one
   head in a 3×2 grid (decoded back via the s5 PNG decoder + tiled). "One head,
   six hands" — the session as a single composed statement.
