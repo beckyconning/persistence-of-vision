@@ -23,6 +23,11 @@ colour-field / Rothko.
   with sparse warm accents (rose/amber) placed by *contrast of extension* so a little
   warm charges the whole cool field. Optical vibration from the hue sequence + a
   breathing band-width cadence — colour interaction with zero soft-glow crutch.
+- **`vibrate.png`** — colour as pure **perception**: two complementary hues (orange-red
+  + cyan-blue) forced to the SAME luminance (0.55 via Rec.709 weights) and interleaved in
+  wavy bands. Strong hue contrast, near-zero luminance contrast → the eye's luminance-keyed
+  edge detectors can't lock the boundary, so it shimmers (equiluminance / Op colour buzz).
+  Measured, not eyeballed.
 - **`fauve.png`** — colour AS **representation** in a **dissonant** palette (Derain/
   Matisse): a recognisable landscape — turquoise sky, green-gold band, hot-orange sun,
   magenta/violet/vermilion hills, a violet-blue river, acid-lime meadow, a teal-canopy
