@@ -23,6 +23,11 @@ colour-field / Rothko.
   with sparse warm accents (rose/amber) placed by *contrast of extension* so a little
   warm charges the whole cool field. Optical vibration from the hue sequence + a
   breathing band-width cadence — colour interaction with zero soft-glow crutch.
+- **`fauve.png`** — colour AS **representation** in a **dissonant** palette (Derain/
+  Matisse): a recognisable landscape — turquoise sky, green-gold band, hot-orange sun,
+  magenta/violet/vermilion hills, a violet-blue river, acid-lime meadow, a teal-canopy
+  tree — built ENTIRELY from flat clashing colour shapes, no line and no value modelling.
+  The scene reads purely from shape + hue adjacency; the clash is the point.
 
 ## How the glow is built (it's craft, not a flat rectangle)
 
