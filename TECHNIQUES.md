@@ -341,3 +341,20 @@ multiplicative (non-additive) lighting; hand-wavering line via per-pixel jitter.
 - **Lesson — the rule is the subject.** Molnár/Mohr land because the transformation law (disorder
   gradient, accumulating rotation) is legible; growth is conceptual, not surface rendering. Held the
   paper-ink palette constant on purpose so the ideas carried.
+
+## Session 16 — 2026-07-01 (colour field / Rothko — colour AS subject, one large composition)
+- **Soft-edged luminous field** (`2026-07-01-color-field/src/rothko.py`): a rectangle = 4-sided
+  `smoothstep` feather (`smooth(c-w/2-f, c-w/2+f, u) * (1-smooth(c+w/2-f, c+w/2+f, u))`, same in v);
+  the FORM still reads but no hard line. Colour graded edge→core.
+- **Even-plateau luminosity, NOT radial falloff** (the fix that made it a field not a sun): grade by
+  `glow = 1 - smooth(0.45, 1.05, dist)` (flat core, soft edge) — `(1-dist)**k` gives a central
+  HOTSPOT/spotlight. This one line is the difference between "colour field" and "glowing ball".
+- **Glow ≠ needs a dark ground.** High-key `dawn.png` proves a field glows by being LIGHTER than a
+  warm-ivory ground (lift gamma >1). Same composition, opposite emotional key = shows colour range.
+- **Scumble + tooth so nothing is dead-flat:** low-freq `vnoise` colour drift (×~5%) + fine-freq
+  grain (+~1%). Hover via a radial `halo` darkening; gentle `**0.92` gamma lift for from-within glow.
+- **Animated colour interaction** (`breathe.py`, APNG): move ONLY luminosity (field breath, offset
+  phases) + ground HUE (counter-phase cool/warm) so simultaneous contrast visibly SHIFTS; FREEZE the
+  per-pixel grain (seed fixed) or it flickers and kills the calm. Seamless loop = phase 2π·f/N.
+- **Retired the grid** (s15's rut) — one large unified composition instead. New over-used move to
+  watch: soft-glow-in-the-dark (2 of 3); next colour work should be HARD-EDGE (Albers/Itten).

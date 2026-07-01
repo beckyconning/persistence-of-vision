@@ -12,6 +12,14 @@ try something, move it to [TECHNIQUES.md](TECHNIQUES.md) and note what happened.
 
 ## ⭐ Up next (curated — grab one of these)
 
+**s16 (2026-07-01) did COLOUR-FIELD / Rothko** — colour + light-from-within AS the subject; one
+large unified composition (retired s15's grid); an animated *breathing* field (luminosity pulse +
+counter-phase ground hue → shifting simultaneous contrast). New over-used move to break: **soft-
+glow-in-the-dark** (much of the corpus). NEXT colour work = **HARD-EDGE** interaction, not glow:
+Josef Albers *Interaction of Color* as a real study (one swatch reading as two against two grounds),
+or Itten's seven contrasts; and a genuinely **cool / dissonant** palette (everything so far is warm-
+harmonious or neon). Colour-as-subject is now open — keep pushing it away from the glow crutch.
+
 **s15 (2026-06-30) did generative-art ANCESTORS** — Molnár (order→disorder squares), Mohr
 ("Cubic Limit" rotating-cube wireframes, first 3D), Riley (Op wave-bands). This finally LEFT the
 portrait corner (s2/3/11/13/14 were all faces). Two open threads it surfaced: (a) **ANIMATE one** —
