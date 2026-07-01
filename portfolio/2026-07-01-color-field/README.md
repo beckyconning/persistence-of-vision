@@ -98,3 +98,11 @@ python3 -m venv .venv && .venv/bin/pip install numpy   # repo root
 .venv/bin/python src/rothko.py      # seagram.png + dawn.png
 .venv/bin/python src/breathe.py     # breathing.png (APNG)
 ```
+
+## Logged dead-end
+- **Bayer-dithered gradient** (`src/dither.py`, no image kept): tried to close with
+  ordered-dither colour, but the recursive Bayer-matrix construction over-divided
+  (`/(n*n)` at every recursion level, not once), collapsing the thresholds → the
+  gradient barely dithered (near-solid). Ran out of break time to fix; kept the code
+  as the note. Correct build: divide by `n*n` ONCE at the end, or add 0.5 and divide by
+  `n*n`. A real technique for next time, not this session.
