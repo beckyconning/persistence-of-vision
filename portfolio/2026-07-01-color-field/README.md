@@ -23,6 +23,11 @@ colour-field / Rothko.
   with sparse warm accents (rose/amber) placed by *contrast of extension* so a little
   warm charges the whole cool field. Optical vibration from the hue sequence + a
   breathing band-width cadence — colour interaction with zero soft-glow crutch.
+- **`albers_proof.png`** — the canonical Albers demonstration done **rigorously**: one
+  physical swatch (muted olive-gold) on two engineered grounds — cool teal (it reads
+  warm/light) and warm ochre (it reads cool/dull) — with a thin connecting **proof bar**
+  of the *same* colour spanning the seam. The bar shows it is one continuous colour; the
+  two framed patches still refuse to match. Colour interaction, measured and proven.
 - **`vibrate.png`** — colour as pure **perception**: two complementary hues (orange-red
   + cyan-blue) forced to the SAME luminance (0.55 via Rec.709 weights) and interleaved in
   wavy bands. Strong hue contrast, near-zero luminance contrast → the eye's luminance-keyed
