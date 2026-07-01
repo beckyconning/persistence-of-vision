@@ -23,6 +23,11 @@ colour-field / Rothko.
   with sparse warm accents (rose/amber) placed by *contrast of extension* so a little
   warm charges the whole cool field. Optical vibration from the hue sequence + a
   breathing band-width cadence — colour interaction with zero soft-glow crutch.
+- **`hidden.png`** — the capstone: an image that exists **only in colour**. Concentric
+  rings in two equiluminant complementaries (rose/teal @ L=0.55) — LEFT the colour image
+  (rings vivid), RIGHT the exact luminance of those pixels (rings collapse to a near-flat
+  gray, spread ≈0.009; a faint ghost remains only from sRGB-vs-linear luminance). Proof in
+  one plate that colour alone can carry a whole image and that form-vision is luminance-led.
 - **`albers_proof.png`** — the canonical Albers demonstration done **rigorously**: one
   physical swatch (muted olive-gold) on two engineered grounds — cool teal (it reads
   warm/light) and warm ochre (it reads cool/dull) — with a thin connecting **proof bar**
