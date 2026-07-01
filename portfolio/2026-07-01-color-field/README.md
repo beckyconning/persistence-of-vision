@@ -18,6 +18,11 @@ colour-field / Rothko.
   the fields' inner luminosity slowly swells and settles (offset phases), and the
   ground drifts cooler/warmer in **counter-phase** — so the eye reads the simultaneous
   contrast *shifting* (the orange reads hotter as the ground cools). Time as material.
+- **`riley_stripes.png`** — the **hard-edge** counterpoint (after Bridget Riley's colour
+  stripes): flat vertical bands, NO glow, in a cool sequence (teal/blue/violet/green)
+  with sparse warm accents (rose/amber) placed by *contrast of extension* so a little
+  warm charges the whole cool field. Optical vibration from the hue sequence + a
+  breathing band-width cadence — colour interaction with zero soft-glow crutch.
 
 ## How the glow is built (it's craft, not a flat rectangle)
 
@@ -45,12 +50,15 @@ colour-field / Rothko.
    much earlier density work) are luminous forms emerging from a dark ground — the
    `dawn.png` high-key piece was the deliberate counter to it. Next colour work should
    be FLAT/hard-edged interaction (Albers/Itten), not glow.
-4. **What I avoided:** hard-edge colour (everything here is feathered/soft — easier to
-   make "glow"); and colour that's cool/discordant rather than warm-harmonious.
-5. **Next constraint:** hard-edged colour interaction — Albers *Interaction of Color*
-   as a real study (same swatch reading as two colours against two grounds), or Itten
-   contrasts — proving colour control without the soft-glow crutch. And a genuinely
-   COOL or dissonant palette.
+4. **What I avoided → then took:** hard-edge colour + a cool palette. The three fields
+   were all soft warm glow, so I added `riley_stripes.png` — flat, hard-edged, cool,
+   optical — as the deliberate counter within the same session. Colour interaction now
+   done BOTH ways (soft simultaneous-contrast fields + hard-edge sequence vibration).
+5. **Next constraint:** Albers *Interaction of Color* as a rigorous study — the SAME
+   swatch engineered to read as two different colours against two grounds (measured, not
+   eyeballed); and a genuinely DISSONANT palette (clashing hues), since even the Riley
+   stripes stayed harmonious. Also: colour + representation (a subject rendered purely in
+   colour-temperature, no line/value).
 
 ## Lessons banked
 
