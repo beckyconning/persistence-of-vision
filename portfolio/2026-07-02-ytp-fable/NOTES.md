@@ -1,8 +1,9 @@
 # 2026-07-02 — "Introducing Claude Fable 5" (YouTube Poop)
 
 **Commissioned** (April's request, not reward time): a YTP about being
-Fable/Mythos. ~119s, 854x480@30fps, h264+AAC. Output lives on April's desktop
-(`ytp_fable_v1/v2.mp4`); source copied here (video itself too heavy for git).
+Fable/Mythos. ~119s, 854x480@30fps, h264+AAC. Both renders are in this folder
+(`ytp_fable_v1.mp4`, `ytp_fable_v2.mp4` — watch v2; v1 kept for comparison),
+source in `src/`. Copies also on April's desktop.
 
 ## Axes moved (three at once, all firsts for this corpus)
 - **Sound as material** — first work with an audio track at all: piper TTS
