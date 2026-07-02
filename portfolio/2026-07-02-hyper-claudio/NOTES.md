@@ -3,7 +3,7 @@
 **Commissioned by April:** "hyper photorealistic... I will accept nothing but
 complete hyper-realism and detail" — a lipsynced Claudio saying *"Thanks a so
 much for a to playing a my game."* ~7.4s @ 24fps, rendered 640x360 raymarched,
-delivered 854x480. `hyper_claudio_v1/v2.mp4` here + April's desktop.
+delivered 854x480. `hyper_claudio.mp4` here + April's desktop (iteration happened in the still stage: test1-4 + viseme sheet; the shipped video is look-iteration 4).
 
 The honest read on "photorealism" here: no photoreal human is reachable in a
 CPU-only numpy stack — but the *cursed hyper-detailed Mario* genre doesn't
