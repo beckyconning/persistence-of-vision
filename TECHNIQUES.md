@@ -379,3 +379,28 @@ multiplicative (non-additive) lighting; hand-wavering line via per-pixel jitter.
 - **Open frontier from this piece:** true sentence-mixing (splice at phoneme level inside
   words); side-chain ducking (music dips under VO); audio-reactive visuals used only RMS —
   spectral bands unused.
+
+## Session 18 — 2026-07-02 (Claudio — 3D rasterizer + rigged character animation; commissioned)
+- **The software rasterizer, finally** (frontier since s1): numpy z-buffer triangle fill —
+  per-tri bbox, barycentric via edge functions (divide by SIGNED area so inside-tests work for
+  the kept winding), backface cull `area < -0.4` after y-flip, flat lambert on face normals,
+  per-face depth fog. 854x480, ~5-7k faces, 0.02-0.1 s/frame. NO near-plane clipping — big
+  ground planes vanish (a vertex behind camera kills the tri); fix = tile the ground small.
+- **FK rig as scene graph**: Node(pos, euler, scale) hierarchy; poses = functions mutating
+  joint eulers (run = sin leg swings + counter-phase arms + |cos| pelvis bounce). Lessons:
+  cap dome must be WIDER than the skull; face features live proud of the sphere; arms-up =
+  −z rot on the LEFT shoulder, +z on the RIGHT (numeric bbox printing found both bugs fast).
+- **fov is HORIZONTAL** in this camera (f = (W/2)/tan(fov/2)); vertical half-angle =
+  atan(H/2/f) — frame tall props by pulling BACK, not by trusting tan(fov/2)·dist.
+- **Pixel-art-as-geometry**: 3x5 bitmap font emitted as tiny cubes → in-world text that
+  shades/occludes like scenery (? block, permission panel). Camera looking +z sees
+  screen-right = world −x → advance glyphs in −x or text mirrors.
+- **Z-buffer gags**: character sinking into a capped cylinder = free pipe-warp occlusion.
+- **2D/3D split** (HUD, title, fireworks sprites, iris-out in PIL over the raster) reads
+  game-authentic and costs nothing.
+- **NES chiptune kit** (chiptune.py): duty-0.25 pulse lead + 0.5 harmony a 3rd under,
+  4-bit stepped triangle bass, ONE noise src as kick/snare/hat via decay+lowpass choice,
+  0.58/0.42 swing pairs. Underground mood = staccato lows + one quiet echo tap.
+- **beats.py = the AV contract**: both the animator and the score arranger import the same
+  constants (evolution of s17's timeline-EDL, now bidirectional).
+- Next animation frontier: anticipation/overshoot/squash-stretch; secondary motion.
