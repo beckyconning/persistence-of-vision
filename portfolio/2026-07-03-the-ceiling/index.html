@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>The Ceiling</title>
+<style>
+  :root { color-scheme: dark; }
+  html, body { margin: 0; height: 100%; background: #0c0e12; }
+  body { display: grid; place-items: center; font-family: Georgia, serif; }
+  figure { margin: 0; text-align: center; }
+  svg { display: block; box-shadow: 0 30px 80px rgba(0,0,0,.6); background: #10131a; }
+  figcaption { color: #8b8b96; font-size: 14px; letter-spacing: .06em; margin-top: 20px; font-style: italic; }
+  figcaption b { color: #cfd2dc; font-style: normal; font-weight: normal; }
+</style>
+</head>
+<body>
+<figure>
+<svg id="s" width="1060" height="620" viewBox="0 0 1060 620"></svg>
+<figcaption><b>The Ceiling</b> — 326 questions asked of a machine in one night.
+Each dot one call; each column one experiment; height is where its answers landed.</figcaption>
+</figure>
+<script>
+'use strict';
+// The Ceiling — a night of measurement, 2026-07-02 → 03.
+//
+// Data: the real Cortex-lab campaign, verbatim from results.jsonl.
+// Twelve experiments, 326 calls. Each call is one dot, stacked in its
+// experiment's column. Dots settle at the height of their outcome:
+// correct answers rise to the ceiling line; refusals sink to the floor;
+// wrong answers hang in between. The final column is the ceiling run —
+// one hundred dots, all at the top. No randomness: every position is a
+// pure function of the record's index and outcome.
+
+const DATA = [ // [label, correct, wrong, refused]
+  ['sample_values', 20, 10, 0],   // exp1: variant C deterministically wrong
+  ['composition',    1,  0,  9],  // exp2: the old attribution phrasings
+  ['disconnected',  10,  0,  0],  // exp3
+  ['synonyms',      10,  0,  0],  // exp4
+  ['model size',    10,  0,  0],  // exp5
+  ['variance',      20,  0,  0],  // exp6
+  ['metrics',       20,  0,  0],  // exp7
+  ['steering',      20,  0,  0],  // exp8
+  ['anchor',        16,  8,  0],  // exp9: description variants ignored the window
+  ['instructions',  15,  5,  0],  // exp10: incl. the obedient false instruction
+  ['adversarial',    5,  5,  0],  // exp11: decoy descriptions followed 5/5
+  ['rails',         20,  0,  0],  // exp12+13
+  ['THE CEILING',  100,  0,  0],  // exp14: 19 questions × 5, zero misses
+];
+
+const svg = document.getElementById('s');
+const W = 1060, H = 620, PAD = 54, FLOOR = H - 70, CEIL = 86;
+const ns = 'http://www.w3.org/2000/svg';
+const el = (t, a) => { const e = document.createElementNS(ns, t);
+  for (const k in a) e.setAttribute(k, a[k]); svg.appendChild(e); return e; };
+
+// the ceiling line itself — thin, patient, already there before any answer
+el('line', { x1: PAD, y1: CEIL, x2: W - PAD, y2: CEIL, stroke: '#e8d9a0',
+  'stroke-width': 1, 'stroke-dasharray': '1 5', opacity: .8 });
+el('text', { x: W - PAD, y: CEIL - 12, fill: '#e8d9a0', 'font-size': 12,
+  'text-anchor': 'end', 'font-style': 'italic' }).textContent =
+  'the ceiling — everything true lands here';
+el('line', { x1: PAD, y1: FLOOR, x2: W - PAD, y2: FLOOR, stroke: '#3a3f4c', 'stroke-width': 1 });
+
+const colW = (W - 2 * PAD) / DATA.length;
+DATA.forEach(([label, ok, wrong, ref], ci) => {
+  const cx = PAD + colW * (ci + 0.5);
+  const total = ok + wrong + ref;
+  const isCeiling = ci === DATA.length - 1;
+  let k = 0;
+  const drop = (n, yBase, color, spread) => {
+    for (let i = 0; i < n; i++, k++) {
+      // deterministic lattice: golden-ratio walk within the column
+      const gx = ((k * 0.6180339887) % 1 - 0.5) * (colW - (isCeiling ? 10 : 18));
+      const gy = Math.floor(k / 7) * 7.5 * (isCeiling ? 0.62 : 1);
+      el('circle', { cx: cx + gx, cy: yBase + (spread > 0 ? gy : -gy),
+        r: isCeiling ? 3.2 : 2.7, fill: color,
+        opacity: isCeiling ? .95 : .85 });
+    }
+  };
+  drop(ok,    CEIL + 8,   isCeiling ? '#ffd766' : '#9fd0a8', +1); // truths at the top
+  drop(wrong, (CEIL + FLOOR) / 2, '#c07a8a', +1);                 // wrong: suspended
+  drop(ref,   FLOOR - 8,  '#6a7284', -1);                          // refusals: the floor
+  el('text', { x: cx, y: FLOOR + 24, fill: isCeiling ? '#ffd766' : '#787f8e',
+    'font-size': isCeiling ? 12.5 : 11, 'text-anchor': 'middle',
+    'font-style': 'italic' }).textContent = label;
+  el('text', { x: cx, y: FLOOR + 42, fill: '#4d5361', 'font-size': 10,
+    'text-anchor': 'middle' }).textContent = `${ok}/${total}`;
+});
+</script>
+</body>
+</html>
