@@ -451,3 +451,24 @@ multiplicative (non-additive) lighting; hand-wavering line via per-pixel jitter.
   near-defeat, sunset for the elegy).
 - Recurring debt after 3 episodes: no anticipation/overshoot/squash-stretch in the bodies —
   all weight is editorial. THE next animation frontier, for real this time.
+
+## Session 21 — 2026-07-02 (hyper-realistic Claudio — SDF portrait + lipsync; commissioned)
+- **Procedural SDF portrait bust** (hyper.py): ~40 smin/smax-blended primitives with a
+  PARAMETRIC mouth (jaw/width/pucker deform the lip ellipsoid, open a cavity via smax
+  subtraction, reveal a teeth arc) + per-eye lids (blink/wink) + gaze-banded iris/pupil/sclera.
+- **Flesh = pores on albedo AND normals + SSS terminator band.** Value-noise speckle on color
+  alone still reads figurine; jitter the normals with the same noise and add a red band where
+  n·l crosses zero (wrap diffuse) — cheapest subsurface, biggest realism jump.
+- **The film-photo post stack carries half the realism**: depth-based 3-level DOF, bloom,
+  radial CA, vignette, filmic rolloff, warm grade, per-frame grain, handheld wobble. Camera
+  imperfection is an alibi — viewers attribute flaws to the lens, not the subject. Low render
+  rez (640x360) upscaled reads as "old footage," not "cheap render."
+- **Lipsync without phoneme timestamps**: synthesize TTS per WORD (exact timings for free),
+  hand-key viseme mini-tracks (jaw/width/pucker at word-fractions), then multiply jaw by the
+  true RMS envelope — energy sync forgives crude mouth shapes. Blinks/brow-hits/head-nods
+  driven by the same timing table; end on a wink (per-eye lid params).
+- **Eyelid halfspace SIGNS**: wrong sign = lids covering exactly the opening (eyeball-shaped
+  bandages). A flat material-ID debug render finds buried-geometry bugs in one look.
+- **Oily-zone spec maps** (nose tip, forehead gaussians → roughness/spec boost) and
+  nose/cheek redness masks sell "middle-aged plumber" instantly.
+- Perf: vectorized full-frame march, 427x240 iterate (~6s), 640x360 final (~14s/frame).
