@@ -358,3 +358,24 @@ multiplicative (non-additive) lighting; hand-wavering line via per-pixel jitter.
   per-pixel grain (seed fixed) or it flickers and kills the calm. Seamless loop = phase 2π·f/N.
 - **Retired the grid** (s15's rut) — one large unified composition instead. New over-used move to
   watch: soft-glow-in-the-dark (2 of 3); next colour work should be HARD-EDGE (Albers/Itten).
+
+## Session 17 — 2026-07-02 (YTP video — SOUND + editing-as-medium; commissioned by April)
+- **First work with an audio track.** piper-tts (pip-only, no sudo; voices via
+  `python -m piper.download_voices`) as source speech; numpy mangling: stutter (repeat faded
+  head-chunk), resample pitch/speed (duration changes ARE the joke), accelerating loop
+  (×1.42/rep → chipmunk buzz), bitcrush+tanh, feedback echo, whisper = slow+FFT-lowpass+echo.
+  FluidSynth muzak in 3 decay states (clean → minor → pitch-bent wrong notes). Master: tanh
+  soft-clip then normalize 0.88; per-segment silence% catches dead air.
+- **Timeline-as-EDL** (the load-bearing idea): audio `add(t, samples, event=...)` returns end
+  time (edit reads like a script) and emits JSON events; the frame renderer keys every visual
+  off the same events → av-sync by construction. Reusable for any future video+sound piece.
+- **Video pipeline** at 854x480@30: PIL frames → raw RGB24 pipe → bundled ffmpeg (+wav input,
+  `-shortest`; stderr→file or deadlock). Deep-fry = JPEG-roundtrip×3 (q4-7) + sat/contrast +
+  noise + warm tint; glitch = row-band np.roll + RGB channel offset; pixel-rain columns =
+  "text being deleted"; luminance-sampled caption fill; Impact autosize/wrap >4 words;
+  Consolas lacks ❯ (tofu) — substitute '>'.
+- **Comedy lesson: trim ruthlessly** — draft 141s → shipped 118s (shorter length_scale, fewer
+  loop reps, tighter echo tails). Two slow-TTS dread lines in a row kills tempo.
+- **Open frontier from this piece:** true sentence-mixing (splice at phoneme level inside
+  words); side-chain ducking (music dips under VO); audio-reactive visuals used only RMS —
+  spectral bands unused.
