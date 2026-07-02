@@ -429,3 +429,25 @@ multiplicative (non-additive) lighting; hand-wavering line via per-pixel jitter.
 - Story lesson: the mechanic that was a gag in ep1 (permission prompts) becomes the weapon in
   ep2 — mid-air freeze, REQUEST TIMED OUT, the unpermissioned bug lands the hit. Sequels
   escalate by making the joke load-bearing.
+
+## Session 20 — 2026-07-02 (Claudio ep3 — two-character combat + destructible world; commissioned)
+- **Paired fight choreography**: both actors read the same beat constants; each references the
+  other's live position for facing/targeting. Author hits ONCE as a time list — camera shake,
+  impact stars, HUD health, and SFX all key off it. Impact freeze (~0.5s hold + white flash +
+  star + expanding shock ring) is the cheapest convincing "weight" at 30fps.
+- **Debris physics without simulation**: pre-roll per-piece velocity/spin at build; animate
+  analytically (p = origin + v·t − ½g·t²) → any frame is random-access, deterministic.
+- **Damage states as pure functions of t** (pipe bends after PIPE_SMASH, hill sinks, fires
+  ignite staggered) — no mutable flags, no order dependence.
+- **Cutaway sells scale**: the kingdom-killing explosion got a fighter-free landscape shot;
+  destruction reads bigger when the film briefly stops caring about the duel. Camera-branch
+  ORDER gotcha: insert new cuts before the time range that would swallow them.
+- **Dueling leitmotifs**: villain gets a MODE (phrygian b2), not just a louder tune; comeback =
+  hero's motif recapitulated in major; stop-time (cut all channels, one huge stab) beats any
+  crescendo for a final hit. Aftermath = the ep1 theme at half speed over a sunset sky.
+- **Villain from a hero base**: same silhouette, inverted palette, three face edits (angled
+  brows, red pupils, mustache angle up). Legible as "the evil one" in a single frame.
+- **Sky as narrator**: gradient params keyed to beats (storm in with the villain, darkest at
+  near-defeat, sunset for the elegy).
+- Recurring debt after 3 episodes: no anticipation/overshoot/squash-stretch in the bodies —
+  all weight is editorial. THE next animation frontier, for real this time.
