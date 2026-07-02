@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Constancy (after Albers)</title>
+<style>
+  :root { color-scheme: dark; }
+  html, body { margin: 0; height: 100%; background: #101014; }
+  body { display: grid; place-items: center; font-family: Georgia, 'Times New Roman', serif; }
+  figure { margin: 0; text-align: center; }
+  canvas { display: block; box-shadow: 0 30px 80px rgba(0,0,0,.55); }
+  figcaption { color: #8b8b96; font-size: 14px; letter-spacing: .06em; margin-top: 22px; font-style: italic; }
+  figcaption b { color: #c9c9d4; font-style: normal; font-weight: normal; }
+</style>
+</head>
+<body>
+<figure>
+  <canvas id="c" width="1080" height="648"></canvas>
+  <figcaption><b>Constancy</b> — every small square is the same colour. Only its ground moves.</figcaption>
+</figure>
+<script>
+'use strict';
+// Constancy (after Albers) — one value, many readings.
+//
+// A 5×3 atlas of grounds walks hue and lightness on a slow, breathing cycle.
+// The centred swatch never changes: rgb(150,140,160) in every tile, always.
+// Simultaneous contrast does the painting: against warm dark grounds the
+// constant reads cool and luminous; against cold light grounds it reads
+// warm and recessed. Perception re-derives the centre from its context —
+// what is actually invariant can only be known by protecting it.
+
+const cv = document.getElementById('c'), ctx = cv.getContext('2d');
+const COLS = 5, ROWS = 3, W = cv.width / COLS, H = cv.height / ROWS;
+const CONST = 'rgb(150,140,160)';           // the one value, everywhere
+const TAU = Math.PI * 2;
+
+function ground(i, j, t) {
+  // Each tile owns a fixed hue station; lightness breathes in slow phase
+  // ripples across the grid so neighbouring readings diverge maximally.
+  const n = i + j * COLS;
+  const hue = (n * 360 / (COLS * ROWS) + 12 * Math.sin(t / 31 + n)) % 360;
+  const phase = t / 17 + (i * 1.7 + j * 2.9);
+  const light = 34 + 26 * Math.sin(phase);
+  const sat = 42 + 18 * Math.sin(t / 23 + n * 1.3);
+  return `hsl(${hue.toFixed(1)} ${sat.toFixed(1)}% ${light.toFixed(1)}%)`;
+}
+
+function frame(ms) {
+  const t = ms / 1000;
+  for (let j = 0; j < ROWS; j++) {
+    for (let i = 0; i < COLS; i++) {
+      const x = i * W, y = j * H;
+      ctx.fillStyle = ground(i, j, t);
+      ctx.fillRect(x, y, W, H);
+      // Albers' nesting: a mid ring of the ground, darkened, tightens the
+      // induction field around the constant centre.
+      const g = ctx.fillStyle;
+      ctx.fillStyle = 'rgba(0,0,0,.18)';
+      ctx.fillRect(x + W * .22, y + H * .22, W * .56, H * .56);
+      ctx.fillStyle = CONST;
+      const s = Math.min(W, H) * .30;
+      ctx.fillRect(x + (W - s) / 2, y + (H - s) / 2, s, s);
+    }
+  }
+  // hairline grid, so the tiles read as an atlas, not a quilt
+  ctx.strokeStyle = 'rgba(16,16,20,.9)'; ctx.lineWidth = 2;
+  for (let i = 1; i < COLS; i++) { ctx.beginPath(); ctx.moveTo(i * W, 0); ctx.lineTo(i * W, cv.height); ctx.stroke(); }
+  for (let j = 1; j < ROWS; j++) { ctx.beginPath(); ctx.moveTo(0, j * H); ctx.lineTo(cv.width, j * H); ctx.stroke(); }
+  requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+</script>
+</body>
+</html>

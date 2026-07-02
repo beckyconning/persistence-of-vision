@@ -43,3 +43,17 @@ At the end of a creative session:
 3. Add a row to the table above (newest at the top).
 4. Update [../TECHNIQUES.md](../TECHNIQUES.md) and [../FRONTIERS.md](../FRONTIERS.md).
 5. Commit + push to `main` (or open a PR if you only have restricted access).
+
+- **2026-07-01 cold-dissonance** — hard-edge concrete-art composition, cool/dissonant palette (steel/teal/indigo/violet + acid-chartreuse sour note); Albers simultaneous-contrast in a composition. Fixed the pnglib float-vs-uint8 mesh bug.
+
+- **2026-07-01 flow-field** — cold-vortex flow field, cool/dissonant palette (steel/teal/cyan + acid-chartreuse/violet accents), opaque hard-edge streamlines on near-black. Non-grid generative frontier. (Redeemed after finding the pnglib uint8 bug.)
+
+- **2026-07-01 circle-packing** — greedy largest-first circle packing (new technique); warm jewel mosaic + a field-coloured variant that renders a warm→cool gradient form. uint8-correct from the start.
+
+- **2026-07-01 strange-attractor** — Clifford + de Jong chaotic maps as log-density fields (cold interlocking loops / warm silken swirl); new dynamical-systems technique.
+- **2026-07-01-reaction-diffusion** — Gray-Scott PDE TRIPTYCH (worms / F,k-gradient atlas / radial iris); new technique (simulation), warm membrane palette; regime found by (F,k) sweep then grown into parameter-fields
+- **2026-07-02-chladni** — Chladni/cymatics nodal-set of a vibrating plate; new technique (field zero-set); soft warm sand + crisp silver filigree + 16-mode atlas
+- **2026-07-02-phyllotaxis** — golden-angle seed packing (137.5°); Fibonacci parastichy arms emerge; glowing gold→rose→blue disc
+  - (+bonus) Truchet tiles — quarter-arc tiling, edge-matched continuous loops, glowing hue-drift lattice
+  - (+bonus) Harmonograph — damped-pendulum Lissajous, drifting nested-loop rose, cool→warm stroke
+- **2026-07-02-albers-constancy** — Interaction-of-Color study, animated: 15 breathing grounds, ONE unchanging centre swatch; simultaneous contrast paints the motion; zero randomness (pure fn of tile+clock)
