@@ -404,3 +404,28 @@ multiplicative (non-additive) lighting; hand-wavering line via per-pixel jitter.
 - **beats.py = the AV contract**: both the animator and the score arranger import the same
   constants (evolution of s17's timeline-EDL, now bidirectional).
 - Next animation frontier: anticipation/overshoot/squash-stretch; secondary motion.
+
+## Session 19 — 2026-07-02 (Claudio WORLD 1-2 — glitch apocalypse; commissioned)
+- **Diegetic glitch = expose the real pipeline in reverse**: flat-shade → random-flat-color
+  ("rainbow"), normals-as-RGB, depth-as-grayscale render modes, then vertex-warp the geometry
+  itself (gaussian + single-axis stretch spasms, amp ∝ c²). Reads as reality decompiling, not
+  a pasted filter. Keep renderer-leak frames CLEAN of 2D noise — legibility is the horror.
+- **One corruption curve to rule everything**: a single c(t) drives vertex amp, 2D-glitch
+  probability, HUD text decay, render-mode flicker, camera misbehavior AND per-chunk audio
+  mangling (stutter/reverse/rate-wobble/bitcrush/dropout on the rendered theme). Total AV
+  coherence for free; the audience feels one sickness, not many effects.
+- **Glitch in WAVES** (`amt = c·(0.22+0.78·burst)`), never constant walls — constant max-2D
+  noise buries the 3D spectacle (first render was an unreadable wash at c>0.7).
+- **A void is scene management**: dark sky ≠ void; toggle the environment node list off.
+- **2D corruption kit** (glitchfx.py): row tears, RGB channel roll, macroblock displacement
+  (datamosh), pixelate, 4-level quantize, vertical hold roll, ghost-frame blend, garbage/zalgo
+  text, corrupt HUD ladder, Windows error dialogs, BSOD. Familiar OS chrome sells "crashed"
+  hardest.
+- **In-world UI panels are blocking twice**: they occlude the hero if placed between camera
+  and subject (accidentally funny, usually wrong), and screen-right = world−x bites on every
+  placement. Speech-bubble panels go BESIDE the subject; verify at 1:1, not thumbnails.
+- **Hit-stun kit**: damage blink `int(t·18)%2`, knockback arc, flying-cap parabola with spin,
+  face-down splat pose (root euler (−π/2,−π/2,0)).
+- Story lesson: the mechanic that was a gag in ep1 (permission prompts) becomes the weapon in
+  ep2 — mid-air freeze, REQUEST TIMED OUT, the unpermissioned bug lands the hit. Sequels
+  escalate by making the joke load-bearing.
