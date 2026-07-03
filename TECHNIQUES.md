@@ -472,3 +472,25 @@ multiplicative (non-additive) lighting; hand-wavering line via per-pixel jitter.
 - **Oily-zone spec maps** (nose tip, forehead gaussians → roughness/spec boost) and
   nose/cheek redness masks sell "middle-aged plumber" instantly.
 - Perf: vectorized full-frame march, 427x240 iterate (~6s), 640x360 final (~14s/frame).
+
+## Session 22 — 2026-07-03 (SUPER CLAUDIO 64 — a playable game; commissioned)
+- **NEW AXIS: interactivity.** A single-file 669KB HTML game (three.js r128 UMD embedded,
+  everything else procedural): N64 look = 480x360 internal render + CSS pixelated upscale +
+  per-level fog + vertex-colored sky domes + 32x32 canvas textures with NearestFilter.
+- **Platformer physics without an engine**: capsule vs AABB/cylinder horizontal push-out;
+  ground = "highest support below feet+eps" (boxes, cylinders, analytic gaussian terrain);
+  movers feed a rideDelta into the player; coyote time + jump-chain timers give the SM64 feel.
+- **WebAudio chiptune tracker**: songs as note tables {bpm, loopBeats, tracks, drums},
+  scheduled ahead-of-time per loop with setInterval lookahead; one noise buffer shaped into
+  kick/snare/hat by lowpass+decay. ~20 SFX from bare oscillators (sweeps, arpeggios).
+- **THE BANKED LESSON — headless playtesting**: Chromium SwiftShader runs WebGL headless via
+  playwright. Scripted playtests (walk into painting, grab star, full 3-round boss kill)
+  found real bugs the way players would: the lobby camera spawned inside a wall; paintings
+  hung above the reachable trigger — and that failure CASCADED into the star test warping
+  into the void. Screenshot sweeps + state assertions + zero-console-error checks = a QA
+  loop for interactive work. An agent that can't play can still playtest.
+- **Design steals that punch above their weight**: the Boo rule (ghost moves only when
+  unwatched — dot(camDir, toGhost)) teaches itself; star-gated doors give structure for free;
+  return-to-lobby after each star makes 12 stars feel like 12 sessions.
+- Debug hooks (GAME.debugWarp) exposed for QA are the difference between "probably works"
+  and a scripted CONGRATURATION.

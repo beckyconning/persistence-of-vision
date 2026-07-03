@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>SUPER CLAUDIO 64</title>
+<style>
+  html,body { margin:0; padding:0; background:#000; height:100%; overflow:hidden;
+    font-family: 'Courier New', monospace; user-select:none; }
+  #game-wrap { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; }
+  #game { position:relative; aspect-ratio: 4/3; height:100vh; max-width:100vw; }
+  #game canvas { width:100% !important; height:100% !important; image-rendering: pixelated; }
+  .overlay { position:absolute; inset:0; pointer-events:none; }
+  .px { text-shadow: 2px 2px 0 #1a1408, -1px -1px 0 #1a1408, 1px -1px 0 #1a1408, -1px 1px 0 #1a1408; }
+  #hud-stars { position:absolute; top:12px; left:16px; color:#ffd23c; font-size:26px; font-weight:bold; }
+  #hud-tokens { position:absolute; top:44px; left:16px; color:#ff9860; font-size:19px; font-weight:bold; display:none; }
+  #hud-hearts { position:absolute; top:12px; right:16px; color:#ff5a5a; font-size:26px; letter-spacing:3px; }
+  #hud-hearts.flash { animation: hflash 0.5s; }
+  @keyframes hflash { 0%,100%{transform:scale(1)} 50%{transform:scale(1.5); color:#fff} }
+  #bosshp { position:absolute; top:44px; right:16px; color:#c85aff; font-size:20px; font-weight:bold; display:none; }
+  #banner { position:absolute; top:16%; width:100%; text-align:center; color:#fff;
+    font-size:34px; font-weight:bold; opacity:0; transition:opacity .5s; letter-spacing:2px; }
+  #banner .sub { font-size:16px; color:#ffe9a8; margin-top:6px; letter-spacing:1px; }
+  #msg { position:absolute; bottom:14%; width:100%; text-align:center; color:#ffffa8;
+    font-size:20px; font-weight:bold; opacity:0; transition:opacity .4s; }
+  #starget { position:absolute; top:34%; width:100%; text-align:center; color:#ffd23c;
+    font-size:44px; font-weight:bold; opacity:0; transition:opacity .4s; }
+  #starget .sub { font-size:20px; color:#fff; }
+  #fade { position:absolute; inset:0; background:#000; opacity:0; }
+  #title { position:absolute; inset:0; background:
+      radial-gradient(ellipse at 50% 30%, #35508c 0%, #101a38 70%, #060a18 100%);
+    display:flex; flex-direction:column; align-items:center; justify-content:center; }
+  #title h1 { color:#ffd23c; font-size:64px; margin:0; letter-spacing:4px;
+    text-shadow: 4px 4px 0 #b03028, 8px 8px 0 #1a1408; transform: rotate(-2deg); }
+  #title h1 .six { color:#7ec8ff; }
+  #title .boot { color:#ff9860; font-size:16px; margin-top:10px; letter-spacing:3px; }
+  #title .press { color:#fff; font-size:22px; margin-top:56px; animation: blink 1.1s infinite; }
+  @keyframes blink { 50% { opacity: 0.15; } }
+  #title .controls { color:#a8c0e8; font-size:14px; margin-top:44px; line-height:1.8; text-align:center; }
+  #title .tm { color:#5a6a90; font-size:11px; margin-top:30px; }
+  #pausebox { display:none; position:absolute; top:32%; left:50%; transform:translateX(-50%);
+    background:rgba(8,10,24,0.92); border:3px solid #ffd23c; padding:26px 44px;
+    color:#fff; font-size:20px; text-align:center; line-height:2; }
+  #pausebox h2 { color:#ffd23c; margin:0 0 10px; }
+</style>
+</head>
+<body>
+<div id="game-wrap"><div id="game">
+  <div class="overlay">
+    <div id="hud-stars" class="px">★×0</div>
+    <div id="hud-tokens" class="px">◉ 0/8</div>
+    <div id="hud-hearts" class="px">♥♥♥</div>
+    <div id="bosshp" class="px"></div>
+    <div id="banner" class="px"></div>
+    <div id="msg" class="px"></div>
+    <div id="starget" class="px"></div>
+    <div id="fade"></div>
+    <div id="title">
+      <h1>SUPER CLAUDIO <span class="six">64</span></h1>
+      <div class="boot">it's a not a the game you are a thinking of</div>
+      <div class="press px">PRESS ENTER TO START</div>
+      <div class="controls">
+        WASD/arrows: move &nbsp;·&nbsp; SPACE: jump (chain for double/triple!)<br>
+        SHIFT+SPACE while running: LONG JUMP &nbsp;·&nbsp; C in air: GROUND POUND<br>
+        Q/E: rotate camera &nbsp;·&nbsp; R/F: zoom &nbsp;·&nbsp; ESC: pause<br>
+        jump into paintings · collect stars · 6 stars opens the boss door
+      </div>
+      <div class="tm">© 2026 CLAUDIO ENTERTAINMENT SYSTEM · not affiliated with anyone · do not ask</div>
+    </div>
+    <div id="pausebox">
+      <h2>PAUSED</h2>
+      ESC: resume<br>
+      B: return to castle lobby<br>
+      <span style="font-size:14px;color:#a8c0e8">stars are saved automatically</span>
+    </div>
+  </div>
+</div></div>
+<!-- THREE_JS_HERE -->
+<!-- GAME_JS_HERE -->
+</body>
+</html>
