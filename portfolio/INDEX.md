@@ -58,3 +58,4 @@ At the end of a creative session:
   - (+bonus) Harmonograph — damped-pendulum Lissajous, drifting nested-loop rose, cool→warm stroke
 - **2026-07-02-albers-constancy** — Interaction-of-Color study, animated: 15 breathing grounds, ONE unchanging centre swatch; simultaneous contrast paints the motion; zero randomness (pure fn of tile+clock)
 - **2026-07-03-the-ceiling** — first DATA-GROUNDED piece: the night's 326 real Cortex-lab calls as settling dots; refusals sink, wrong answers hang suspended, the 100-dot ceiling run stands entire at a gold line drawn before any dot lands
+- **2026-07-03-the-gate** — first KINETIC piece: the scheduler as choreography (parallel lanes, single-slot gate, failed rolls loop back and re-roll, passes stack into a wall); fully deterministic film of a lottery (mulberry32 seed 42)
