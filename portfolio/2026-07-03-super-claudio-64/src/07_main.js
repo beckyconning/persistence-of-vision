@@ -130,7 +130,7 @@ const GAME = {
     AUDIO.stopSong(); AUDIO.S.starget();
     GAME.state = 'starget'; stargetTimer = 3.6; gotStarId = st.id;
     hud.starget.style.opacity = 1;
-    hud.starget.innerHTML = '★ STAR GET! ★<div class="sub">' + (GAME.starCount()) + ' / 12</div>';
+    hud.starget.innerHTML = '★ STAR GET! ★<div class="sub">' + (GAME.starCount()) + ' / 13</div>';
     player.frozen = true;
   }
 
@@ -185,8 +185,8 @@ const GAME = {
         B.pos.z += B.chargeDir.z * (B.speed + B.hits * 2.5) * dt;
         m.rotation.y = Math.atan2(B.chargeDir.x, B.chargeDir.z);
         m.rotation.x = 0.35;
-        if (Math.hypot(B.pos.x, B.pos.z) > 13.6) {  // CRASH into the rim
-          B.pos.multiplyScalar(13.6 / Math.hypot(B.pos.x, B.pos.z));
+        if (Math.hypot(B.pos.x, B.pos.z) > 17.6) {  // CRASH into the rim
+          B.pos.multiplyScalar(17.6 / Math.hypot(B.pos.x, B.pos.z));
           B.state = 'stunned'; B.t = 0; m.rotation.x = 0;
           AUDIO.S.crack(); msg('NOW! GROUND POUND HIM! (C mid-air)');
         }
@@ -264,7 +264,7 @@ const GAME = {
         if (INPUT.pressed.Enter || INPUT.pressed.Space) {
           AUDIO.init();
           hud.title.style.display = 'none';
-          loadLevel('lobby');
+          loadLevel('outside');
           GAME.state = 'play';
         }
         break;
@@ -382,11 +382,19 @@ const GAME = {
               }
             }
           }
+          if (ctx.exitDoor) {
+            const ed = ctx.exitDoor;
+            if (Math.abs(player.pos.x - ed.x) < 2.4 && Math.abs(player.pos.z - ed.z) < 1.3) warpTo('outside');
+          }
           const bd = ctx.bossDoor;
           if (Math.abs(player.pos.x - bd.x) < 2.6 && Math.abs(player.pos.z - bd.z) < 1.6 && player.pos.y > 2) {
             if (GAME.starCount() >= bd.need) warpTo('boss');
             else { AUDIO.S.denied(); player.vel.z = 9; msg('THE DOOR DEMANDS ' + bd.need + ' STARS'); }
           }
+        }
+        if (ctx.castleDoor) {
+          const cd = ctx.castleDoor;
+          if (Math.abs(player.pos.x - cd.x) < 2.4 && Math.abs(player.pos.z - cd.z) < 1.4) warpTo('lobby');
         }
         if (ctx.boss) updateBoss(ctx, dt);
         for (const fn of ctx.decor) fn(ctx.t);

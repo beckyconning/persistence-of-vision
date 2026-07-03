@@ -9,6 +9,8 @@ const path = require('path');
   await page.waitForTimeout(800);
   await page.keyboard.press('Enter');
   await page.waitForTimeout(2000);
+  await page.evaluate(() => GAME.debugWarp('lobby'));
+  await page.waitForTimeout(2400);
   await page.screenshot({ path: 'out/qa2_lobby.png' });
 
   // 1) walk into meadow painting (need 0) -> should warp
@@ -21,7 +23,7 @@ const path = require('path');
   console.log('after painting walk, level =', lvl1);
 
   // 2) grab the peak star via teleport
-  await page.evaluate(() => { GAME.player.pos.set(8, GAME.ctx.stars[0].y + 0.2, -28); });
+  await page.evaluate(() => { const s = GAME.ctx.stars[0]; GAME.player.pos.set(s.x, s.y + 0.2, s.z); });
   await page.waitForTimeout(600);
   await page.screenshot({ path: 'out/qa2_starget.png' });
   const st = await page.evaluate(() => ({ state: GAME.state, stars: GAME.starCount() }));

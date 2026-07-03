@@ -4,6 +4,11 @@ const CHARS = (() => {
 
   function buildPlumber(pal) {
     const g = new THREE.Group();
+    // inner body flipped so the FACE points along +z = travel direction
+    const body = new THREE.Group();
+    body.rotation.y = Math.PI;
+    g.add(body);
+    const addTo = body;
     const J = {};
     const M = {
       cap: lam(pal.cap), shirt: lam(pal.shirt), overalls: lam(pal.overalls),
@@ -12,14 +17,14 @@ const CHARS = (() => {
     };
     // legs
     for (const [nm, sx] of [['hipL', -1], ['hipR', 1]]) {
-      const hip = new THREE.Group(); hip.position.set(sx * 0.22, 0.72, 0); g.add(hip); J[nm] = hip;
+      const hip = new THREE.Group(); hip.position.set(sx * 0.22, 0.72, 0); addTo.add(hip); J[nm] = hip;
       const leg = new THREE.Mesh(new THREE.CylinderGeometry(0.17, 0.15, 0.55, 7), M.overalls);
       leg.position.y = -0.28; hip.add(leg);
       const shoe = new THREE.Mesh(new THREE.SphereGeometry(0.22, 7, 5), M.shoe);
       shoe.scale.set(1, 0.62, 1.35); shoe.position.set(0, -0.58, 0.08); hip.add(shoe);
     }
     // torso
-    const torso = new THREE.Group(); torso.position.y = 0.85; g.add(torso); J.torso = torso;
+    const torso = new THREE.Group(); torso.position.y = 0.85; addTo.add(torso); J.torso = torso;
     const belly = new THREE.Mesh(new THREE.SphereGeometry(0.58, 10, 8), M.overalls);
     belly.scale.set(1, 0.85, 0.88); belly.position.y = 0.15; torso.add(belly);
     const chest = new THREE.Mesh(new THREE.SphereGeometry(0.5, 10, 8), M.shirt);
@@ -91,6 +96,7 @@ const CHARS = (() => {
 
   function buildBug(scale = 1, ghost = false) {
     const g = new THREE.Group();
+    const inner = new THREE.Group(); inner.rotation.y = Math.PI; g.add(inner);
     const bodyM = new THREE.MeshLambertMaterial({
       color: ghost ? 0xbfaaff : 0x965cbe, transparent: ghost, opacity: ghost ? 0.55 : 1,
     });
@@ -98,18 +104,18 @@ const CHARS = (() => {
       color: 0x5a3278, transparent: ghost, opacity: ghost ? 0.5 : 1,
     });
     const body = new THREE.Mesh(new THREE.SphereGeometry(0.62, 9, 7), bodyM);
-    body.scale.set(1, 0.78, 1.1); body.position.y = 0.5; g.add(body);
+    body.scale.set(1, 0.78, 1.1); body.position.y = 0.5; inner.add(body);
     for (const sx of [-1, 1]) {
       const eye = new THREE.Mesh(new THREE.SphereGeometry(0.17, 7, 5), lam(0xffffff));
-      eye.position.set(sx * 0.22, 0.72, -0.48); g.add(eye);
+      eye.position.set(sx * 0.22, 0.72, -0.48); inner.add(eye);
       const pup = new THREE.Mesh(new THREE.SphereGeometry(0.075, 5, 4), lam(0x201430));
-      pup.position.set(sx * 0.2, 0.7, -0.62); g.add(pup);
+      pup.position.set(sx * 0.2, 0.7, -0.62); inner.add(pup);
       const ant = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.5, 0.06), darkM);
-      ant.position.set(sx * 0.18, 1.05, -0.3); ant.rotation.z = -sx * 0.3; g.add(ant);
+      ant.position.set(sx * 0.18, 1.05, -0.3); ant.rotation.z = -sx * 0.3; inner.add(ant);
       for (let i = 0; i < 3; i++) {
         const leg = new THREE.Mesh(new THREE.BoxGeometry(0.1, 0.45, 0.1), darkM);
         leg.position.set(sx * 0.6, 0.28, -0.35 + i * 0.35);
-        leg.rotation.z = -sx * 0.55; g.add(leg);
+        leg.rotation.z = -sx * 0.55; inner.add(leg);
         if (!g.userData.legs) g.userData.legs = [];
         g.userData.legs.push(leg);
       }

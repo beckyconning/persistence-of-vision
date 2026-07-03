@@ -58,3 +58,19 @@ dive, no momentum-preserving slope physics). Levels are one-idea-each; a great
 level braids three. The ghost bug is the best design in it (borrowed authority:
 Boo rules teach themselves). Music loops are 8-16 bars — real N64 tracks
 develop. If April plays it and wants WORLD 2, the engine is ready.
+
+
+## Patch 1.1 (2026-07-03, from April's playtest)
+- **Claudio walked backwards** — model built face-at-−z but the controller treats
+  +z as forward; fixed with an inner group rotated π (bugs too). Lesson: the
+  headless QA screenshots showed his back while walking away and I read it as
+  correct — a HUMAN noticed in seconds. Playtesting by real hands finds what
+  scripted playtests can't; ship early, listen fast.
+- **Mouse camera**: hold right/middle mouse + drag orbits and tilts (Q/E kept).
+- **All five worlds enlarged** (~1.4x, more platforms/enemies/decor; longer ice
+  slide, third lava mover, 11-cloud sky chain, 12-shelf library with TWO ghosts,
+  bigger boss arena).
+- **CASTLE GROUNDS added** — a proper SM64-style exterior: moat + bridge, keep
+  with battlements, four cone-roofed towers, hedge path, flowers, butterflies,
+  a crate-stair route to the roof and a 13th star up there. Game now starts
+  outside; the lobby has a working front door both ways.

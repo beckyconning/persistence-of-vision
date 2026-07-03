@@ -7,9 +7,16 @@ const INPUT = (() => {
     if (['Space', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.code)) e.preventDefault();
   });
   window.addEventListener('keyup', e => { down[e.code] = false; });
+  const mouse = { dx: 0, dy: 0, held: false };
+  window.addEventListener('contextmenu', e => e.preventDefault());
+  window.addEventListener('mousedown', e => { if (e.button === 2 || e.button === 1) { mouse.held = true; e.preventDefault(); } });
+  window.addEventListener('mouseup', e => { if (e.button === 2 || e.button === 1) mouse.held = false; });
+  window.addEventListener('mousemove', e => {
+    if (mouse.held) { mouse.dx += e.movementX; mouse.dy += e.movementY; }
+  });
   return {
-    down, pressed,
-    clear() { for (const k in pressed) pressed[k] = false; },
+    down, pressed, mouse,
+    clear() { for (const k in pressed) pressed[k] = false; mouse.dx = 0; mouse.dy = 0; },
     axis() { // camera-relative move intent
       let x = 0, z = 0;
       if (down.KeyW || down.ArrowUp) z -= 1;
@@ -257,6 +264,11 @@ class GameCamera {
   update(dt, playerPos, world) {
     if (INPUT.pressed.KeyQ) this.yaw += Math.PI / 4;
     if (INPUT.pressed.KeyE) this.yaw -= Math.PI / 4;
+    // hold RIGHT (or middle) mouse and drag to orbit
+    if (INPUT.mouse.held) {
+      this.yaw -= INPUT.mouse.dx * 0.0075;
+      this.height = Math.max(1.6, Math.min(10, this.height + INPUT.mouse.dy * 0.03));
+    }
     if (INPUT.down.KeyR) this.dist = Math.max(6, this.dist - 8 * dt);
     if (INPUT.down.KeyF) this.dist = Math.min(16, this.dist + 8 * dt);
     this.target.lerp(new THREE.Vector3(playerPos.x, playerPos.y + 1.4, playerPos.z), Math.min(1, dt * 6));

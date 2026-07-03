@@ -19,6 +19,13 @@ const LVL = (() => {
     if (solid) world.cyls.push({ x, z, r, y0: y, y1: y + h, mesh });
     return mesh;
   }
+  function cone(scene, x, y, z, r, h, color) {
+    const mesh = new THREE.Mesh(new THREE.CylinderGeometry(0.05, r, h, 10),
+      new THREE.MeshLambertMaterial({ color }));
+    mesh.position.set(x, y + h / 2, z);
+    scene.add(mesh);
+    return mesh;
+  }
   function gaussTerrain(hills, base = 0) {
     return (x, z) => {
       let y = base;
@@ -49,12 +56,12 @@ const LVL = (() => {
     scene.add(leaves);
   }
   function skyDome(scene, top, bottom) {
-    const geo = new THREE.SphereGeometry(220, 16, 10);
+    const geo = new THREE.SphereGeometry(300, 16, 10);
     const cols = [];
     const pos = geo.attributes.position;
     const cT = new THREE.Color(top), cB = new THREE.Color(bottom);
     for (let i = 0; i < pos.count; i++) {
-      const t = Math.max(0, Math.min(1, pos.getY(i) / 160 + 0.35));
+      const t = Math.max(0, Math.min(1, pos.getY(i) / 220 + 0.35));
       const c = cB.clone().lerp(cT, t);
       cols.push(c.r, c.g, c.b);
     }
@@ -104,10 +111,12 @@ const LVL = (() => {
       // floor
       box(scene, world, 0, -1, 0, 44, 1, 34, mat(TEX.checker, 11, 8));
       box(scene, world, 0, 0, -3, 6, 0.12, 26, mat(TEX.carpet, 1, 6));
-      // walls
+      // walls (south wall has the exit-door gap)
       const wallM = mat(TEX.castle, 8, 3);
       box(scene, world, 0, 0, -17.5, 44, 12, 1, wallM);
-      box(scene, world, 0, 0, 17.5, 44, 12, 1, wallM);
+      box(scene, world, -13.2, 0, 17.5, 17.6, 12, 1, wallM);
+      box(scene, world, 13.2, 0, 17.5, 17.6, 12, 1, wallM);
+      box(scene, world, 0, 6.5, 17.5, 9, 5.5, 1, wallM);
       box(scene, world, -22.5, 0, 0, 1, 12, 35, mat(TEX.castle, 6, 3));
       box(scene, world, 22.5, 0, 0, 1, 12, 35, mat(TEX.castle, 6, 3));
       box(scene, world, 0, 11.5, 0, 46, 1, 36, new THREE.MeshLambertMaterial({ color: 0x8a7660 }), false);
@@ -119,14 +128,17 @@ const LVL = (() => {
         box(scene, world, 0, i * 0.55, -12.5 - i * 1.1, 14 - i * 1.2, 0.55, 1.4, mat(TEX.castle, 4, 1));
       box(scene, world, 0, 2.75, -16.4, 10, 0.55, 2.5, mat(TEX.carpet, 3, 1));
       // BOSS DOOR
-      const doorM = mat(TEX.door, 1, 1);
-      const door = new THREE.Mesh(new THREE.BoxGeometry(4.4, 6.2, 0.4), doorM);
+      const door = new THREE.Mesh(new THREE.BoxGeometry(4.4, 6.2, 0.4), mat(TEX.door, 1, 1));
       door.position.set(0, 6.3, -16.9); scene.add(door);
       ctx.bossDoor = { x: 0, z: -16.4, y: 3.3, need: 6 };
       const starIcon = CHARS.star(); starIcon.scale.setScalar(0.7);
       starIcon.position.set(0, 10, -16.6); scene.add(starIcon);
       ctx.decor.push(t => { starIcon.rotation.y = t; });
-      // paintings: 2 left, 2 right, 1 front-right of door
+      // EXIT DOOR to the castle grounds (south)
+      const exdoor = new THREE.Mesh(new THREE.BoxGeometry(4.2, 6.5, 0.4), mat(TEX.door, 1, 1));
+      exdoor.position.set(0, 3.2, 17.2); scene.add(exdoor);
+      ctx.exitDoor = { x: 0, z: 16.9 };
+      // paintings
       const spots = [
         [-21.9, 3.9, -6, Math.PI / 2], [-21.9, 3.9, 7, Math.PI / 2],
         [21.9, 3.9, -6, -Math.PI / 2], [21.9, 3.9, 7, -Math.PI / 2],
@@ -146,95 +158,102 @@ const LVL = (() => {
         ctx.paintings.push({ def: p, x: px, y: py, z: pz, ry, art });
         ctx.decor.push(t => { art.position.y = py + Math.sin(t * 1.7 + i) * 0.05; });
       });
-      // secret lobby star on a ledge above the door (triple-jump + wall proximity)
+      // secret lobby star on a ledge above the door
       box(scene, world, 8, 7.5, -16, 3, 0.5, 2.5, mat(TEX.castle, 1, 1));
       addStar(ctx, 'lobby_secret', 8, 9, -16);
-      ctx.spawn = new THREE.Vector3(0, 0.2, 4);
+      ctx.spawn = new THREE.Vector3(0, 0.2, 13);
       ctx.spawnYaw = Math.PI;
     }
   };
 
-  // ---------- TOKEN MEADOWS ----------
+  // ---------- TOKEN MEADOWS (enlarged) ----------
+  const MX = 12, MZ = -44;   // the mountain
   const meadow = {
     name: 'TOKEN MEADOWS', sub: 'a suspiciously cheerful place', song: 'meadow',
-    sky: [0x68a8f0, 0xc8e8ff], fog: [0xb8d8f0, 45, 130],
+    sky: [0x68a8f0, 0xc8e8ff], fog: [0xb8d8f0, 55, 190],
     build(ctx) {
       const { scene, world } = ctx;
       skyDome(scene, 0x68a8f0, 0xc8e8ff);
       const terr = gaussTerrain([
-        [0, 0, 26, 1.2], [-22, -14, 12, 3.2], [24, 8, 14, 2.6],
-        [8, -28, 16, 12.5],          // THE MOUNTAIN
-        [-16, 22, 10, 2.0],
+        [0, 0, 34, 1.3], [-32, -20, 15, 3.6], [34, 12, 18, 3.0],
+        [MX, MZ, 19, 13.5],           // THE MOUNTAIN
+        [-24, 32, 13, 2.4], [30, -30, 12, 2.2], [-38, 6, 10, 2.8],
       ], 0);
       world.terrain = terr;
       world.killY = -25;
-      terrainMesh(scene, terr, 100, 56, mat(TEX.grass, 22, 22));
+      terrainMesh(scene, terr, 150, 72, mat(TEX.grass, 30, 30));
       // mountain spiral platforms
-      const spiral = [];
-      for (let i = 0; i < 7; i++) {
-        const a = i * 1.05 + 0.6, r = 10.5 - i * 0.85;
-        const x = 8 + Math.cos(a) * r, z = -28 + Math.sin(a) * r;
-        const y = 2.8 + i * 1.55;
-        box(scene, world, x, y, z, 3.4, 0.6, 3.4, mat(TEX.brickTop, 2, 2));
-        spiral.push([x, y, z]);
+      for (let i = 0; i < 9; i++) {
+        const a = i * 0.92 + 0.6, r = 13.5 - i * 0.95;
+        const x = MX + Math.cos(a) * r, z = MZ + Math.sin(a) * r;
+        const y = 2.6 + i * 1.5;
+        box(scene, world, x, y, z, 3.6, 0.6, 3.6, mat(TEX.brickTop, 2, 2));
       }
-      addStar(ctx, 'meadow_peak', 8, terr(8, -28) + 1.6, -28);
-      // trees + fence
-      tree(scene, world, -10, 8, terr(-10, 8)); tree(scene, world, 14, 14, terr(14, 14), 1.3);
-      tree(scene, world, -20, -4, terr(-20, -4), 0.9); tree(scene, world, 22, -8, terr(22, -8));
-      // floating ring of platforms with tokens
+      addStar(ctx, 'meadow_peak', MX, terr(MX, MZ) + 1.6, MZ);
+      // trees
+      for (const [tx, tz, ts] of [[-14, 10, 1], [20, 20, 1.3], [-28, -6, 0.9], [30, -12, 1],
+                                   [-8, 28, 1.1], [38, 2, 0.9], [-34, 20, 1.2], [8, -16, 0.8],
+                                   [-20, -30, 1], [44, 22, 1.1]])
+        tree(scene, world, tx, tz, terr(tx, tz), ts);
+      // floating ring of platforms with tokens (wider)
       for (let i = 0; i < 8; i++) {
         const a = i / 8 * Math.PI * 2;
-        const x = Math.cos(a) * 15, z = 6 + Math.sin(a) * 15;
-        if (i % 2 === 0) box(scene, world, x, terr(x, z) + 2.2, z, 2.6, 0.5, 2.6, mat(TEX.brickTop, 2, 2));
-        addToken(ctx, x, terr(x, z) + (i % 2 === 0 ? 3.6 : 1.2), z);
+        const x = Math.cos(a) * 22, z = 8 + Math.sin(a) * 22;
+        if (i % 2 === 0) box(scene, world, x, terr(x, z) + 2.4, z, 2.8, 0.5, 2.8, mat(TEX.brickTop, 2, 2));
+        addToken(ctx, x, terr(x, z) + (i % 2 === 0 ? 3.9 : 1.2), z);
       }
-      ctx.tokenStar = { id: 'meadow_tokens', x: 0, y: terr(0, 6) + 2, z: 6 };
+      ctx.tokenStar = { id: 'meadow_tokens', x: 0, y: terr(0, 8) + 2, z: 8 };
+      // a lake
+      const lake = new THREE.Mesh(new THREE.CylinderGeometry(9, 9, 0.25, 18),
+        new THREE.MeshLambertMaterial({ color: 0x4088c8, transparent: true, opacity: 0.85 }));
+      lake.position.set(-32, 0.5, 24); scene.add(lake);
       // bugs
-      addBug(ctx, -6, -8); addBug(ctx, 16, -2); addBug(ctx, -18, 14, { speed: 2.8 });
-      addBug(ctx, 4, 18, { radius: 7 });
-      ctx.spawn = new THREE.Vector3(0, terr(0, 24) + 0.3, 24);
+      addBug(ctx, -8, -10); addBug(ctx, 22, -4); addBug(ctx, -26, 18, { speed: 2.8 });
+      addBug(ctx, 6, 24, { radius: 7 }); addBug(ctx, 36, 16, {}); addBug(ctx, -16, -24, { speed: 3 });
+      ctx.spawn = new THREE.Vector3(0, terr(0, 34) + 0.3, 34);
       ctx.spawnYaw = Math.PI;
     }
   };
 
-  // ---------- COMPACTION CORE ----------
+  // ---------- COMPACTION CORE (enlarged) ----------
   const lava = {
     name: 'COMPACTION CORE', sub: 'where deleted context goes', song: 'lava',
-    sky: [0x28080c, 0x701818], fog: [0x501010, 30, 95],
+    sky: [0x28080c, 0x701818], fog: [0x501010, 40, 130],
     build(ctx) {
       const { scene, world } = ctx;
       skyDome(scene, 0x28080c, 0x701818);
       world.killY = -12;
-      // the lava sea
-      const lavaMesh = new THREE.Mesh(new THREE.PlaneGeometry(160, 160, 1, 1), mat(TEX.lava, 26, 26));
+      const lavaMesh = new THREE.Mesh(new THREE.PlaneGeometry(240, 240, 1, 1), mat(TEX.lava, 38, 38));
       lavaMesh.rotation.x = -Math.PI / 2; lavaMesh.position.y = -2;
       scene.add(lavaMesh);
       ctx.lavaY = -1.6;
       ctx.decor.push(t => { lavaMesh.material.map.offset.set(Math.sin(t * 0.25) * 0.1, t * 0.015); });
       const bas = () => mat(TEX.basalt, 3, 3);
-      // islands
-      box(scene, world, 0, -1, 18, 12, 1.4, 10, bas());
-      box(scene, world, 0, -1, 2, 6, 1.2, 6, bas());
-      box(scene, world, -12, -0.8, -6, 7, 1.2, 7, bas());
-      box(scene, world, 12, -0.6, -8, 7, 1.4, 7, bas());
-      box(scene, world, 0, -0.4, -24, 10, 1.6, 9, bas());
-      // moving platforms (movers)
-      const mv1 = box(scene, world, -6, 0.4, -14, 3.2, 0.5, 3.2, mat(TEX.basalt, 2, 2));
-      const mv2 = box(scene, world, 7, 0.6, -17, 3.2, 0.5, 3.2, mat(TEX.basalt, 2, 2));
-      ctx.movers.push({ b: mv1, fn: t => [-6 + Math.sin(t * 0.7) * 6, 0.4, -14] });
-      ctx.movers.push({ b: mv2, fn: t => [7, 0.6 + Math.sin(t * 0.9) * 1.8 + 1.8, -17 + Math.cos(t * 0.7) * 4] });
+      // islands (a longer archipelago)
+      box(scene, world, 0, -1, 26, 14, 1.4, 12, bas());
+      box(scene, world, 0, -1, 6, 7, 1.2, 7, bas());
+      box(scene, world, -16, -0.8, -4, 8, 1.2, 8, bas());
+      box(scene, world, 16, -0.6, -8, 8, 1.4, 8, bas());
+      box(scene, world, -8, -0.7, -22, 7, 1.3, 7, bas());
+      box(scene, world, 10, -0.5, -30, 7, 1.4, 7, bas());
+      box(scene, world, 0, -0.4, -44, 12, 1.7, 10, bas());
+      // moving platforms
+      const mv1 = box(scene, world, -8, 0.4, -12, 3.4, 0.5, 3.4, mat(TEX.basalt, 2, 2));
+      const mv2 = box(scene, world, 10, 0.6, -18, 3.4, 0.5, 3.4, mat(TEX.basalt, 2, 2));
+      const mv3 = box(scene, world, 0, 0.8, -36, 3.4, 0.5, 3.4, mat(TEX.basalt, 2, 2));
+      ctx.movers.push({ b: mv1, fn: t => [-8 + Math.sin(t * 0.7) * 7, 0.4, -12] });
+      ctx.movers.push({ b: mv2, fn: t => [10, 0.6 + Math.sin(t * 0.9) * 1.8 + 1.8, -18 + Math.cos(t * 0.7) * 5] });
+      ctx.movers.push({ b: mv3, fn: t => [Math.sin(t * 0.6) * 8, 0.8, -36] });
       // crates to pound
       ctx.crates = [];
-      for (const [cx, cz, island] of [[-12, -6, 0.4], [12, -8, 0.8], [2, 18, 0.4]]) {
+      for (const [cx, cz, island] of [[-16, -4, 0.4], [16, -8, 0.8], [3, 26, 0.4]]) {
         const c = box(scene, world, cx, island, cz, 2, 2, 2, mat(TEX.wood, 2, 2));
         ctx.crates.push({ b: c, broken: false });
       }
-      ctx.crateStar = { id: 'lava_crates', x: 0, y: 1.6, z: 2 };
-      // star across the movers
-      addStar(ctx, 'lava_far', 0, 1.6, -24);
-      // deco: bubbling spouts
-      for (const [bx, bz] of [[-20, 6], [18, 4], [6, -32], [-6, 26]]) {
+      ctx.crateStar = { id: 'lava_crates', x: 0, y: 1.6, z: 6 };
+      addStar(ctx, 'lava_far', 0, 1.9, -44);
+      // bubbling spouts
+      for (const [bx, bz] of [[-26, 10], [24, 6], [8, -48], [-8, 34], [-30, -20], [30, -28]]) {
         const bub = new THREE.Mesh(new THREE.SphereGeometry(0.8, 7, 5),
           new THREE.MeshLambertMaterial({ color: 0xff7818, emissive: 0x802000 }));
         bub.position.set(bx, -1.6, bz); scene.add(bub);
@@ -243,10 +262,10 @@ const LVL = (() => {
           bub.position.y = -2 + c * 3; bub.scale.setScalar(1 - c * 0.7);
         });
       }
-      ctx.spawn = new THREE.Vector3(0, 1, 21);
+      ctx.spawn = new THREE.Vector3(0, 1, 29);
       ctx.spawnYaw = Math.PI;
     }
   };
 
-  return { mat, box, cyl, gaussTerrain, terrainMesh, tree, skyDome, addStar, addToken, addBug, PAINTINGS, defs: { lobby, meadow, lava } };
+  return { mat, box, cyl, cone, gaussTerrain, terrainMesh, tree, skyDome, addStar, addToken, addBug, PAINTINGS, defs: { lobby, meadow, lava } };
 })();
