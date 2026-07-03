@@ -494,3 +494,32 @@ multiplicative (non-additive) lighting; hand-wavering line via per-pixel jitter.
   return-to-lobby after each star makes 12 stars feel like 12 sessions.
 - Debug hooks (GAME.debugWarp) exposed for QA are the difference between "probably works"
   and a scripted CONGRATURATION.
+
+## Session 23 — 2026-07-03 (TEMPOMANCER — an invented game; commissioned)
+- **GENRE INVERSION as a design method**: take a genre's fixed contract (rhythm games:
+  world sets beat, player obeys) and swap the roles (player's taps ARE the world's clock).
+  The whole design fell out of one inversion: tempo = world speed, silence = freeze,
+  freeze overstayed = dissolution, momentum from a fast-conducted lift = launch.
+- **Pure-sim core + presentation shell**: ALL game logic in a DOM-free module (UMD dual
+  export); node:test drives the same code the browser runs. Tempo clock, AABB physics,
+  machines as pure functions of (beat, tweenT) — displayed state = lerp(f(B), f(B+1), t),
+  so a "step" is also a smooth tween and an early tap just snap-completes it.
+- **Completability PROOFS, not playtests**: each level ships with a scripted input
+  sequence (segments: {dur, right, jump, tapEvery}) that a deterministic 1/60-step sim
+  must clear deathless. Hand-traced danger windows (piston slam intervals, gate crush
+  margins, boost trajectories) then let the sim arbitrate. Caught a real design bug: a
+  ferry descending onto the player's approach path (crushed at t=8.32).
+- **Momentum transfer needs ANALYTIC velocity**: jump-on-tap-frame reads (f(B+1)-f(B))/interval,
+  not frame-delta (which is 0 on the tap frame). General lesson: mechanics that couple to
+  "current velocity" of tweened objects should differentiate the tween, not the frames.
+- **Silence as a resource**: meter arms at max(0.9s, 1.25×interval), fills over 4s;
+  visually = saturate() filter draining + closing vignette; audibly = master lowpass
+  sweeping 18kHz→250Hz. The world dying is *felt* in three senses at once.
+- **Audience-composed music**: kick+bass on every tap (bass walks a i–III–VII–VI cycle
+  every 4 beats), pentatonic pluck melody indexed by beat, machine voices only when their
+  state changes this beat (gates = chord stab, pistons = swish/tick, blades = ring-mod
+  metal, ferries = high pluck). Pentatonic = never-wrong notes; generated-impulse
+  convolver = free glue reverb.
+- **Proxy-mock smoke test**: a callable/chainable everything-Proxy stands in for DOM,
+  canvas ctx and AudioContext; the whole presentation layer runs headless in node and
+  reference-errors surface without a browser. Cheap guard before the real playwright pass.

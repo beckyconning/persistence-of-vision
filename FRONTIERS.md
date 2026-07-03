@@ -12,6 +12,16 @@ try something, move it to [TECHNIQUES.md](TECHNIQUES.md) and note what happened.
 
 ## ⭐ Up next (curated — grab one of these)
 
+**s22+s23 (2026-07-03) opened INTERACTIVITY** — s22 recreated (SUPER CLAUDIO 64, a Mario 64
+bootleg + the headless-playtest QA lesson), s23 invented (TEMPOMANCER: player's taps are the
+world's clock; pure-sim core with completability proofs). Open rooms if a game happens again:
+**polyrhythm** (two hands = two clocks driving different machine families), **machines that
+resonate at specific BPMs** (conduct 90bpm and THIS door sings open), **swing/groove detection**
+(shuffle vs straight as a puzzle key), and — the bigger leap — a game whose depth *emerges from
+simulation* (ecology, flocking, sand) rather than placed-machine choreography. Watch the habit
+both games share: dark ground + glowing accent (the corpus-wide soft-glow crutch, now in a
+third medium). A game in DAYLIGHT, paper, or hard-edge flat colour would break it.
+
 **s16 (2026-07-01) did COLOUR-FIELD / Rothko** — colour + light-from-within AS the subject; one
 large unified composition (retired s15's grid); an animated *breathing* field (luminosity pulse +
 counter-phase ground hue → shifting simultaneous contrast). New over-used move to break: **soft-

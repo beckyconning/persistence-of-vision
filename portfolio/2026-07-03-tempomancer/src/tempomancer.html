@@ -1,0 +1,1323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TEMPOMANCER</title>
+<style>
+  html, body { margin: 0; height: 100%; background: #08080e; overflow: hidden; }
+  body { display: flex; align-items: center; justify-content: center; }
+  canvas { image-rendering: auto; }
+</style>
+</head>
+<body>
+<canvas id="game" width="640" height="384"></canvas>
+<script>
+// TEMPOMANCER core simulation — pure logic, no DOM, no audio.
+// Dual export: browser global `TempoCore` + CommonJS for node:test.
+(function (root, factory) {
+  if (typeof module === 'object' && module.exports) module.exports = factory();
+  else root.TempoCore = factory();
+})(typeof self !== 'undefined' ? self : this, function () {
+  'use strict';
+
+  const DEFAULT_INTERVAL = 0.5; // 120 BPM
+  const GAP_MIN = 0.25, GAP_MAX = 1.5; // 240–40 BPM
+  const SILENCE_FILL = 4.0; // seconds from armed to dissolved
+
+  class TempoClock {
+    constructor() { this.reset(); }
+
+    reset() {
+      this.beat = -1;
+      this.t = 0;
+      this.interval = DEFAULT_INTERVAL;
+      this.silence = 0;
+      this.dissolved = false;
+      this.lastTap = null;
+      this.gaps = [];
+    }
+
+    tap(now) {
+      if (this.lastTap !== null) {
+        const gap = Math.min(GAP_MAX, Math.max(GAP_MIN, now - this.lastTap));
+        this.gaps.push(gap);
+        if (this.gaps.length > 3) this.gaps.shift();
+        const sorted = [...this.gaps].sort((a, b) => a - b);
+        this.interval = sorted[Math.floor(sorted.length / 2)];
+      }
+      this.beat++;
+      this.t = 0;
+      this.lastTap = now;
+      this.silence = 0;
+    }
+
+    update(now) {
+      if (this.lastTap === null) return;
+      const since = now - this.lastTap;
+      this.t = Math.min(1, since / this.interval);
+      const armDelay = Math.max(0.9, 1.25 * this.interval);
+      this.silence = Math.min(1, Math.max(0, (since - armDelay) / SILENCE_FILL));
+      if (this.silence >= 1) this.dissolved = true;
+    }
+  }
+
+  // --- Machines: pure functions of (beat, tweenT). displayed = lerp(f(B), f(B+1), t). ---
+
+  const lerp = (a, b, t) => a + (b - a) * t;
+
+  function pingpong(i, n) {
+    if (n <= 1) return 0;
+    const m = i % (2 * n - 2);
+    return m < n ? m : 2 * n - 2 - m;
+  }
+
+  function pistonExt(beat, t, phase) {
+    const f = B => (B + phase) % 2 === 0 ? 0 : 1;
+    return lerp(f(beat), f(beat + 1), t);
+  }
+
+  function gateOpenness(beat, t, g) {
+    const f = B => (B + g.phase) % g.mod === g.openOn ? 1 : 0;
+    return lerp(f(beat), f(beat + 1), t);
+  }
+
+  function bladeCenter(beat, t, def) {
+    const a = (def.phase + (beat + t) * def.stepDeg) * Math.PI / 180;
+    return { x: def.cx + Math.cos(a) * def.r, y: def.cy + Math.sin(a) * def.r };
+  }
+
+  function ferryPos(beat, t, def) {
+    const n = def.points.length;
+    const a = def.points[pingpong(beat, n)];
+    const b = def.points[pingpong(beat + 1, n)];
+    return { x: lerp(a[0], b[0], t), y: lerp(a[1], b[1], t) };
+  }
+
+  // touchedBeat: beat when first stood on (null = untouched).
+  // Breaks 2 beats after touch, regrows 4 beats after breaking.
+  function crumbleSolid(touchedBeat, beat) {
+    if (touchedBeat === null) return true;
+    const breakAt = touchedBeat + 2;
+    if (beat < breakAt) return true;
+    return beat >= breakAt + 4;
+  }
+
+  // --- Level + simulation ---
+
+  const TILE = 32;
+  const GRAV = 1500, RUN = 140, JUMP_V = -470, MAX_FALL = 700;
+  const COYOTE = 0.09, JBUF = 0.12;
+  const PW = 20, PH = 28;
+  const BLADE_R = 14; // kill radius of the saw itself
+
+  function parseLevel(def) {
+    const map = def.map;
+    const H = map.length;
+    const W = Math.max(...map.map(r => r.length));
+    const grid = map.map(r => r.padEnd(W, '.'));
+    let spawn = { tx: 0, ty: 0 };
+    let shrine = null;
+    const spikes = [], crumbleTiles = [];
+    for (let ty = 0; ty < H; ty++) for (let tx = 0; tx < W; tx++) {
+      const ch = grid[ty][tx];
+      if (ch === 'P') spawn = { tx, ty };
+      else if (ch === 'X') shrine = { x: tx * TILE + 4, y: ty * TILE, w: TILE - 8, h: TILE };
+      else if (ch === '^') spikes.push({ x: tx * TILE + 5, y: ty * TILE + 18, w: TILE - 10, h: TILE - 18 });
+      else if (ch === 'c') crumbleTiles.push({ tx, ty });
+    }
+    return {
+      name: def.name || '', hint: def.hint || '', key: def.key || 0,
+      W, H, grid, spawn, shrine, spikes, crumbleTiles,
+      machines: def.machines || [],
+      solidAt(tx, ty) {
+        if (tx < 0 || ty < 0 || tx >= W || ty >= H) return false;
+        return grid[ty][tx] === '#';
+      },
+      crumbleAt(tx, ty) {
+        if (tx < 0 || ty < 0 || tx >= W || ty >= H) return false;
+        return grid[ty][tx] === 'c';
+      },
+    };
+  }
+
+  const overlaps = (a, b) => a.x < b.x + b.w && a.x + a.w > b.x && a.y < b.y + b.h && a.y + a.h > b.y;
+
+  function gateRect(def, openness) {
+    return { x: def.tx * TILE, y: def.ty * TILE, w: TILE, h: (1 - openness) * def.h * TILE, id: 'gate' };
+  }
+  function pistonRect(def, ext) {
+    const len = ext * def.len * TILE;
+    if (def.dir === 'up') return { x: def.tx * TILE + 4, y: def.ty * TILE - len, w: TILE - 8, h: len, id: 'piston' };
+    return { x: def.tx * TILE + 4, y: (def.ty + 1) * TILE, w: TILE - 8, h: len, id: 'piston' };
+  }
+  function ferryRect(def, pos) {
+    return { x: pos.x, y: pos.y, w: (def.w || 2) * TILE, h: 16, id: 'ferry' };
+  }
+  const ferryPxPoints = def => ({ ...def, points: def.points.map(p => [p[0] * TILE, p[1] * TILE]) });
+
+  class Sim {
+    constructor(level) {
+      this.level = level;
+      this.clock = new TempoClock();
+      this.time = 0;
+      this.deaths = 0;
+      this.completed = false;
+      this.beatsConducted = 0;
+      this.crumbles = new Map(); // "tx,ty" -> beat first stood on
+      this.ferryLast = new Map();
+      this.spawnPlayer();
+    }
+
+    spawnPlayer() {
+      const s = this.level.spawn;
+      this.player = {
+        x: s.tx * TILE + (TILE - PW) / 2, y: s.ty * TILE + (TILE - PH),
+        w: PW, h: PH, vx: 0, vy: 0,
+        grounded: false, coyote: 0, jbuf: 0, standingOn: null,
+      };
+    }
+
+    die(cause) {
+      this.deaths++;
+      this.lastDeath = cause;
+      this.clock.reset();
+      this.crumbles.clear();
+      this.ferryLast.clear();
+      this.spawnPlayer();
+    }
+
+    pose() {
+      const B = Math.max(this.clock.beat, 0);
+      return { B, t: this.clock.beat < 0 ? 0 : this.clock.t };
+    }
+
+    // All solid rects from machines + crumble tiles at the given pose.
+    machineSolids(pose) {
+      const out = [];
+      this.level.machines.forEach((m, i) => {
+        if (m.type === 'gate') {
+          const r = gateRect(m, gateOpenness(pose.B, pose.t, m));
+          r.id = 'gate:' + i;
+          if (r.h > 0.5) out.push(r);
+        } else if (m.type === 'ferry') {
+          const r = ferryRect(m, ferryPos(pose.B, pose.t, ferryPxPoints(m)));
+          r.id = 'ferry:' + i;
+          out.push(r);
+        }
+      });
+      for (const c of this.level.crumbleTiles) {
+        const key = c.tx + ',' + c.ty;
+        if (crumbleSolid(this.crumbles.has(key) ? this.crumbles.get(key) : null, pose.B)) {
+          out.push({ x: c.tx * TILE, y: c.ty * TILE, w: TILE, h: TILE, id: 'crumble:' + key });
+        }
+      }
+      return out;
+    }
+
+    tileRectsAround(p) {
+      const out = [];
+      const x0 = Math.floor(p.x / TILE) - 1, x1 = Math.floor((p.x + p.w) / TILE) + 1;
+      const y0 = Math.floor(p.y / TILE) - 1, y1 = Math.floor((p.y + p.h) / TILE) + 1;
+      for (let ty = y0; ty <= y1; ty++) for (let tx = x0; tx <= x1; tx++) {
+        if (this.level.solidAt(tx, ty)) out.push({ x: tx * TILE, y: ty * TILE, w: TILE, h: TILE, id: 'tile' });
+      }
+      return out;
+    }
+
+    step(input, dt) {
+      if (this.completed) return;
+      this.time += dt;
+      const p = this.player;
+
+      if (input.tap) {
+        this.clock.tap(this.time);
+        this.beatsConducted++;
+      }
+      this.clock.update(this.time);
+      if (this.clock.dissolved) { this.die('silence'); return; }
+
+      const pose = this.pose();
+      const solids = this.machineSolids(pose);
+
+      // Ferries carry their riders (delta since last frame, including tap-snaps).
+      let riddenFerryVy = 0;
+      this.level.machines.forEach((m, i) => {
+        if (m.type !== 'ferry') return;
+        const cur = ferryPos(pose.B, pose.t, ferryPxPoints(m));
+        const last = this.ferryLast.get(i) || cur;
+        this.ferryLast.set(i, cur);
+        if (p.standingOn === 'ferry:' + i) {
+          p.x += cur.x - last.x; p.y += cur.y - last.y;
+          // Analytic tween velocity, so a jump on the tap frame already feels the rise.
+          if (this.clock.beat >= 0 && pose.t < 1) {
+            const pts = ferryPxPoints(m);
+            const a = ferryPos(pose.B, 0, pts), b = ferryPos(pose.B, 1, pts);
+            riddenFerryVy = (b.y - a.y) / this.clock.interval;
+          }
+        }
+      });
+
+      // Moving solids (gates growing, ferries shoving) push the player out; squeezed = erased.
+      const tilesNow = () => this.tileRectsAround(p);
+      for (const r of solids) {
+        if (!overlaps(p, r)) continue;
+        const pushes = [
+          { dx: r.x - (p.x + p.w), dy: 0, m: (p.x + p.w) - r.x },       // left
+          { dx: (r.x + r.w) - p.x, dy: 0, m: (r.x + r.w) - p.x },       // right
+          { dx: 0, dy: (r.y + r.h) - p.y, m: (r.y + r.h) - p.y },       // down
+          { dx: 0, dy: r.y - (p.y + p.h), m: (p.y + p.h) - r.y },       // up
+        ].sort((a, b) => a.m - b.m);
+        const push = pushes[0];
+        p.x += push.dx; p.y += push.dy;
+        if (tilesNow().some(t => overlaps(p, t)) || solids.some(s => s !== r && overlaps(p, s))) {
+          this.die('crushed'); return;
+        }
+      }
+
+      // Player intent
+      const dir = (input.right ? 1 : 0) - (input.left ? 1 : 0);
+      p.vx = dir * RUN;
+      p.coyote = p.grounded ? COYOTE : Math.max(0, p.coyote - dt);
+      p.jbuf = input.jump ? JBUF : Math.max(0, p.jbuf - dt);
+      if (p.jbuf > 0 && p.coyote > 0) {
+        // A rising ferry lends its momentum: conduct presto, launch like a rocket.
+        p.vy = JUMP_V + Math.min(0, riddenFerryVy);
+        p.coyote = 0; p.jbuf = 0; p.grounded = false;
+      }
+      p.vy = Math.min(MAX_FALL, p.vy + GRAV * dt);
+
+      // X axis
+      p.x += p.vx * dt;
+      p.x = Math.max(0, Math.min(this.level.W * TILE - p.w, p.x));
+      for (const r of [...this.tileRectsAround(p), ...solids]) {
+        if (!overlaps(p, r)) continue;
+        p.x = p.vx > 0 ? r.x - p.w : r.x + r.w;
+      }
+
+      // Y axis
+      p.grounded = false;
+      const wasStanding = p.standingOn;
+      p.standingOn = null;
+      p.y += p.vy * dt;
+      for (const r of [...this.tileRectsAround(p), ...solids]) {
+        if (!overlaps(p, r)) continue;
+        if (p.vy > 0) { p.y = r.y - p.h; p.grounded = true; p.standingOn = r.id; p.vy = 0; }
+        else if (p.vy < 0) { p.y = r.y + r.h; p.vy = 0; }
+      }
+      if (p.grounded && !p.standingOn) p.standingOn = wasStanding;
+
+      // Standing on a crumble tile starts its countdown — but only once the song exists.
+      if (p.grounded && this.clock.beat >= 0 && p.standingOn && p.standingOn.startsWith('crumble:')) {
+        const key = p.standingOn.slice(8);
+        if (!this.crumbles.has(key)) this.crumbles.set(key, pose.B);
+      }
+
+      // Hazards
+      const hazards = [...this.level.spikes];
+      for (const m of this.level.machines) {
+        if (m.type === 'piston') {
+          const ext = pistonExt(pose.B, pose.t, m.phase);
+          if (ext > 0.02) hazards.push(pistonRect(m, ext));
+        }
+      }
+      for (const r of hazards) if (overlaps(p, r)) { this.die('hazard'); return; }
+      for (const m of this.level.machines) {
+        if (m.type !== 'blade') continue;
+        const c = bladeCenter(pose.B, pose.t, {
+          ...m, cx: m.tx * TILE + TILE / 2, cy: m.ty * TILE + TILE / 2,
+        });
+        const nx = Math.max(p.x, Math.min(c.x, p.x + p.w));
+        const ny = Math.max(p.y, Math.min(c.y, p.y + p.h));
+        if ((c.x - nx) ** 2 + (c.y - ny) ** 2 < BLADE_R * BLADE_R) { this.die('blade'); return; }
+      }
+      if (p.y > this.level.H * TILE + 2 * TILE) { this.die('fell'); return; }
+
+      if (this.level.shrine && overlaps(p, this.level.shrine)) this.completed = true;
+    }
+  }
+
+  function simulate(level, script, dt = 1 / 60) {
+    const sim = new Sim(level);
+    for (const seg of script) {
+      const frames = Math.round(seg.dur / dt);
+      let tSeg = 0, nextTap = 0;
+      for (let i = 0; i < frames; i++) {
+        const input = {
+          left: !!seg.left, right: !!seg.right,
+          jump: i === 0 && !!seg.jump, tap: false,
+        };
+        if (seg.tapEvery && tSeg >= nextTap - 1e-9) { input.tap = true; nextTap += seg.tapEvery; }
+        sim.step(input, dt);
+        tSeg += dt;
+        if (sim.completed) break;
+      }
+      if (sim.completed) break;
+    }
+    return { completed: sim.completed, deaths: sim.deaths, time: sim.time, beats: sim.beatsConducted, sim };
+  }
+
+  return {
+    TempoClock, DEFAULT_INTERVAL, lerp, pingpong, pistonExt, gateOpenness,
+    bladeCenter, ferryPos, crumbleSolid, parseLevel, Sim, simulate, TILE,
+    gateRect, pistonRect, ferryRect, ferryPxPoints,
+  };
+});
+
+// TEMPOMANCER levels — 20x12 tiles, ASCII maps + machine definitions.
+// P spawn, X shrine, # solid, ^ spike, c crumble.
+(function (root, factory) {
+  if (typeof module === 'object' && module.exports) module.exports = factory();
+  else root.TempoLevels = factory();
+})(typeof self !== 'undefined' ? self : this, function () {
+  'use strict';
+  return [
+    {
+      name: 'I. Downbeat',
+      hint: 'The world moves only when you tap. SPACE is your baton.',
+      key: 0,
+      map: [
+        '....................',
+        '....................',
+        '....................',
+        '....................',
+        '....................',
+        '....................',
+        '....................',
+        '....................',
+        '....................',
+        '....................',
+        '.P...............X..',
+        '####################',
+      ],
+      machines: [
+        { type: 'gate', tx: 9, ty: 8, h: 3, mod: 2, openOn: 1, phase: 0 },
+      ],
+    },
+    {
+      name: 'II. Largo',
+      hint: 'A slow song makes gentle machines.',
+      key: 1,
+      map: [
+        '.......#....#.......',
+        '....................',
+        '....................',
+        '....................',
+        '....................',
+        '....................',
+        '....................',
+        '....................',
+        '....................',
+        '....................',
+        'P................X..',
+        '####################',
+      ],
+      machines: [
+        { type: 'piston', tx: 7, ty: 0, dir: 'down', len: 10, phase: 0 },
+        { type: 'piston', tx: 12, ty: 0, dir: 'down', len: 10, phase: 0 },
+      ],
+    },
+    {
+      name: 'III. Presto',
+      hint: 'Speed is power. Ride the lift on a racing beat — and JUMP.',
+      key: 2,
+      map: [
+        '....................',
+        '...........X........',
+        '........#####.......',
+        '....................',
+        '....................',
+        '....................',
+        '....................',
+        '....................',
+        '....................',
+        '....................',
+        '.P..................',
+        '####################',
+      ],
+      machines: [
+        { type: 'ferry', points: [[3, 10], [3, 4]], w: 2 },
+      ],
+    },
+    {
+      name: 'IV. Fermata',
+      hint: 'Silence freezes the world. But reality dissolves without music.',
+      key: 3,
+      map: [
+        '....................',
+        '....................',
+        '....................',
+        '....................',
+        '....................',
+        '....................',
+        '....................',
+        '....................',
+        '....................',
+        '....................',
+        '.P...............X..',
+        '####################',
+      ],
+      machines: [
+        { type: 'blade', tx: 7, ty: 9, r: 48, stepDeg: 137, phase: 90 },
+        { type: 'blade', tx: 10, ty: 9, r: 48, stepDeg: 137, phase: 90 },
+        { type: 'blade', tx: 13, ty: 9, r: 48, stepDeg: 137, phase: 90 },
+      ],
+    },
+    {
+      name: 'V. Syncopation',
+      hint: 'The doors keep their own counts. Walk in time.',
+      key: 4,
+      map: [
+        '....................',
+        '....................',
+        '....................',
+        '....................',
+        '....................',
+        '....................',
+        '....................',
+        '....................',
+        '....................',
+        '....................',
+        'P................X..',
+        '####################',
+      ],
+      machines: [
+        { type: 'gate', tx: 6, ty: 8, h: 3, mod: 4, openOn: 3, phase: 0 },
+        { type: 'gate', tx: 11, ty: 8, h: 3, mod: 4, openOn: 3, phase: 2 },
+      ],
+    },
+    {
+      name: 'VI. Rubato',
+      hint: 'Bend the tempo. Slow for the stampers — wild for the lift.',
+      key: 5,
+      map: [
+        '....................',
+        '....................',
+        '....................',
+        '....................',
+        '....................',
+        '#############.....X.',
+        '.................###',
+        '....................',
+        '....................',
+        '....................',
+        'P...................',
+        '####################',
+      ],
+      machines: [
+        { type: 'piston', tx: 7, ty: 5, dir: 'down', len: 5, phase: 0 },
+        { type: 'piston', tx: 12, ty: 5, dir: 'down', len: 5, phase: 0 },
+        { type: 'ferry', points: [[15, 10], [15, 10], [15, 6]], w: 2 },
+      ],
+    },
+    {
+      name: 'VII. Coda',
+      hint: 'Everything you know. Keep the song alive.',
+      key: 6,
+      map: [
+        '....................',
+        '....................',
+        '....................',
+        '....................',
+        '....................',
+        '....................',
+        '....................',
+        '....................',
+        '....................',
+        '....................',
+        '.P................X.',
+        '########ccccc#######',
+      ],
+      machines: [
+        { type: 'gate', tx: 5, ty: 8, h: 3, mod: 4, openOn: 3, phase: 0 },
+        { type: 'blade', tx: 15, ty: 9, r: 40, stepDeg: 90, phase: 90 },
+        { type: 'blade', tx: 17, ty: 9, r: 40, stepDeg: 90, phase: 90 },
+      ],
+    },
+  ];
+});
+
+// TEMPOMANCER presentation layer — canvas rendering, WebAudio synthesis, screens.
+// All logic lives in core.js; this file only reads sim state and makes it sing.
+(function (root, factory) {
+  if (typeof module === 'object' && module.exports) module.exports = factory();
+  else { root.TempoGame = factory(); root.TempoGame.boot(root); }
+})(typeof self !== 'undefined' ? self : this, function () {
+  'use strict';
+
+  const VW = 640, VH = 384, STEP = 1 / 60;
+
+  const ACCENTS = ['#ffd166', '#4cc9f0', '#ff5d8f', '#64dfdf', '#c77dff', '#ff9e42', '#fff3b0'];
+  const ROOTS = [45, 43, 48, 41, 47, 50, 45]; // midi, per level
+  const PENTA = [0, 3, 5, 7, 10];
+  const CHORDS = [0, 3, -2, -4]; // bass root offsets, cycling every 4 beats
+  const MELODY = [0, 2, 4, 3, 2, 5, 4, 6, 0, 4, 3, 5, 2, 4, 6, 7];
+  const DEATH_LINES = {
+    silence: 'the song died — and took the world with it',
+    hazard: 'unmade by a machine that keeps your time',
+    crushed: 'crushed on your own downbeat',
+    blade: 'the orbit you conducted',
+    fell: 'lost to the void below',
+  };
+
+  const mtof = m => 440 * Math.pow(2, (m - 69) / 12);
+  const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+
+  // ---------------------------------------------------------------- audio
+  function makeAudio(win) {
+    let ac = null, master, dampen, verb, verbSend, muted = false, lastDampen = -1;
+    function ensure() {
+      if (ac || !win.AudioContext) return;
+      ac = new win.AudioContext();
+      master = ac.createGain(); master.gain.value = 0.85;
+      dampen = ac.createBiquadFilter(); dampen.type = 'lowpass'; dampen.frequency.value = 18000;
+      const comp = ac.createDynamicsCompressor();
+      master.connect(dampen); dampen.connect(comp); comp.connect(ac.destination);
+      // small generated room
+      verb = ac.createConvolver();
+      const sr = ac.sampleRate || 44100, len = Math.max(1, Math.floor(sr * 1.4));
+      const buf = ac.createBuffer(2, len, sr);
+      for (let c = 0; c < 2; c++) {
+        const d = buf.getChannelData(c);
+        for (let i = 0; i < d.length; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, 2.6);
+      }
+      verb.buffer = buf;
+      verbSend = ac.createGain(); verbSend.gain.value = 0.22;
+      verbSend.connect(verb); verb.connect(master);
+      if (ac.resume) ac.resume();
+    }
+    function out(node, wet) {
+      node.connect(master);
+      if (wet && verbSend) node.connect(verbSend);
+    }
+    function env(peak, decay, curve) {
+      const g = ac.createGain(); const t = ac.currentTime;
+      g.gain.setValueAtTime(0.0001, t);
+      g.gain.exponentialRampToValueAtTime(Math.max(0.001, peak * (muted ? 0 : 1)), t + 0.008);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + decay);
+      return g;
+    }
+    function osc(type, f0, f1, dur) {
+      const o = ac.createOscillator(); o.type = type; const t = ac.currentTime;
+      o.frequency.setValueAtTime(Math.max(20, f0), t);
+      if (f1) o.frequency.exponentialRampToValueAtTime(Math.max(20, f1), t + dur);
+      o.start(t); o.stop(t + dur + 0.05);
+      return o;
+    }
+    function noise(dur) {
+      const sr = ac.sampleRate || 44100;
+      const b = ac.createBuffer(1, Math.max(1, Math.floor(sr * dur)), sr);
+      const d = b.getChannelData(0);
+      for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
+      const s = ac.createBufferSource(); s.buffer = b; s.start(ac.currentTime);
+      return s;
+    }
+    const A = {
+      ensure,
+      get on() { return !!ac; },
+      toggleMute() { muted = !muted; if (master) master.gain.value = muted ? 0 : 0.85; return muted; },
+      setSilence(s) {
+        if (!ac) return;
+        const f = 250 + 17750 * Math.pow(1 - s, 2);
+        if (Math.abs(f - lastDampen) > 120) {
+          lastDampen = f;
+          if (dampen.frequency.setTargetAtTime) dampen.frequency.setTargetAtTime(f, ac.currentTime, 0.08);
+        }
+      },
+      kick(accent) {
+        if (!ac) return;
+        const g = env(accent ? 0.95 : 0.7, 0.16);
+        osc('sine', accent ? 175 : 150, 42, 0.16).connect(g); out(g);
+        const ng = env(0.25, 0.03); const hp = ac.createBiquadFilter();
+        hp.type = 'highpass'; hp.frequency.value = 4000;
+        noise(0.03).connect(hp); hp.connect(ng); out(ng);
+      },
+      bass(midi) {
+        if (!ac) return;
+        const g = env(0.34, 0.3); const lp = ac.createBiquadFilter();
+        lp.type = 'lowpass'; lp.frequency.value = 420;
+        osc('sawtooth', mtof(midi), 0, 0.3).connect(lp); lp.connect(g); out(g);
+      },
+      pluck(midi, vel) {
+        if (!ac) return;
+        const g = env(0.16 * (vel || 1), 0.42);
+        osc('triangle', mtof(midi), 0, 0.42).connect(g);
+        osc('triangle', mtof(midi) * 1.005, 0, 0.42).connect(g);
+        out(g, true);
+      },
+      stab(midis) {
+        if (!ac) return;
+        for (const m of midis) {
+          const g = env(0.1, 0.2); const lp = ac.createBiquadFilter();
+          lp.type = 'lowpass'; lp.frequency.value = 2600;
+          osc('sawtooth', mtof(m), 0, 0.2).connect(lp); lp.connect(g); out(g, true);
+        }
+      },
+      thud() {
+        if (!ac) return;
+        const g = env(0.5, 0.22);
+        osc('sine', 95, 48, 0.22).connect(g); out(g);
+        const ng = env(0.18, 0.08); const lp = ac.createBiquadFilter();
+        lp.type = 'lowpass'; lp.frequency.value = 380;
+        noise(0.08).connect(lp); lp.connect(ng); out(ng);
+      },
+      tick() {
+        if (!ac) return;
+        const g = env(0.06, 0.04);
+        osc('square', 1900, 0, 0.04).connect(g); out(g);
+      },
+      metal() {
+        if (!ac) return;
+        const g = env(0.055, 0.07);
+        osc('square', 730, 0, 0.07).connect(g);
+        osc('square', 919, 0, 0.07).connect(g);
+        out(g, true);
+      },
+      crack() {
+        if (!ac) return;
+        const g = env(0.35, 0.14); const bp = ac.createBiquadFilter();
+        bp.type = 'bandpass'; bp.frequency.setValueAtTime(1100, ac.currentTime);
+        if (bp.frequency.exponentialRampToValueAtTime) bp.frequency.exponentialRampToValueAtTime(280, ac.currentTime + 0.13);
+        noise(0.14).connect(bp); bp.connect(g); out(g);
+      },
+      swish() {
+        if (!ac) return;
+        const g = env(0.08, 0.12); const bp = ac.createBiquadFilter();
+        bp.type = 'bandpass'; bp.frequency.value = 900;
+        noise(0.12).connect(bp); bp.connect(g); out(g, true);
+      },
+      death(cause) {
+        if (!ac) return;
+        const g = env(0.3, 0.45);
+        osc('sawtooth', 320, 55, 0.45).connect(g); out(g, true);
+        A.thud();
+      },
+      cadence(root) {
+        if (!ac) return;
+        [0, 3, 5, 10, 12, 15].forEach((iv, i) => {
+          const t = ac.currentTime + i * 0.09;
+          const o = ac.createOscillator(); o.type = 'triangle';
+          o.frequency.setValueAtTime(mtof(root + 12 + iv), t);
+          const g = ac.createGain();
+          g.gain.setValueAtTime(0.0001, t);
+          g.gain.exponentialRampToValueAtTime(muted ? 0.001 : 0.14, t + 0.02);
+          g.gain.exponentialRampToValueAtTime(0.0001, t + 0.6);
+          o.connect(g); out(g, true); o.start(t); o.stop(t + 0.7);
+        });
+      },
+    };
+    return A;
+  }
+
+  // ---------------------------------------------------------------- game
+  function createGame(win) {
+    const doc = win.document;
+    const core = win.TempoCore || (typeof require === 'function' ? require('./core.js') : null);
+    const LEVELS = win.TempoLevels || (typeof require === 'function' ? require('./levels.js') : null);
+    const { Sim, parseLevel, TILE, pistonExt, gateOpenness, bladeCenter, ferryPos, ferryPxPoints, crumbleSolid, lerp } = core;
+
+    let canvas = doc.getElementById && doc.getElementById('game');
+    if (!canvas && doc.createElement) { canvas = doc.createElement('canvas'); doc.body && doc.body.appendChild && doc.body.appendChild(canvas); }
+    const ctx = canvas.getContext('2d');
+    const wc = doc.createElement('canvas'); wc.width = VW; wc.height = VH;
+    const w = wc.getContext('2d');
+
+    const audio = makeAudio(win);
+
+    const G = {
+      state: 'title', levelIndex: 0, sim: null, level: null,
+      titleTaps: 0, timer: 0, playTime: 0,
+      totalBeats: 0, totalDeaths: 0, runTime: 0,
+      msg: '', msgTimer: 0, deathFlash: 0, clearFlash: 0, beatFlash: 0, shake: 0,
+      batonFlick: 0, faceDir: 1, scale: 1,
+      particles: [], rings: [],
+      prev: {},
+      frame, draw, restartLevel, // exposed
+      skipTo(i) { loadLevel(clamp(i, 0, LEVELS.length - 1)); G.state = 'play'; G.timer = 0; },
+    };
+
+    // ------------- input
+    const held = {};
+    let tapQueued = false, jumpQueued = false;
+    function onKeyDown(e) {
+      audio.ensure();
+      const c = e.code || e.key;
+      if (held[c]) { if (e.preventDefault) e.preventDefault(); return; }
+      held[c] = true;
+      if (c === 'Space' || c === ' ') { tapQueued = true; if (e.preventDefault) e.preventDefault(); }
+      if (c === 'ArrowUp' || c === 'KeyW') { jumpQueued = true; if (e.preventDefault) e.preventDefault(); }
+      if (c === 'KeyR') restartLevel(true);
+      if (c === 'KeyM') audio.toggleMute();
+    }
+    function onKeyUp(e) { held[e.code || e.key] = false; }
+    function onPointer() { audio.ensure(); tapQueued = true; }
+    win.addEventListener('keydown', onKeyDown);
+    win.addEventListener('keyup', onKeyUp);
+    win.addEventListener('pointerdown', onPointer);
+    win.addEventListener('resize', resize);
+
+    function resize() {
+      const s = clamp(Math.min((win.innerWidth || VW) / VW, (win.innerHeight || VH) / (VH + 30)), 0.5, 3);
+      G.scale = s;
+      canvas.width = Math.floor(VW * s); canvas.height = Math.floor(VH * s);
+      if (canvas.style) {
+        canvas.style.width = canvas.width + 'px'; canvas.style.height = canvas.height + 'px';
+      }
+    }
+    resize();
+
+    // ------------- level flow
+    function loadLevel(i) {
+      G.levelIndex = i;
+      G.level = parseLevel(LEVELS[i]);
+      G.sim = new Sim(G.level);
+      G.playTime = 0; G.msg = ''; G.msgTimer = 0;
+      G.particles.length = 0; G.rings.length = 0;
+      G.prev = { beat: -1, deaths: 0, completed: false, grounded: false, vy: 0, ext: {}, crumb: {} };
+    }
+    function restartLevel(manual) {
+      if (G.state === 'play' && manual) loadLevel(G.levelIndex);
+      else if (G.state === 'end' || G.state === 'title') fullReset();
+    }
+    function fullReset() {
+      G.state = 'title'; G.titleTaps = 0; G.totalBeats = 0; G.totalDeaths = 0; G.runTime = 0; G.timer = 0;
+    }
+
+    const accent = () => ACCENTS[G.levelIndex % ACCENTS.length];
+    const root = () => ROOTS[G.levelIndex % ROOTS.length];
+
+    // ------------- FX helpers
+    function burst(x, y, n, color, speed, up) {
+      for (let i = 0; i < n; i++) {
+        const a = Math.random() * Math.PI * 2;
+        G.particles.push({
+          x, y, vx: Math.cos(a) * speed * (0.4 + Math.random()),
+          vy: (up ? -Math.abs(Math.sin(a)) : Math.sin(a)) * speed * (0.4 + Math.random()),
+          life: 0.5 + Math.random() * 0.4, t: 0, color, size: 1.5 + Math.random() * 2.5,
+        });
+      }
+    }
+    function ring(x, y, color) { G.rings.push({ x, y, r: 6, t: 0, color }); }
+
+    // ------------- beat / event reactions
+    function onBeat(B) {
+      G.beatFlash = 1; G.batonFlick = 1;
+      G.totalBeats++;
+      const p = G.sim.player;
+      ring(p.x + p.w / 2, p.y + p.h / 2, accent());
+      const down = B % 4 === 0;
+      audio.kick(down);
+      audio.bass(root() - 12 + CHORDS[Math.floor(B / 4) % 4]);
+      const deg = MELODY[B % MELODY.length];
+      audio.pluck(root() + 24 + PENTA[deg % 5] + 12 * Math.floor(deg / 5), down ? 1 : 0.75);
+      // machine voices: what starts moving on this beat?
+      G.level.machines.forEach(m => {
+        if (m.type === 'gate') {
+          const a = gateOpenness(B, 0, m), b = gateOpenness(B, 1, m);
+          if (b > a) audio.stab([root() + 12, root() + 15, root() + 19]);
+          else if (b < a) audio.tick();
+        } else if (m.type === 'piston') {
+          if (pistonExt(B, 1, m.phase) > pistonExt(B, 0, m.phase)) audio.swish();
+          else audio.tick();
+        } else if (m.type === 'blade') {
+          audio.metal();
+        } else if (m.type === 'ferry') {
+          const pts = ferryPxPoints(m);
+          const a = ferryPos(B, 0, pts), b = ferryPos(B, 1, pts);
+          if (a.x !== b.x || a.y !== b.y) audio.pluck(root() + 19, 0.5);
+        }
+      });
+    }
+
+    function detectFrameEvents() {
+      const sim = G.sim, pose = sim.pose(), pr = G.prev;
+      // piston slams
+      G.level.machines.forEach((m, i) => {
+        if (m.type !== 'piston') return;
+        const ext = pistonExt(pose.B, pose.t, m.phase);
+        const was = pr.ext[i] || 0;
+        if (ext > 0.99 && was <= 0.99 && sim.clock.beat >= 0) {
+          const len = m.len * TILE;
+          const tipY = m.dir === 'up' ? m.ty * TILE - len : (m.ty + 1) * TILE + len;
+          audio.thud(); G.shake = Math.max(G.shake, 5);
+          burst(m.tx * TILE + TILE / 2, tipY, 10, '#9aa2c8', 90, true);
+        }
+        pr.ext[i] = ext;
+      });
+      // crumble breaks
+      for (const c of G.level.crumbleTiles) {
+        const key = c.tx + ',' + c.ty;
+        const solid = crumbleSolid(sim.crumbles.has(key) ? sim.crumbles.get(key) : null, pose.B);
+        if (pr.crumb[key] === undefined) pr.crumb[key] = solid;
+        if (pr.crumb[key] && !solid) {
+          audio.crack();
+          burst(c.tx * TILE + TILE / 2, c.ty * TILE + TILE / 2, 12, '#8d99ae', 70, false);
+        }
+        pr.crumb[key] = solid;
+      }
+      // landing
+      const p = sim.player;
+      if (p.grounded && !pr.grounded && pr.vy > 260) {
+        burst(p.x + p.w / 2, p.y + p.h, 6, '#6c7396', 50, true);
+        audio.tick();
+      }
+      pr.grounded = p.grounded; pr.vy = p.vy;
+    }
+
+    // ------------- update
+    let acc = 0;
+    function frame(dt) {
+      dt = clamp(dt, 0, 0.1);
+      G.beatFlash = Math.max(0, G.beatFlash - dt * 3.2);
+      G.batonFlick = Math.max(0, G.batonFlick - dt * 5);
+      G.deathFlash = Math.max(0, G.deathFlash - dt * 2.2);
+      G.clearFlash = Math.max(0, G.clearFlash - dt * 1.4);
+      G.shake = Math.max(0, G.shake - dt * 26);
+      G.msgTimer = Math.max(0, G.msgTimer - dt);
+      // particles & rings
+      G.particles = G.particles.filter(pt => (pt.t += dt) < pt.life);
+      for (const pt of G.particles) { pt.x += pt.vx * dt; pt.y += pt.vy * dt; pt.vy += 240 * dt; }
+      G.rings = G.rings.filter(r => (r.t += dt) < 0.5);
+      for (const r of G.rings) r.r += dt * 220;
+
+      if (G.state === 'title') {
+        G.timer += dt;
+        if (tapQueued) {
+          tapQueued = false; G.titleTaps++; G.beatFlash = 1; audio.kick(G.titleTaps === 4);
+          audio.pluck(45 + 24 + PENTA[G.titleTaps % 5], 1);
+          if (G.titleTaps >= 4) { G.state = 'card'; G.timer = 0; loadLevel(0); }
+        }
+        jumpQueued = false;
+        return;
+      }
+      if (G.state === 'card') {
+        G.timer += dt; tapQueued = false; jumpQueued = false;
+        if (G.timer > 1.5) { G.state = 'play'; G.timer = 0; }
+        return;
+      }
+      if (G.state === 'clear') {
+        G.timer += dt; tapQueued = false; jumpQueued = false;
+        if (G.timer > 1.7) {
+          if (G.levelIndex + 1 >= LEVELS.length) { G.state = 'end'; G.timer = 0; }
+          else { loadLevel(G.levelIndex + 1); G.state = 'card'; G.timer = 0; }
+        }
+        return;
+      }
+      if (G.state === 'end') {
+        G.timer += dt;
+        if (tapQueued && G.timer > 1.2) { tapQueued = false; fullReset(); }
+        tapQueued = false;
+        return;
+      }
+
+      // ---- play
+      G.playTime += dt; G.runTime += dt;
+      const input = {
+        left: !!(held.ArrowLeft || held.KeyA),
+        right: !!(held.ArrowRight || held.KeyD),
+        jump: jumpQueued, tap: tapQueued,
+      };
+      if (input.left && !input.right) G.faceDir = -1;
+      if (input.right && !input.left) G.faceDir = 1;
+      tapQueued = false; jumpQueued = false;
+
+      acc += dt;
+      let first = true;
+      while (acc >= STEP) {
+        acc -= STEP;
+        const pr = G.prev, sim = G.sim;
+        pr.vy = sim.player.vy;
+        sim.step(first ? input : { left: input.left, right: input.right }, STEP);
+        first = false;
+        if (sim.clock.beat > pr.beat && sim.clock.beat >= 0) onBeat(sim.clock.beat);
+        pr.beat = sim.clock.beat;
+        if (sim.deaths > pr.deaths) {
+          pr.deaths = sim.deaths; G.totalDeaths++;
+          G.deathFlash = 1; G.shake = 8;
+          G.msg = DEATH_LINES[sim.lastDeath] || 'unmade'; G.msgTimer = 2.6;
+          audio.death(sim.lastDeath);
+          pr.beat = sim.clock.beat;
+        }
+        detectFrameEvents();
+        if (sim.completed && !pr.completed) {
+          pr.completed = true;
+          G.state = 'clear'; G.timer = 0; G.clearFlash = 1;
+          audio.cadence(root());
+          const sh = G.level.shrine;
+          burst(sh.x + sh.w / 2, sh.y + sh.h / 2, 26, accent(), 130, false);
+          break;
+        }
+      }
+      audio.setSilence(G.sim.clock.silence);
+    }
+
+    // ------------- drawing
+    function rr(c, x, y, wd, ht, r) {
+      c.beginPath();
+      if (c.roundRect) { c.roundRect(x, y, wd, ht, r); }
+      else { c.rect(x, y, wd, ht); }
+    }
+
+    function drawWorld() {
+      const sim = G.sim, L = G.level, pose = sim.pose(), ac = accent();
+      w.fillStyle = '#0e0f1a'; w.fillRect(0, 0, VW, VH);
+      // grid shimmer
+      w.globalAlpha = 0.05 + 0.06 * G.beatFlash;
+      w.strokeStyle = ac; w.lineWidth = 1;
+      w.beginPath();
+      for (let x = 0; x <= VW; x += TILE) { w.moveTo(x + 0.5, 0); w.lineTo(x + 0.5, VH); }
+      for (let y = 0; y <= VH; y += TILE) { w.moveTo(0, y + 0.5); w.lineTo(VW, y + 0.5); }
+      w.stroke(); w.globalAlpha = 1;
+
+      // tiles
+      for (let ty = 0; ty < L.H; ty++) for (let tx = 0; tx < L.W; tx++) {
+        if (!L.solidAt(tx, ty)) continue;
+        const x = tx * TILE, y = ty * TILE;
+        w.fillStyle = '#262b41'; w.fillRect(x, y, TILE, TILE);
+        w.fillStyle = L.solidAt(tx, ty - 1) ? '#2c3150' : '#454d78';
+        w.fillRect(x, y, TILE, 3);
+        w.fillStyle = '#1b1e30'; w.fillRect(x, y + TILE - 3, TILE, 3);
+      }
+      // crumble tiles
+      for (const c of L.crumbleTiles) {
+        const key = c.tx + ',' + c.ty;
+        const touched = sim.crumbles.has(key) ? sim.crumbles.get(key) : null;
+        const solid = crumbleSolid(touched, pose.B);
+        const x = c.tx * TILE, y = c.ty * TILE;
+        if (solid) {
+          const fuse = touched === null ? 0 : clamp((pose.B + pose.t - touched) / 2, 0, 1);
+          const jx = fuse > 0.7 ? (Math.random() - 0.5) * 2.5 * fuse : 0;
+          w.fillStyle = '#33314b'; w.fillRect(x + jx, y, TILE, TILE);
+          w.fillStyle = '#454d78'; w.fillRect(x + jx, y, TILE, 3);
+          w.strokeStyle = `rgba(20,18,30,${0.5 + fuse * 0.5})`; w.lineWidth = 1 + fuse * 1.5;
+          w.beginPath();
+          w.moveTo(x + 6 + jx, y + 4); w.lineTo(x + 14 + jx, y + 14); w.lineTo(x + 8 + jx, y + 26);
+          w.moveTo(x + 22 + jx, y + 3); w.lineTo(x + 18 + jx, y + 16); w.lineTo(x + 26 + jx, y + 27);
+          w.stroke();
+        } else {
+          w.strokeStyle = 'rgba(90,96,140,0.25)'; w.lineWidth = 1;
+          w.strokeRect(x + 2, y + 2, TILE - 4, TILE - 4);
+        }
+      }
+      // spikes
+      w.fillStyle = '#7a8194';
+      for (const s of L.spikes) {
+        const bx = s.x - 5, by = s.y + s.h;
+        w.beginPath();
+        w.moveTo(bx, by); w.lineTo(bx + 8, by - 14); w.lineTo(bx + 16, by);
+        w.moveTo(bx + 16, by); w.lineTo(bx + 24, by - 14); w.lineTo(bx + 32, by);
+        w.fill();
+      }
+      // shrine
+      const sh = L.shrine;
+      if (sh) {
+        const cx = sh.x + sh.w / 2, cy = sh.y + sh.h;
+        const glow = 0.55 + 0.45 * Math.sin(G.playTime * 2.2) * 0.5 + G.beatFlash * 0.4;
+        w.fillStyle = '#3a4062';
+        w.fillRect(cx - 12, cy - 6, 24, 6);
+        w.fillRect(cx - 10, cy - 30, 4, 24); w.fillRect(cx + 6, cy - 30, 4, 24);
+        w.fillRect(cx - 12, cy - 34, 24, 5);
+        w.globalAlpha = clamp(glow, 0, 1);
+        w.fillStyle = ac;
+        w.beginPath(); w.arc(cx, cy - 17, 5 + G.beatFlash * 2, 0, 7); w.fill();
+        w.globalAlpha = 0.25 * glow;
+        w.beginPath(); w.arc(cx, cy - 17, 12 + G.beatFlash * 5, 0, 7); w.fill();
+        w.globalAlpha = 1;
+      }
+      // machines
+      G.level.machines.forEach((m, i) => {
+        if (m.type === 'gate') drawGate(m, pose, ac);
+        else if (m.type === 'piston') drawPiston(m, pose);
+        else if (m.type === 'blade') drawBlade(m, pose, ac);
+        else if (m.type === 'ferry') drawFerry(m, pose, ac);
+      });
+      drawPlayer(sim.player, ac);
+      // particles / rings
+      for (const pt of G.particles) {
+        w.globalAlpha = 1 - pt.t / pt.life;
+        w.fillStyle = pt.color;
+        w.fillRect(pt.x - pt.size / 2, pt.y - pt.size / 2, pt.size, pt.size);
+      }
+      w.globalAlpha = 1;
+      for (const r of G.rings) {
+        w.globalAlpha = (1 - r.t / 0.5) * 0.5;
+        w.strokeStyle = r.color; w.lineWidth = 2;
+        w.beginPath(); w.arc(r.x, r.y, r.r, 0, 7); w.stroke();
+      }
+      w.globalAlpha = 1;
+    }
+
+    function drawGate(m, pose, ac) {
+      const o = gateOpenness(pose.B, pose.t, m);
+      const x = m.tx * TILE, y = m.ty * TILE, fullH = m.h * TILE, h = (1 - o) * fullH;
+      w.fillStyle = '#3a4062'; w.fillRect(x - 4, y - 8, TILE + 8, 8);
+      if (h > 1) {
+        w.fillStyle = '#565f8f';
+        for (let b = 0; b < 3; b++) w.fillRect(x + 4 + b * 10, y, 4, h);
+        w.fillStyle = '#454d78'; w.fillRect(x, y + h - 4, TILE, 4);
+      }
+      // count pips
+      const cur = ((pose.B % m.mod) + m.mod) % m.mod;
+      for (let k = 0; k < m.mod; k++) {
+        const px = x + TILE / 2 + (k - (m.mod - 1) / 2) * 9, py = y - 14;
+        const opens = ((k + m.phase) % m.mod) === m.openOn;
+        w.globalAlpha = k === cur ? 1 : 0.35;
+        w.fillStyle = opens ? ac : '#8d99ae';
+        w.beginPath(); w.arc(px, py, k === cur ? 3.4 : 2.4, 0, 7); w.fill();
+      }
+      w.globalAlpha = 1;
+    }
+
+    function drawPiston(m, pose) {
+      const ext = pistonExt(pose.B, pose.t, m.phase);
+      const x = m.tx * TILE, y = m.ty * TILE;
+      const len = ext * m.len * TILE, down = m.dir !== 'up';
+      w.fillStyle = '#3a4062'; w.fillRect(x - 2, down ? y : y + TILE - 6, TILE + 4, 6);
+      w.fillStyle = '#565f8f';
+      w.fillRect(x + TILE / 2 - 4, down ? y + TILE : y - len, 8, len);
+      w.fillStyle = '#6c7396';
+      const hy = down ? y + TILE + len - 10 : y - len;
+      w.fillRect(x + 3, hy, TILE - 6, 10);
+      w.fillStyle = '#454d78'; w.fillRect(x + 3, down ? hy + 7 : hy, TILE - 6, 3);
+    }
+
+    function drawBlade(m, pose, ac) {
+      const def = { ...m, cx: m.tx * TILE + TILE / 2, cy: m.ty * TILE + TILE / 2 };
+      const c = bladeCenter(pose.B, pose.t, def);
+      const spin = (pose.B + pose.t) * m.stepDeg * 3 * Math.PI / 180;
+      w.strokeStyle = '#3a4062'; w.lineWidth = 3;
+      w.beginPath(); w.moveTo(def.cx, def.cy); w.lineTo(c.x, c.y); w.stroke();
+      w.fillStyle = '#2c3150';
+      w.beginPath(); w.arc(def.cx, def.cy, 5, 0, 7); w.fill();
+      w.fillStyle = ac;
+      w.beginPath();
+      for (let k = 0; k < 8; k++) {
+        const a = spin + k * Math.PI / 4;
+        const r1 = 9, r2 = 14;
+        w.lineTo(c.x + Math.cos(a) * r2, c.y + Math.sin(a) * r2);
+        w.lineTo(c.x + Math.cos(a + 0.25) * r1, c.y + Math.sin(a + 0.25) * r1);
+      }
+      w.closePath(); w.fill();
+      w.fillStyle = '#0e0f1a';
+      w.beginPath(); w.arc(c.x, c.y, 4, 0, 7); w.fill();
+    }
+
+    function drawFerry(m, pose, ac) {
+      const pts = ferryPxPoints(m);
+      const pos = ferryPos(pose.B, pose.t, pts);
+      const wd = (m.w || 2) * TILE;
+      w.fillStyle = '#565f8f'; rr(w, pos.x, pos.y, wd, 16, 4); w.fill();
+      w.fillStyle = '#6c7396'; w.fillRect(pos.x + 2, pos.y, wd - 4, 3);
+      const nxt = ferryPos(pose.B, 1, pts);
+      const dx = Math.sign(nxt.x - pos.x), dy = Math.sign(nxt.y - pos.y);
+      w.strokeStyle = ac; w.globalAlpha = 0.8; w.lineWidth = 2;
+      const mx = pos.x + wd / 2, my = pos.y + 8;
+      w.beginPath();
+      if (dy !== 0) {
+        w.moveTo(mx - 5, my + 2 * dy); w.lineTo(mx, my - 3 * dy); w.lineTo(mx + 5, my + 2 * dy);
+      } else if (dx !== 0) {
+        w.moveTo(mx - 3 * dx, my - 4); w.lineTo(mx + 3 * dx, my); w.lineTo(mx - 3 * dx, my + 4);
+      } else {
+        w.moveTo(mx - 4, my); w.lineTo(mx + 4, my);
+      }
+      w.stroke(); w.globalAlpha = 1;
+    }
+
+    function drawPlayer(p, ac) {
+      const cx = p.x + p.w / 2, cy = p.y + p.h / 2;
+      const squash = p.grounded ? 1 : clamp(1 - p.vy / 2600, 0.85, 1.18);
+      w.save();
+      w.translate(cx, p.y + p.h);
+      w.scale(2 - squash, squash);
+      // robe
+      w.fillStyle = '#e9ecf5';
+      w.beginPath();
+      w.moveTo(-8, 0); w.lineTo(-5, -18); w.lineTo(5, -18); w.lineTo(8, 0);
+      w.closePath(); w.fill();
+      w.fillStyle = ac; w.fillRect(-8, -2, 16, 2);
+      // head
+      w.fillStyle = '#f8f9fa';
+      w.beginPath(); w.arc(0, -22, 6, 0, 7); w.fill();
+      // eyes
+      w.fillStyle = '#20233a';
+      w.fillRect(G.faceDir * 2 - 1.2, -24, 2.4, 3);
+      // baton arm
+      const flick = G.batonFlick;
+      const ang = (-0.6 - flick * 1.1) * G.faceDir;
+      const hx = G.faceDir * 6, hy = -16;
+      const bx = hx + Math.cos(ang) * 13 * G.faceDir, by = hy + Math.sin(ang) * 13;
+      w.strokeStyle = '#f8f9fa'; w.lineWidth = 2;
+      w.beginPath(); w.moveTo(hx, hy); w.lineTo(bx, by); w.stroke();
+      w.fillStyle = ac;
+      w.globalAlpha = 0.5 + flick * 0.5;
+      w.beginPath(); w.arc(bx, by, 2 + flick * 2.5, 0, 7); w.fill();
+      w.globalAlpha = 1;
+      w.restore();
+    }
+
+    function text(c, str, x, y, size, color, align, alpha, font) {
+      c.save();
+      c.globalAlpha = alpha === undefined ? 1 : alpha;
+      c.fillStyle = color;
+      c.font = `${size}px ${font || '"Segoe UI", system-ui, sans-serif'}`;
+      c.textAlign = align || 'left'; c.textBaseline = 'middle';
+      c.fillText(str, x, y);
+      c.restore();
+    }
+
+    function drawHUD() {
+      const sim = G.sim, ac = accent();
+      const def = LEVELS[G.levelIndex];
+      text(w, def.name, 12, 16, 13, '#c8cee8', 'left', 0.9);
+      text(w, def.hint, 12, 34, 11, '#8d99ae', 'left', 0.8, 'italic "Segoe UI", system-ui, sans-serif');
+      // tempo
+      if (sim.clock.beat >= 0) {
+        const bpm = Math.round(60 / sim.clock.interval);
+        text(w, bpm + ' bpm', VW - 12, 16, 13, ac, 'right', 0.9);
+        // 4-count pips
+        for (let k = 0; k < 4; k++) {
+          const on = sim.clock.beat % 4 === k;
+          w.globalAlpha = on ? 1 : 0.3;
+          w.fillStyle = k === 0 ? ac : '#c8cee8';
+          w.beginPath(); w.arc(VW - 66 + k * 14, 34, on ? 4 : 2.6, 0, 7); w.fill();
+        }
+        w.globalAlpha = 1;
+      } else {
+        text(w, 'tap SPACE — begin the song', VW - 12, 16, 12, ac, 'right', 0.7 + 0.3 * Math.sin(G.playTime * 4));
+      }
+      // level dots
+      for (let k = 0; k < LEVELS.length; k++) {
+        w.globalAlpha = k === G.levelIndex ? 1 : 0.3;
+        w.fillStyle = k === G.levelIndex ? ac : '#8d99ae';
+        w.beginPath(); w.arc(VW / 2 + (k - 3) * 13, VH - 12, k === G.levelIndex ? 3.4 : 2.4, 0, 7); w.fill();
+      }
+      w.globalAlpha = 1;
+      if (G.totalDeaths > 0) text(w, '☠ ' + G.totalDeaths, VW - 12, VH - 12, 11, '#8d99ae', 'right', 0.6);
+      if (G.msgTimer > 0) {
+        text(w, G.msg, VW / 2, VH / 2 - 46, 13, '#e9ecf5', 'center', clamp(G.msgTimer, 0, 1) * 0.9, 'italic "Segoe UI", system-ui, sans-serif');
+      }
+      // silence dissolve
+      const s = sim.clock.silence;
+      if (s > 0.01) {
+        const gr = w.createRadialGradient(VW / 2, VH / 2, VH * (1.1 - 0.55 * s), VW / 2, VH / 2, VH * 1.35);
+        gr.addColorStop(0, 'rgba(8,8,14,0)'); gr.addColorStop(1, `rgba(8,8,14,${0.9 * s})`);
+        w.fillStyle = gr; w.fillRect(0, 0, VW, VH);
+        if (s > 0.35) text(w, 'the song is dying', VW / 2, 60, 12, '#8d99ae', 'center', (s - 0.35) * 1.2, 'italic "Segoe UI", system-ui, sans-serif');
+      }
+    }
+
+    function draw() {
+      if (G.state === 'title') { drawTitle(); return; }
+      if (G.state === 'end') { drawEnd(); return; }
+      if (!G.sim) return;
+      drawWorld();
+      drawHUD();
+      // composite with silence desaturation + shake
+      const s = G.sim.clock.silence;
+      ctx.save();
+      ctx.fillStyle = '#08080e';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.scale(G.scale, G.scale);
+      if (G.shake > 0.5) ctx.translate((Math.random() - 0.5) * G.shake, (Math.random() - 0.5) * G.shake);
+      if (ctx.filter !== undefined) ctx.filter = `saturate(${Math.round((1 - s * 0.95) * 100)}%) brightness(${Math.round((1 - s * 0.3) * 100)}%)`;
+      ctx.drawImage(wc, 0, 0);
+      if (ctx.filter !== undefined) ctx.filter = 'none';
+      // flashes
+      if (G.deathFlash > 0) { ctx.globalAlpha = G.deathFlash * 0.55; ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, VW, VH); }
+      if (G.clearFlash > 0) { ctx.globalAlpha = G.clearFlash * 0.4; ctx.fillStyle = accent(); ctx.fillRect(0, 0, VW, VH); }
+      ctx.globalAlpha = 1;
+      if (G.state === 'card' || G.state === 'clear') drawCard();
+      ctx.restore();
+    }
+
+    function drawCard() {
+      const t = G.timer, def = LEVELS[G.levelIndex];
+      const a = clamp(t * 4, 0, 1) * clamp((1.55 - t) * 4, 0, 1);
+      ctx.fillStyle = `rgba(8,8,14,${0.62 * a})`; ctx.fillRect(0, 0, VW, VH);
+      if (G.state === 'clear') {
+        text(ctx, 'SHRINE ATTUNED', VW / 2, VH / 2 - 10, 26, accent(), 'center', a, 'bold "Segoe UI", system-ui, sans-serif');
+        text(ctx, G.sim.beatsConducted + ' beats conducted', VW / 2, VH / 2 + 20, 12, '#c8cee8', 'center', a);
+      } else {
+        text(ctx, def.name, VW / 2, VH / 2 - 12, 28, '#f8f9fa', 'center', a, 'bold "Segoe UI", system-ui, sans-serif');
+        text(ctx, def.hint, VW / 2, VH / 2 + 20, 13, ACCENTS[G.levelIndex], 'center', a, 'italic "Segoe UI", system-ui, sans-serif');
+      }
+    }
+
+    function drawTitle() {
+      ctx.save();
+      ctx.fillStyle = '#0a0b13'; ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.scale(G.scale, G.scale);
+      const pulse = 1 + G.beatFlash * 0.05;
+      const ac = ACCENTS[G.titleTaps % ACCENTS.length];
+      ctx.save();
+      ctx.translate(VW / 2, VH / 2 - 60); ctx.scale(pulse, pulse);
+      text(ctx, 'T E M P O M A N C E R', 0, 0, 38, '#f8f9fa', 'center', 1, 'bold "Segoe UI", system-ui, sans-serif');
+      ctx.restore();
+      text(ctx, 'reality is a song — keep it alive', VW / 2, VH / 2 - 22, 14, ac, 'center', 0.9, 'italic "Segoe UI", system-ui, sans-serif');
+      text(ctx, 'the world moves ONLY on your beat', VW / 2, VH / 2 + 8, 12, '#8d99ae', 'center', 0.85);
+      text(ctx, 'SPACE / click — conduct        A D / ← → — move        W / ↑ — jump', VW / 2, VH / 2 + 34, 12, '#8d99ae', 'center', 0.85);
+      text(ctx, 'stop conducting: the world freezes… then dissolves', VW / 2, VH / 2 + 56, 11, '#6c7396', 'center', 0.8);
+      // 4-tap starter
+      for (let k = 0; k < 4; k++) {
+        const on = k < G.titleTaps;
+        ctx.globalAlpha = on ? 1 : 0.25;
+        ctx.fillStyle = on ? ac : '#8d99ae';
+        ctx.beginPath(); ctx.arc(VW / 2 + (k - 1.5) * 22, VH / 2 + 92, on ? 6 : 4, 0, 7); ctx.fill();
+      }
+      ctx.globalAlpha = 0.7 + 0.3 * Math.sin(G.timer * 3);
+      text(ctx, 'tap four beats to begin', VW / 2, VH / 2 + 118, 12, '#c8cee8', 'center');
+      ctx.restore();
+    }
+
+    function drawEnd() {
+      ctx.save();
+      ctx.fillStyle = '#0a0b13'; ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.scale(G.scale, G.scale);
+      const a = clamp(G.timer * 1.5, 0, 1);
+      text(ctx, 'C O D A', VW / 2, VH / 2 - 92, 34, '#fff3b0', 'center', a, 'bold "Segoe UI", system-ui, sans-serif');
+      text(ctx, 'you kept the song alive', VW / 2, VH / 2 - 54, 15, '#f8f9fa', 'center', a, 'italic "Segoe UI", system-ui, sans-serif');
+      const bpm = G.runTime > 0 ? Math.round(G.totalBeats / G.runTime * 60) : 0;
+      const lines = [
+        ['beats conducted', G.totalBeats],
+        ['average tempo', bpm + ' bpm'],
+        ['times unmade', G.totalDeaths],
+        ['the performance', Math.floor(G.runTime / 60) + 'm ' + Math.floor(G.runTime % 60) + 's'],
+      ];
+      lines.forEach(([k, v], i) => {
+        text(ctx, k, VW / 2 - 16, VH / 2 - 8 + i * 24, 13, '#8d99ae', 'right', a);
+        text(ctx, String(v), VW / 2 + 16, VH / 2 - 8 + i * 24, 13, '#f8f9fa', 'left', a);
+      });
+      if (G.timer > 1.2) {
+        ctx.globalAlpha = 0.7 + 0.3 * Math.sin(G.timer * 3);
+        text(ctx, 'encore? tap to conduct again', VW / 2, VH / 2 + 106, 12, '#c8cee8', 'center');
+      }
+      ctx.restore();
+    }
+
+    return G;
+  }
+
+  function boot(win) {
+    if (!win || !win.document || !win.requestAnimationFrame) return;
+    const start = () => {
+      const game = createGame(win);
+      win.__TEMPOGAME = game;
+      let last = 0;
+      const loop = ts => {
+        const dt = last ? (ts - last) / 1000 : 1 / 60;
+        last = ts;
+        game.frame(dt);
+        game.draw();
+        win.requestAnimationFrame(loop);
+      };
+      win.requestAnimationFrame(loop);
+    };
+    if (win.document.readyState === 'loading') win.document.addEventListener('DOMContentLoaded', start);
+    else start();
+  }
+
+  return { createGame, boot };
+});
+</script>
+</body>
+</html>
