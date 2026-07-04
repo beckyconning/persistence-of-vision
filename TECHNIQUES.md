@@ -523,3 +523,12 @@ multiplicative (non-additive) lighting; hand-wavering line via per-pixel jitter.
 - **Proxy-mock smoke test**: a callable/chainable everything-Proxy stands in for DOM,
   canvas ctx and AudioContext; the whole presentation layer runs headless in node and
   reference-errors surface without a browser. Cheap guard before the real playwright pass.
+### Narrative staging on canvas (2026-07-04, the-dead-field)
+- Three acts on one modular clock (`t = now % LOOP`, act boundaries as constants) — captions change,
+  but the STORY must read from state changes (ash vs glow, red vs green), not the caption.
+- Material hierarchy as meaning: render the POWERLESS thing ornate (gold double border) and the
+  powerful thing plain — inversion of status IS the finding.
+- Persistence as honesty: don't clear the failed state when the fix arrives (the ash archive stays);
+  matches real systems where the fix appends rather than deletes.
+- Weakness found: schedule-driven downstream effects read as loosely coupled; next time give every
+  effect a visible per-event CAUSE (provenance lines / quote-the-letter).

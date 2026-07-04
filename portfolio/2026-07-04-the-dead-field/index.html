@@ -1,0 +1,205 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>The Dead Field</title>
+<style>
+  html,body{margin:0;height:100%;background:#0a0b0d;display:grid;place-items:center;overflow:hidden}
+  canvas{max-width:96vw;max-height:96vh}
+</style>
+<canvas id="c" width="960" height="600"></canvas>
+<script>
+'use strict';
+// THE DEAD FIELD — 2026-07-04
+// Three acts, fully deterministic (pure function of the clock; no randomness).
+//   I   letters posted to the ornate field turn to ash; the reader only ever
+//       scans the plain field below; downstream, refusals accumulate.
+//   II  fifty-one probes measure both fields; only one answers.
+//   III the same letters append after the plain field's preamble; the scanline
+//       finds them; downstream snaps green and resolves to 0.140.
+// The ash archive is never cleared: still written, harmless, kept.
+
+const cv = document.getElementById('c'), g = cv.getContext('2d');
+const W = cv.width, H = cv.height;
+const LOOP = 36;                       // seconds
+const ACT2 = 13, ACT3 = 20;            // act boundaries
+const PROBES = 51;                     // the 51 REST calls
+
+// layout
+const TOP  = {x: 560, y: 120, w: 300, h: 120};   // custom_instructions (ornate)
+const MOD  = {x: 560, y: 330, w: 300, h: 150};   // module_custom_instructions.sql_generation
+const PRE  = {x: MOD.x + 12, y: MOD.y + 34, w: MOD.w - 24, h: 34}; // hard-coded preamble
+const OUT  = {x: 905, y: 330};                    // downstream answers column
+const EMIT = {x: 60,  y: 300};                    // the writer
+
+// deterministic letter schedule: one slip every 1.15 s, forever, both acts
+const PERIOD = 1.15;
+function slipsAt(t){                   // all slips born in [0, t)
+  const n = Math.floor(t / PERIOD), out = [];
+  for (let i = 0; i < n; i++) out.push({born: i * PERIOD, id: i});
+  return out;
+}
+const FLIGHT = 3.2;                    // seconds of travel
+
+function ease(u){ return u < 0 ? 0 : u > 1 ? 1 : u * u * (3 - 2 * u); }
+function lerp(a, b, u){ return a + (b - a) * u; }
+
+// a slip's position/state at age u∈[0,1]: routed to TOP during act I/II, MOD in act III
+function slipPos(born, u, rerouted){
+  const sx = EMIT.x, sy = EMIT.y;
+  if (!rerouted){
+    const tx = TOP.x + 24 + ((born * 7) % (TOP.w - 60)), ty = TOP.y + TOP.h / 2;
+    const mx = lerp(sx, tx, u), arc = -90 * Math.sin(Math.PI * u);
+    return {x: mx, y: lerp(sy, ty, ease(u)) + arc, tx, ty};
+  }
+  const tx = MOD.x + 24 + ((born * 7) % (MOD.w - 60)), ty = PRE.y + PRE.h + 34 + ((born * 13) % 48);
+  const mx = lerp(sx, tx, u), arc = 60 * Math.sin(Math.PI * u);
+  return {x: mx, y: lerp(sy, ty, ease(u)) + arc, tx, ty};
+}
+
+function roundRect(r, rad){
+  g.beginPath();
+  g.moveTo(r.x + rad, r.y);
+  g.arcTo(r.x + r.w, r.y, r.x + r.w, r.y + r.h, rad);
+  g.arcTo(r.x + r.w, r.y + r.h, r.x, r.y + r.h, rad);
+  g.arcTo(r.x, r.y + r.h, r.x, r.y, rad);
+  g.arcTo(r.x, r.y, r.x + r.w, r.y, rad);
+  g.closePath();
+}
+
+function slipGlyph(x, y, alpha, hue){  // a tiny letter: 3 text lines in a card
+  g.save(); g.translate(x, y); g.globalAlpha = alpha;
+  g.fillStyle = hue; g.fillRect(-11, -7, 22, 14);
+  g.fillStyle = 'rgba(10,11,13,.85)';
+  g.fillRect(-7, -3, 14, 1.5); g.fillRect(-7, 0, 10, 1.5); g.fillRect(-7, 3, 12, 1.5);
+  g.restore();
+}
+
+function draw(now){
+  const t = (now / 1000) % LOOP;
+  g.clearRect(0, 0, W, H);
+
+  // ---- fields ----
+  // ornate: gold double border, prominent
+  g.save();
+  g.strokeStyle = 'rgba(212,175,55,.9)'; g.lineWidth = 2; roundRect(TOP, 10); g.stroke();
+  g.strokeStyle = 'rgba(212,175,55,.35)'; g.lineWidth = 1;
+  roundRect({x: TOP.x - 5, y: TOP.y - 5, w: TOP.w + 10, h: TOP.h + 10}, 13); g.stroke();
+  g.fillStyle = 'rgba(212,175,55,.9)'; g.font = '13px ui-monospace,monospace';
+  g.fillText('custom_instructions', TOP.x, TOP.y - 14);
+  // plain: single grey hairline
+  g.strokeStyle = 'rgba(140,150,160,.55)'; g.lineWidth = 1; roundRect(MOD, 4); g.stroke();
+  g.fillStyle = 'rgba(140,150,160,.8)'; g.font = '11px ui-monospace,monospace';
+  g.fillText('module_custom_instructions.sql_generation', MOD.x, MOD.y - 10);
+  // the preamble that was always there (hatched block)
+  g.save(); g.beginPath(); g.rect(PRE.x, PRE.y, PRE.w, PRE.h); g.clip();
+  g.strokeStyle = 'rgba(140,150,160,.5)'; g.lineWidth = 1;
+  for (let x = -PRE.h; x < PRE.w; x += 7){
+    g.beginPath(); g.moveTo(PRE.x + x, PRE.y + PRE.h); g.lineTo(PRE.x + x + PRE.h, PRE.y); g.stroke();
+  }
+  g.restore();
+  g.fillStyle = 'rgba(140,150,160,.65)'; g.font = '10px ui-monospace,monospace';
+  g.fillText('preamble (always emitted)', PRE.x, PRE.y - 5);
+  g.restore();
+
+  // ---- the writer ----
+  g.fillStyle = 'rgba(120,200,255,.9)'; g.beginPath();
+  g.arc(EMIT.x - 18, EMIT.y, 5, 0, 7); g.fill();
+  g.fillStyle = 'rgba(120,200,255,.6)'; g.font = '11px ui-monospace,monospace';
+  g.fillText('writer', EMIT.x - 42, EMIT.y + 22);
+
+  // ---- letters ----
+  const rerouteAt = ACT3;
+  for (const s of slipsAt(t)){
+    const age = (t - s.born) / FLIGHT;
+    const rerouted = s.born >= rerouteAt;
+    if (age <= 1){                                  // in flight
+      const p = slipPos(s.born, age, rerouted);
+      slipGlyph(p.x, p.y, .95, rerouted ? 'rgba(120,255,190,.95)' : 'rgba(120,200,255,.95)');
+    } else {                                        // landed
+      const p = slipPos(s.born, 1, rerouted);
+      if (!rerouted){                               // ash: delivered, never read
+        const dead = Math.min(1, (t - s.born - FLIGHT) / 1.2);
+        slipGlyph(p.tx, p.ty - 18 + ((s.id * 11) % 36),
+                  lerp(.9, .28, dead), `rgba(${lerp(120,168,dead)|0},${lerp(200,168,dead)|0},${lerp(255,168,dead)|0},1)`);
+      } else {                                      // alive in the module field
+        slipGlyph(p.tx, p.ty, .95, 'rgba(120,255,190,.95)');
+      }
+    }
+  }
+
+  // ---- the reader: a scanline that only ever sweeps the plain field ----
+  const scanU = (t % 2.6) / 2.6;
+  const sy = MOD.y + 6 + scanU * (MOD.h - 12);
+  g.strokeStyle = 'rgba(255,255,255,.5)'; g.lineWidth = 1;
+  g.beginPath(); g.moveTo(MOD.x + 4, sy); g.lineTo(MOD.x + MOD.w - 4, sy); g.stroke();
+  g.fillStyle = 'rgba(255,255,255,.45)'; g.font = '10px ui-monospace,monospace';
+  g.fillText('reader', MOD.x + MOD.w - 44, sy - 4);
+
+  // ---- act II: the 51 probes ----
+  if (t >= ACT2 && t < ACT3){
+    const u = (t - ACT2) / (ACT3 - ACT2);
+    const fired = Math.min(PROBES, Math.floor(u * PROBES * 1.25));
+    for (let i = 0; i < fired; i++){
+      const toTop = i % 2 === 0;                   // alternate targets, 51 calls
+      const py = toTop ? TOP.y + 14 + (i * 4.1) % (TOP.h - 28)
+                       : MOD.y + 14 + (i * 5.3) % (MOD.h - 28);
+      const px = toTop ? TOP.x : MOD.x;
+      const recent = i >= fired - 3;
+      g.strokeStyle = toTop ? `rgba(180,180,180,${recent ? .5 : .12})`
+                            : `rgba(255,220,120,${recent ? .95 : .35})`;
+      g.lineWidth = toTop ? 1 : 1.5;
+      g.beginPath(); g.moveTo(30, py); g.lineTo(px, py); g.stroke();
+      if (!toTop && recent){                        // the live field answers
+        g.fillStyle = 'rgba(255,220,120,.9)';
+        g.beginPath(); g.arc(px, py, 3.5, 0, 7); g.fill();
+      }
+    }
+    if (u > .55){                                   // discovery settles
+      g.strokeStyle = `rgba(255,220,120,${ease((u - .55) / .3)})`; g.lineWidth = 2;
+      roundRect({x: MOD.x - 6, y: MOD.y - 6, w: MOD.w + 12, h: MOD.h + 12}, 8); g.stroke();
+      g.fillStyle = `rgba(255,220,120,${ease((u - .55) / .3)})`;
+      g.font = '12px ui-monospace,monospace';
+      g.fillText('51 calls: only one field answers', MOD.x, MOD.y + MOD.h + 22);
+    }
+    g.fillStyle = `rgba(180,180,180,${.5 * Math.sin(Math.PI * u)})`;
+    g.font = '12px ui-monospace,monospace';
+    g.fillText('the reader was never here', TOP.x, TOP.y + TOP.h + 20);
+  }
+
+  // ---- downstream answers ----
+  const nOut = 10;
+  for (let i = 0; i < nOut; i++){
+    const oy = OUT.y - 90 + i * 24;
+    const bornRow = i * (LOOP / nOut);              // rows resolve across the loop
+    const green = t >= ACT3 + 2.5 && bornRow < t - ACT3 - 1;
+    if (green){
+      g.strokeStyle = 'rgba(120,255,190,.9)'; g.lineWidth = 2;
+      g.beginPath(); g.moveTo(OUT.x - 7, oy); g.lineTo(OUT.x - 2, oy + 5); g.lineTo(OUT.x + 8, oy - 6); g.stroke();
+    } else {
+      g.strokeStyle = 'rgba(255,110,110,.75)'; g.lineWidth = 2;
+      g.beginPath(); g.moveTo(OUT.x - 6, oy - 5); g.lineTo(OUT.x + 6, oy + 5);
+      g.moveTo(OUT.x + 6, oy - 5); g.lineTo(OUT.x - 6, oy + 5); g.stroke();
+    }
+  }
+  g.fillStyle = 'rgba(200,210,220,.55)'; g.font = '10px ui-monospace,monospace';
+  g.fillText('answers', OUT.x - 22, OUT.y - 112);
+  if (t >= ACT3 + 6){                               // the sentinel resolves
+    const a = ease((t - ACT3 - 6) / 2);
+    g.fillStyle = `rgba(120,255,190,${a})`; g.font = '26px ui-monospace,monospace';
+    g.fillText('0.140', OUT.x - 38, OUT.y + 165);
+    g.fillStyle = `rgba(120,255,190,${.55 * a})`; g.font = '10px ui-monospace,monospace';
+    g.fillText('CNY, exact', OUT.x - 30, OUT.y + 182);
+  }
+
+  // ---- title & act caption ----
+  g.fillStyle = 'rgba(220,225,230,.9)'; g.font = '16px ui-monospace,monospace';
+  g.fillText('THE DEAD FIELD', 40, 48);
+  g.fillStyle = 'rgba(150,158,166,.7)'; g.font = '11px ui-monospace,monospace';
+  const caption = t < ACT2 ? 'I. every letter is delivered'
+                : t < ACT3 ? 'II. fifty-one measurements'
+                : 'III. append, never replace';
+  g.fillText(caption, 40, 68);
+
+  requestAnimationFrame(draw);
+}
+requestAnimationFrame(draw);
+</script>

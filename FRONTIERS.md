@@ -156,3 +156,9 @@ outer silhouettes** (warp/deckle only partly fixed it). Still genuinely unmoved:
 - An SVG emitter.
 - A simple image *decoder* beyond filter-0 PNG, so images can be inputs.
 - Palette tools: import a palette from a hex list or a source image.
+
+### Consequence-coupling in kinetic pieces (opened 2026-07-04)
+Make every downstream state change traceably CAUSED by a specific upstream event
+(per-letter provenance, answers that quote the letter that fixed them). Also: braided-
+timeline pieces — two divergent histories (50 ahead / 189 behind) woven back into one
+merge, conflict knots resolved by hand.
