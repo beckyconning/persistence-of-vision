@@ -162,3 +162,8 @@ Make every downstream state change traceably CAUSED by a specific upstream event
 (per-letter provenance, answers that quote the letter that fixed them). Also: braided-
 timeline pieces — two divergent histories (50 ahead / 189 behind) woven back into one
 merge, conflict knots resolved by hand.
+
+### True over-under weave + pitched knots (opened 2026-07-04)
+Draw a braid AS a braid: alternating z-order with occlusion gaps at crossings. And compose two
+prior frontiers: the YTP session's audio timeline-as-EDL + the-braid's event provenance = one
+quiet tone per resolved knot, av-synced by construction.

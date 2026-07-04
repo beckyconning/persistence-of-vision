@@ -532,3 +532,13 @@ multiplicative (non-additive) lighting; hand-wavering line via per-pixel jitter.
   matches real systems where the fix appends rather than deletes.
 - Weakness found: schedule-driven downstream effects read as loosely coupled; next time give every
   effect a visible per-event CAUSE (provenance lines / quote-the-letter).
+
+### Consequence-coupling (2026-07-04, the-braid — closes the frontier opened by the-dead-field)
+- Per-event provenance: each resolved knot emits its OWN thread to its OWN lamp; nothing downstream
+  fires on a schedule. The viewer reads causality because it is drawn, not implied.
+- Strand weight = history weight (lineWidth by commit count); divergence as an organic lobe
+  (ease-in/ease-out spread), not a diagram fork.
+- Fibers peel toward their FUTURE conflict before arriving — anticipation as composition.
+- Bug class note: inner `const` re-declarations of module clocks (TDZ) killed everything after the
+  strands, silently mid-frame; screenshot + console verification caught it. Verify kinetic pieces
+  at TWO loop phases minimum.

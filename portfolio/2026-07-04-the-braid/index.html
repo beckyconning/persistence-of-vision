@@ -1,0 +1,165 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>The Braid</title>
+<style>
+  html,body{margin:0;height:100%;background:#0b0a0e;display:grid;place-items:center;overflow:hidden}
+  canvas{max-width:96vw;max-height:96vh}
+</style>
+<canvas id="c" width="880" height="640"></canvas>
+<script>
+'use strict';
+// THE BRAID — 2026-07-04
+// Two histories from one origin: the bundle (50 commits) and rc (189 commits),
+// woven back into one merge. Nine knots — the real conflict files. Every effect
+// is drawn from its cause: a commit fiber peels toward the knot it will fight in;
+// a resolved knot sends one thread down into the merged strand; each thread lights
+// its own test lamp. One discordant fiber (unordered SELECT) jitters until the
+// review probe pins it. Deterministic: every position is a function of the clock.
+
+const cv = document.getElementById('c'), g = cv.getContext('2d');
+const W = cv.width, H = cv.height;
+const LOOP = 44;
+
+const ORIGIN = {x: W/2, y: 64};                 // merge-base 8b982086
+const DIVERGE_END = 300;                        // y where strands stop diverging
+const KNOT_TOP = 330, KNOT_BOT = 470;           // conflict zone
+const MERGE_Y = 500, LAMPS_Y = 596;
+
+const KNOTS = [                                  // the nine real UU conflicts
+  "select-child.ts", "derive-focused-model.ts", "focused-model-to-cortex-yaml.ts",
+  "cortex-client.ts", "derivation-helpers.ts", "kpi-expansion.ts",
+  "refinement.ts", "instructions.ts", "select-child.test.ts",
+];
+const BUNDLE_N = 50, RC_N = 189;
+
+function ease(u){ return u < 0 ? 0 : u > 1 ? 1 : u*u*(3-2*u); }
+function strandX(side, y){                       // side -1 bundle, +1 rc
+  if (y <= ORIGIN.y) return ORIGIN.x;
+  const u = ease(Math.min(1, (y - ORIGIN.y) / (DIVERGE_END - ORIGIN.y)));
+  const spread = 210 * u;
+  const back = y > KNOT_TOP ? ease((y - KNOT_TOP) / (MERGE_Y - KNOT_TOP)) : 0;
+  return ORIGIN.x + side * spread * (1 - back);
+}
+function knotPos(i){
+  const col = i % 3, row = (i / 3) | 0;
+  return {x: W/2 + (col - 1) * 170, y: KNOT_TOP + 24 + row * 48};
+}
+
+// deterministic commit fibers: n fibers per strand, each a phase along the loop
+function fiberY(t, phase){ return ORIGIN.y + ((t * 26 + phase * 520) % (MERGE_Y - ORIGIN.y)); }
+
+function draw(now){
+  const t = (now / 1000) % LOOP;
+  g.clearRect(0, 0, W, H);
+  g.font = '11px ui-monospace,monospace';
+
+  // ---- strands (woven: 3 sub-threads each, sinusoidal plait) ----
+  for (const side of [-1, 1]){
+    const hue = side < 0 ? [120, 220, 200] : [230, 170, 90];   // bundle teal / rc amber
+    for (let k = 0; k < 3; k++){
+      g.beginPath();
+      for (let y = ORIGIN.y; y <= MERGE_Y; y += 4){
+        const wob = Math.sin(y / 26 + k * 2.09) * 7;
+        const x = strandX(side, y) + wob;
+        y === ORIGIN.y ? g.moveTo(x, y) : g.lineTo(x, y);
+      }
+      g.strokeStyle = `rgba(${hue[0]},${hue[1]},${hue[2]},.5)`;
+      g.lineWidth = side < 0 ? 2 : 3.2;          // rc is the heavier strand
+      g.stroke();
+    }
+  }
+  // merged strand below MERGE_Y (six sub-threads, both hues interleaved)
+  for (let k = 0; k < 6; k++){
+    const hue = k % 2 ? [230,170,90] : [120,220,200];
+    g.beginPath();
+    for (let y = MERGE_Y; y <= LAMPS_Y - 18; y += 4){
+      let x = ORIGIN.x + Math.sin(y / 22 + k * 1.05) * 9;
+      // the discordant fiber: k===3 jitters (heap order) until pinned at PIN_T
+      if (k === 3 && t < PIN_T) x += Math.sin(y * 1.7 + t * 40) * 5 * Math.min(1,(t-MERGE_T)/2 > 0 ? 1 : 0);
+      y === MERGE_Y ? g.moveTo(x, y) : g.lineTo(x, y);
+    }
+    g.strokeStyle = k === 3 && t < PIN_T ? 'rgba(255,120,120,.85)'
+                  : `rgba(${hue[0]},${hue[1]},${hue[2]},.55)`;
+    g.lineWidth = 2.2; g.stroke();
+  }
+
+  // ---- commit fibers: peel toward the knot they will fight in ----
+  const nb = 14, nr = 26;                         // fibers in flight (of 50 / 189)
+  for (const [side, n] of [[-1, nb], [1, nr]]){
+    for (let i = 0; i < n; i++){
+      const phase = i / n, y = fiberY(t, phase + (side + 1) * .25);
+      const knot = knotPos(i % 9);
+      const peel = y > KNOT_TOP - 60 ? ease((y - (KNOT_TOP - 60)) / 80) : 0;
+      const x = strandX(side, y) * (1 - peel) + knot.x * peel;
+      g.fillStyle = side < 0 ? 'rgba(120,220,200,.9)' : 'rgba(230,170,90,.9)';
+      g.beginPath(); g.arc(x, y * (1 - peel) + knot.y * peel, 2, 0, 7); g.fill();
+    }
+  }
+
+  // ---- the nine knots: resolve in sequence; each sends a thread down ----
+  for (let i = 0; i < 9; i++){
+    const p = knotPos(i);
+    const resolveAt = MERGE_T + 2 + i * 2.2;      // one knot at a time
+    const done = t >= resolveAt;
+    // knot: a small over-under crossing, red while unresolved
+    g.strokeStyle = done ? 'rgba(170,240,190,.95)' : 'rgba(255,110,110,.9)';
+    g.lineWidth = 2;
+    g.beginPath(); g.arc(p.x, p.y, done ? 5 : 8, 0, 7); g.stroke();
+    if (!done && t > resolveAt - 1.2){            // the hand arrives: a probe line
+      g.strokeStyle = 'rgba(255,255,255,.6)';
+      g.beginPath(); g.moveTo(p.x - 16, p.y - 16); g.lineTo(p.x, p.y); g.stroke();
+    }
+    g.fillStyle = done ? 'rgba(170,240,190,.75)' : 'rgba(255,150,150,.75)';
+    g.fillText(KNOTS[i], p.x - 52, p.y + (i % 3 === 1 ? 24 : -12));
+    // consequence thread: knot → merged strand → its own lamp
+    if (done){
+      const u = ease(Math.min(1, (t - resolveAt) / 1.6));
+      const lampX = 130 + i * 72;
+      g.strokeStyle = 'rgba(170,240,190,.5)'; g.lineWidth = 1;
+      g.beginPath(); g.moveTo(p.x, p.y + 5);
+      const midY = MERGE_Y + 30;
+      g.lineTo(p.x + (ORIGIN.x - p.x) * u, p.y + (midY - p.y) * u);
+      if (u >= 1){ g.lineTo(lampX, LAMPS_Y - 10); }
+      g.stroke();
+      if (u >= 1){                                 // its lamp lights — caused, not scheduled
+        g.fillStyle = 'rgba(120,255,170,.95)';
+        g.beginPath(); g.arc(lampX, LAMPS_Y, 5, 0, 7); g.fill();
+      }
+    } else {
+      g.fillStyle = 'rgba(120,120,130,.5)';
+      g.beginPath(); g.arc(130 + i * 72, LAMPS_Y, 5, 0, 7); g.fill();
+    }
+  }
+
+  // ---- the pin: review probe fixes the discordant fiber ----
+  if (t >= PIN_T - 1.2 && t < PIN_T){
+    g.strokeStyle = 'rgba(255,255,255,.7)';
+    g.beginPath(); g.moveTo(W - 130, MERGE_Y + 40); g.lineTo(ORIGIN.x + 12, MERGE_Y + 52); g.stroke();
+    g.fillStyle = 'rgba(255,255,255,.7)'; g.fillText('review probe', W - 128, MERGE_Y + 36);
+  }
+  if (t >= PIN_T){
+    g.fillStyle = 'rgba(170,240,190,.9)';
+    g.fillText('ORDER BY id — pinned @ c5c632ce', ORIGIN.x + 22, MERGE_Y + 56);
+  }
+
+  // ---- labels ----
+  g.fillStyle = 'rgba(220,225,230,.9)'; g.font = '15px ui-monospace,monospace';
+  g.fillText('THE BRAID', 36, 40);
+  g.font = '11px ui-monospace,monospace';
+  g.fillStyle = 'rgba(120,220,200,.85)';
+  g.fillText(`bundle · ${BUNDLE_N} commits`, strandX(-1, 240) - 150, 244);
+  g.fillStyle = 'rgba(230,170,90,.85)';
+  g.fillText(`rc · ${RC_N} commits`, strandX(1, 240) + 26, 244);
+  g.fillStyle = 'rgba(150,158,166,.8)';
+  g.fillText('8b982086 — merge base', ORIGIN.x + 14, ORIGIN.y + 4);
+  g.fillText('6aeb7aad — one strand', ORIGIN.x + 14, MERGE_Y + 4);
+  const litAll = t >= PIN_T + 1.5;
+  g.fillStyle = litAll ? 'rgba(120,255,170,.95)' : 'rgba(150,158,166,.6)';
+  g.fillText(litAll ? '2894 passed · 0 failed' : 'suites waiting on the knots…', 130, LAMPS_Y + 24);
+
+  requestAnimationFrame(draw);
+}
+const MERGE_T = 6;
+const PIN_T = MERGE_T + 2 + 9 * 2.2 + 3;
+requestAnimationFrame(draw);
+</script>
