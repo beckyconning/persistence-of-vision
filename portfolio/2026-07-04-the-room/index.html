@@ -1,0 +1,165 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>The Room</title>
+<style>
+  html,body{margin:0;height:100%;background:#0d0c10;display:grid;place-items:center;overflow:hidden}
+  canvas{max-width:96vw;max-height:96vh}
+</style>
+<canvas id="c" width="820" height="1100"></canvas>
+<script>
+'use strict';
+// THE ROOM — 2026-07-04
+// Forty-one voices braid into one document. A still weave, drawn top to bottom:
+// six scout strands (five fray and end at the gate), the survivor thickens;
+// judge, researcher, verifier, writer, examiner, redteam strands join it in
+// phase bands; every crossing is a TRUE over-under — the over strand passes
+// unbroken, the under strand yields a gap. Deterministic; no randomness.
+
+const cv = document.getElementById('c'), g = cv.getContext('2d');
+const W = cv.width, H = cv.height, BG = '#0d0c10';
+
+// phase bands (y ranges), matching the real run's structure
+const BANDS = [
+  { name: 'scouts ×6 — one passes the gate', y0: 70,  y1: 230 },
+  { name: 'judges ×3 + synthesis',           y0: 230, y1: 380 },
+  { name: 'researchers ×8 (filings)',        y0: 380, y1: 560 },
+  { name: 'verifiers ×10 — none refuted',    y0: 560, y1: 720 },
+  { name: 'writers ×3 · examiners ×3',       y0: 720, y1: 880 },
+  { name: 'redteam ×4 — six fixes',          y0: 880, y1: 1010 },
+];
+const CX = W * 0.5;
+
+// a strand is a sequence of x-positions per y; we build paths then paint with occlusion
+function strandPath(xs) {          // xs: [[y,x],...] control points → smooth path fn
+  return function x(y) {
+    if (y <= xs[0][0]) return xs[0][1];
+    for (let i = 1; i < xs.length; i++) {
+      if (y <= xs[i][0]) {
+        const [y0, x0] = xs[i - 1], [y1, x1] = xs[i];
+        const u = (y - y0) / (y1 - y0);
+        const s = u * u * (3 - 2 * u);
+        return x0 + (x1 - x0) * s;
+      }
+    }
+    return xs[xs.length - 1][1];
+  };
+}
+
+// deterministic pseudo-noise for organic wobble
+function wob(y, k) { return Math.sin(y / 37 + k * 2.399) * 3.5 + Math.sin(y / 13 + k * 5.11) * 1.2; }
+
+// ---- build the cast ----
+// each: color, weight, path, yStart, yEnd, phase(for crossings)
+const cast = [];
+const TEAL = '#57c9b0', GOLD = '#d4af57', BLUE = '#6f9fdd', RED = '#d97f7f',
+      VIOLET = '#a98fd6', ORANGE = '#dd9f6f', CORD = '#e8e3d5';
+
+// six scouts descend; five end at the gate (y=210), one (index 2 = Concur) continues
+for (let i = 0; i < 6; i++) {
+  const x0 = 120 + i * 116;
+  const survives = i === 2;
+  cast.push({
+    color: TEAL, w: survives ? 3.2 : 2.2, k: i,
+    y0: 40, y1: survives ? 1080 : 214,
+    fray: !survives,
+    x: strandPath(survives
+      ? [[40, x0], [230, CX], [1080, CX]]
+      : [[40, x0], [214, x0 + (i < 3 ? 18 : -18)]]),
+  });
+}
+// judges: 3 gold strands weave around the cord through their band then merge
+for (let i = 0; i < 3; i++) {
+  const side = (i - 1) * 150;
+  cast.push({ color: GOLD, w: 2.4, k: 10 + i, y0: 244, y1: 392,
+    x: strandPath([[244, CX + side * 1.4], [300, CX + side * 0.5], [380, CX]]) });
+}
+// researchers: 8 blue strands, from both margins, braid into the cord
+for (let i = 0; i < 8; i++) {
+  const side = (i % 2 ? 1 : -1) * (60 + (i >> 1) * 68);
+  cast.push({ color: BLUE, w: 2.0, k: 20 + i, y0: 392, y1: 572,
+    x: strandPath([[392, CX + side], [470, CX + side * 0.35], [560, CX]]) });
+}
+// verifiers: 10 thin red strands crossing the cord and returning (none cut it)
+for (let i = 0; i < 10; i++) {
+  const side = (i % 2 ? 1 : -1) * (46 + (i >> 1) * 52);
+  cast.push({ color: RED, w: 1.4, k: 40 + i, y0: 575, y1: 725,
+    x: strandPath([[575, CX + side], [635 + (i % 3) * 12, CX - side * 0.25], [716, CX + side * 0.55], [725, CX + side * 0.62]]),
+    returns: true });
+}
+// writers 3 violet in, examiners 3 orange in — interleaved band
+for (let i = 0; i < 3; i++) {
+  const side = (i - 1) * 170;
+  cast.push({ color: VIOLET, w: 2.6, k: 60 + i, y0: 735, y1: 885,
+    x: strandPath([[735, CX + side], [810, CX + side * 0.3], [878, CX]]) });
+  cast.push({ color: ORANGE, w: 1.7, k: 70 + i, y0: 760, y1: 866,
+    x: strandPath([[760, CX - side * 0.9], [820, CX + side * 0.4], [866, CX + side * 0.1]]),
+    returns: i !== 1 });
+}
+// redteam: 4 orange-red probes touching the cord low
+for (let i = 0; i < 4; i++) {
+  const side = (i % 2 ? 1 : -1) * (70 + (i >> 1) * 90);
+  cast.push({ color: '#e0846a', w: 1.6, k: 80 + i, y0: 892, y1: 1002,
+    x: strandPath([[892, CX + side], [950, CX + side * 0.15], [1000, CX + side * 0.5]]),
+    returns: true });
+}
+
+// ---- painting with true over-under occlusion ----
+// draw order per small y-slab: strands sorted by a deterministic over/under key that
+// alternates at crossings: over = strand whose phase sin is positive in this slab.
+function paintStrand(s, y0, y1) {
+  g.beginPath();
+  for (let y = Math.max(y0, s.y0); y <= Math.min(y1, s.y1); y += 3) {
+    const x = s.x(y) + wob(y, s.k);
+    y === Math.max(y0, s.y0) ? g.moveTo(x, y) : g.lineTo(x, y);
+  }
+  // under-gap: halo in background color, then the strand
+  g.strokeStyle = BG; g.lineWidth = s.w + 5; g.stroke();
+  g.strokeStyle = s.color; g.lineWidth = s.w; g.stroke();
+}
+
+g.fillStyle = BG; g.fillRect(0, 0, W, H);
+
+// paint in y-slabs; within each slab order by sin(phase) so crossings alternate
+const SLAB = 24;
+for (let y = 30; y < H; y += SLAB) {
+  const active = cast.filter(s => s.y1 >= y && s.y0 <= y + SLAB);
+  active.sort((a, b) => Math.sin(y / 41 + a.k * 1.7) - Math.sin(y / 41 + b.k * 1.7));
+  for (const s of active) paintStrand(s, y, y + SLAB);
+}
+
+// the cord: repaint the center line continuous and heavy below the gate so it reads as ONE
+g.beginPath();
+for (let y = 230; y <= 1080; y += 3) {
+  const x = CX + wob(y, 2);
+  y === 230 ? g.moveTo(x, y) : g.lineTo(x, y);
+}
+g.strokeStyle = BG; g.lineWidth = 9; g.stroke();
+const grad = g.createLinearGradient(0, 230, 0, 1080);
+grad.addColorStop(0, TEAL); grad.addColorStop(0.45, '#bcd8c9'); grad.addColorStop(1, CORD);
+g.strokeStyle = grad; g.lineWidth = 4.4; g.stroke();
+
+// frayed scout ends: short splayed fibers
+for (const s of cast.filter(c => c.fray)) {
+  const xe = s.x(s.y1) + wob(s.y1, s.k);
+  for (let f = -2; f <= 2; f++) {
+    g.beginPath(); g.moveTo(xe, s.y1);
+    g.quadraticCurveTo(xe + f * 4, s.y1 + 10, xe + f * 7, s.y1 + 20 + Math.abs(f) * 3);
+    g.strokeStyle = 'rgba(87,201,176,.35)'; g.lineWidth = 1; g.stroke();
+  }
+}
+
+// labels
+g.font = '11px ui-monospace,monospace';
+g.fillStyle = 'rgba(220,225,230,.92)'; g.font = '16px ui-monospace,monospace';
+g.fillText('THE ROOM', 34, 34);
+g.font = '11px ui-monospace,monospace'; g.fillStyle = 'rgba(150,158,166,.75)';
+g.fillText('forty-one voices, one document', 34, 52);
+for (const b of BANDS) {
+  g.fillStyle = 'rgba(150,158,166,.55)';
+  g.fillText(b.name, 18, b.y0 + 14);
+  g.strokeStyle = 'rgba(150,158,166,.12)';
+  g.beginPath(); g.moveTo(14, b.y0); g.lineTo(W - 14, b.y0); g.stroke();
+}
+g.fillStyle = 'rgba(232,227,213,.9)';
+g.fillText('the episode — SAP Concur · Averline Medical · 10/10 verified', CX - 178, 1066);
+</script>

@@ -542,3 +542,11 @@ multiplicative (non-additive) lighting; hand-wavering line via per-pixel jitter.
 - Bug class note: inner `const` re-declarations of module clocks (TDZ) killed everything after the
   strands, silently mid-frame; screenshot + console verification caught it. Verify kinetic pieces
   at TWO loop phases minimum.
+
+### True over-under weave, still (2026-07-04, the-room)
+- Paint per y-SLAB; within a slab sort strands by a deterministic phase key; every strand
+  paints a BG-colored halo (w+5) then itself — the halo cuts the under-strand = real occlusion.
+- Join vs touch: strands that MERGE (writers) end on the cord; strands that TEST (verifiers,
+  examiners, redteam) cross and visibly LEAVE. The distinction carries meaning without labels.
+- Elimination as fray: 5 short splayed quadratic fibers at a strand's end reads as "cut" at a glance.
+- Debt named: the over/under key should be braid-group generators from real event order, not phase noise.

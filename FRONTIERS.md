@@ -167,3 +167,7 @@ merge, conflict knots resolved by hand.
 Draw a braid AS a braid: alternating z-order with occlusion gaps at crossings. And compose two
 prior frontiers: the YTP session's audio timeline-as-EDL + the-braid's event provenance = one
 quiet tone per resolved knot, av-synced by construction.
+
+### Braid-group trace + citation tones (opened 2026-07-04)
+Derive crossing sequences from REAL event order (workflow journal timestamps) so a weave is the
+run's literal trace. Sound remains open: one tone per verified citation, silence for refuted.
