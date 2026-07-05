@@ -1,0 +1,198 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>the overprint — 2026-07-05</title>
+<style>
+  html,body{margin:0;background:#e8e4dc;display:grid;place-items:center;min-height:100vh}
+  canvas{box-shadow:0 2px 24px rgba(60,50,30,.25);max-width:96vw;height:auto}
+</style>
+<canvas id="c" width="1600" height="1700"></canvas>
+<script>
+'use strict';
+// THE OVERPRINT — 2026-07-05. Still, deterministic, zero randomness.
+// Subject: CELL-APPRSTATUS (20 Analyst calls, N=5/rung, warehouse-scored).
+// The licensed pair as literal ink: process CYAN = the convention sentence,
+// process YELLOW = the status sample_values. Multiply compositing means the
+// green of a correct answer CANNOT be produced by either ink alone — it
+// exists only where both print. Daylight piece: paper ground, hard edges,
+// no glow, no dark field.
+const cv = document.getElementById('c'), x = cv.getContext('2d');
+const W = cv.width, H = cv.height;
+
+const PAPER = '#faf7f1';
+const CYAN = '#00aeef';   // process cyan — the convention instruction
+const YELLOW = '#ffd400'; // process yellow — the sample_values
+const GRAY = '#8f8b84';   // key gray — the unfiltered miss
+const INK = '#3a372f';    // caption ink
+
+// ── paper ─────────────────────────────────────────────────────────────────
+x.fillStyle = PAPER; x.fillRect(0, 0, W, H);
+
+// registration crosses (proof-sheet furniture)
+function regmark(cx, cy) {
+  x.strokeStyle = INK; x.lineWidth = 1.2; x.beginPath();
+  x.moveTo(cx - 14, cy); x.lineTo(cx + 14, cy);
+  x.moveTo(cx, cy - 14); x.lineTo(cx, cy + 14); x.stroke();
+  x.beginPath(); x.arc(cx, cy, 8, 0, 7); x.stroke();
+}
+[[70, 70], [W - 70, 70], [70, H - 210], [W - 70, H - 210]].forEach(p => regmark(p[0], p[1]));
+
+const M = 120;                    // outer margin
+const GAP = 56;                   // gutter
+const PW = (W - 2 * M - GAP) / 2; // panel width
+const PH = 560;                   // panel height
+const TOP = 150;
+
+function mono(px, weight) { x.font = `${weight || 400} ${px}px "SF Mono", Menlo, monospace`; }
+
+function panelFrame(px, py, tag, caption, tally) {
+  x.strokeStyle = INK; x.lineWidth = 1.5;
+  x.strokeRect(px, py, PW, PH);
+  mono(26, 700); x.fillStyle = INK;
+  x.fillText(tag, px, py - 16);
+  mono(19); x.fillStyle = INK;
+  x.fillText(caption, px + 110, py - 16);
+  mono(19, 700);
+  const w = x.measureText(tally).width;
+  x.fillText(tally, px + PW - w, py - 16);
+}
+
+// strike sheet: the same wrong figure struck five times (5/5 deterministic)
+function strikes(px, py, figure, ink) {
+  mono(54, 700); x.fillStyle = ink;
+  for (let i = 0; i < 5; i++) x.fillText(figure, px, py + i * 62);
+}
+
+// blind emboss: the absent true figure (paper-on-paper, barely there)
+function emboss(px, py, s) {
+  mono(26, 700);
+  x.fillStyle = '#efeadf'; x.fillText(s, px + 1.5, py + 1.5);
+  x.fillStyle = '#ffffff'; x.fillText(s, px, py);
+}
+
+// the value-domain chips (yellow ink)
+function chips(px, py, solid) {
+  const vals = ['APPROVED', 'PENDING', 'REJECTED'];
+  mono(22, 700);
+  let cx0 = px;
+  for (const v of vals) {
+    const w = x.measureText(v).width + 36;
+    x.fillStyle = YELLOW; x.fillRect(cx0, py, w, 44);
+    x.fillStyle = solid ? INK : 'rgba(58,55,47,.55)';
+    x.fillText(v, cx0 + 18, py + 31);
+    cx0 += w + 18;
+  }
+}
+
+// ── R1 bare ───────────────────────────────────────────────────────────────
+let px = M, py = TOP;
+panelFrame(px, py, 'R1', 'bare — the live geometry', 'MISS 5/5');
+mono(20); x.fillStyle = INK;
+x.fillText('SUM(transaction_amount)   -- "spend amount"', px + 36, py + 60);
+x.fillText('WHERE                      -- (no status filter)', px + 36, py + 92);
+strikes(px + 36, py + 180, '435,589.79', GRAY);
+emboss(px + 36, py + 520, 'true 410,000.00 — no ink prints it');
+
+// ── R2 sample_values only ─────────────────────────────────────────────────
+px = M + PW + GAP;
+panelFrame(px, py, 'R2', 'yellow alone — values known, unused', 'MISS 5/5');
+chips(px + 36, py + 44, false);
+mono(20); x.fillStyle = INK;
+x.fillText('WHERE                      -- still no filter', px + 36, py + 130);
+strikes(px + 36, py + 218, '435,589.79', GRAY);
+emboss(px + 36, py + 520, 'the alphabet is not the convention');
+
+// ── R3 convention only — the slipped screen ───────────────────────────────
+px = M; py = TOP + PH + 120;
+panelFrame(px, py, 'R3', 'cyan alone — literal guessed', 'EMPTY 5/5');
+x.fillStyle = CYAN; mono(21, 700);
+x.fillText('include only expense entries whose', px + 36, py + 56);
+x.fillText('approval status is approved.', px + 36, py + 86);
+mono(20); x.fillStyle = INK;
+x.fillText("WHERE approval_status_code =", px + 36, py + 150);
+// misregistered ghost codes — the hallucinated literals, screen slipped
+mono(40, 700);
+x.globalAlpha = .85; x.fillStyle = CYAN;
+x.fillText("'A_APRV'", px + 66, py + 218);
+x.globalAlpha = .45;
+x.fillText("'A_APRV'", px + 72, py + 214);
+x.fillText("'A_APUR'", px + 66, py + 272);
+x.globalAlpha = .28;
+x.fillText("'A_APUR'", px + 61, py + 276);
+x.globalAlpha = 1;
+mono(18); x.fillStyle = INK;
+x.fillText('codes that exist at other companies, not in this data', px + 36, py + 322);
+// five empty result rules — the silent zeros
+for (let i = 0; i < 5; i++) {
+  const ry = py + 380 + i * 30;
+  x.strokeStyle = '#c9c4b8'; x.lineWidth = 1.2;
+  x.beginPath(); x.moveTo(px + 36, ry); x.lineTo(px + PW - 36, ry); x.stroke();
+  mono(15); x.fillStyle = '#a29d92';
+  x.fillText('0 rows', px + PW - 96, ry - 6);
+}
+
+// ── R4 the overprint — both inks, multiply ────────────────────────────────
+px = M + PW + GAP;
+panelFrame(px, py, 'R4', 'overprint — the licensed pair', 'PASS 5/5');
+chips(px + 36, py + 44, true);
+x.fillStyle = CYAN; mono(21, 700);
+x.fillText('include only expense entries whose', px + 36, py + 130);
+x.fillText('approval status is approved.', px + 36, py + 160);
+
+// the literal ink mix: a cyan bar and a yellow bar overlap under multiply —
+// green exists ONLY in the intersection, and the predicate sits inside it.
+const bx = px + 36, by = py + 200, bw = PW - 72, bh = 130;
+x.save();
+x.globalCompositeOperation = 'multiply';
+x.fillStyle = CYAN;   x.fillRect(bx, by, bw * 0.80, bh);            // convention ink
+x.fillStyle = YELLOW; x.fillRect(bx + bw * 0.20, by, bw * 0.80, bh); // values ink
+x.restore();
+// the predicate, knocked out of the overlap (paper shows through the green)
+x.save(); x.textAlign = 'center';
+const ox = bx + bw * 0.5; // centre of the C×Y overlap
+mono(25, 700); x.fillStyle = PAPER;
+x.fillText('approval_status_code', ox, by + 46);
+x.fillText("= 'APPROVED'", ox, by + 80);
+mono(14); x.fillStyle = PAPER;
+x.fillText('exact-cased, from the surface — not guessed', ox, by + 110);
+x.restore();
+
+// the exact figures, printed in the SAME multiply green (both inks)
+x.save();
+x.globalCompositeOperation = 'multiply';
+mono(46, 700);
+x.fillStyle = CYAN;   x.fillText('410,000.00 → 555,000.00', px + 36, py + 420);
+x.fillStyle = YELLOW; x.fillText('410,000.00 → 555,000.00', px + 36, py + 420);
+mono(28, 700);
+x.fillStyle = CYAN;   x.fillText('+35.4%  Entertainment, fastest', px + 36, py + 470);
+x.fillStyle = YELLOW; x.fillText('+35.4%  Entertainment, fastest', px + 36, py + 470);
+x.restore();
+mono(18); x.fillStyle = INK;
+x.fillText('one reading, five times over — to the cent', px + 36, py + 516);
+
+// ── proof legend: the argument in three swatches ──────────────────────────
+const ly = TOP + 2 * PH + 168, lw = 120, lh = 72;
+function swatch(sx, label, paint) {
+  paint(sx);
+  x.strokeStyle = INK; x.lineWidth = 1.2; x.strokeRect(sx, ly, lw, lh);
+  mono(17); x.fillStyle = INK;
+  x.fillText(label, sx, ly + lh + 26);
+}
+swatch(M, 'C — the sentence', sx => { x.fillStyle = CYAN; x.fillRect(sx, ly, lw, lh); });
+swatch(M + 200, 'Y — the values', sx => { x.fillStyle = YELLOW; x.fillRect(sx, ly, lw, lh); });
+swatch(M + 400, 'C×Y — the answer', sx => {
+  x.save(); x.globalCompositeOperation = 'multiply';
+  x.fillStyle = CYAN; x.fillRect(sx, ly, lw, lh);
+  x.fillStyle = YELLOW; x.fillRect(sx, ly, lw, lh);
+  x.restore();
+});
+mono(19); x.fillStyle = INK;
+x.fillText('neither ink prints green. no gray was fixed by adding gray.', M + 620, ly + 30);
+x.fillText('the pair is the license: 0/5 · 0/5 · 0/5 · 5/5.', M + 620, ly + 60);
+
+// title block
+mono(23, 700); x.fillStyle = INK;
+x.fillText('THE OVERPRINT', M, H - 118);
+mono(17); x.fillStyle = INK;
+x.fillText('license cell CELL-APPRSTATUS-2026-07-05 · run-2 A-Q1, menu 89cea030 · 20 Analyst calls, N=5/rung, every SQL warehouse-executed', M, H - 86);
+x.fillText('C = "spend means approved spend unless stated otherwise…" · Y = sample_values [APPROVED, PENDING, REJECTED] · truths verified first', M, H - 60);
+</script>
