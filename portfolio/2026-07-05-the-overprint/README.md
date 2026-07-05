@@ -16,8 +16,8 @@ Made inside the same break after the ritual named it as the frontier.
 images/study-emboss.png: the critique's craft debt paid in the same break. The
 true figure as REAL relief — text alpha → box-blurred heightfield → finite-
 difference normals → one raking light; no ink anywhere. New technique for the
-corpus (text-to-relief shading); baseline lit factor still grays the paper a
-touch vs the plates' warm white.
+corpus (text-to-relief shading); baseline lit factor grayed the paper at first;
+normalized to 1.0-at-flat in the same break — the stamp now sits on warm white.
 
 ## Self-critique ritual
 

@@ -63,7 +63,7 @@ for (let j = 1; j < H - 1; j++) {
     const nz = 1, ln = Math.hypot(gx, gy, nz);
     // emboss is pressed IN: height negated
     const shade = (gx * L[0] + gy * L[1] + nz * L[2]) / ln;
-    const lit = 0.86 + 0.42 * (shade - L[2]);   // flat paper -> 0.86 baseline
+    const lit = 1.0 + 0.5 * (shade - L[2]);     // flat paper -> exactly the grain
     const k = p * 4;
     out.data[k] = Math.min(255, out.data[k] * lit);
     out.data[k + 1] = Math.min(255, out.data[k + 1] * lit);
