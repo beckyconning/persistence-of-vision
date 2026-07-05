@@ -7,6 +7,11 @@ approval-status convention ladder, 0/5 · 0/5 · 0/5 · 5/5, rendered as
 process-ink logic: the correct answer's green exists only where the convention
 ink and the values ink physically overlap (multiply compositing, not painted).
 
+**Plate 2 (wordless)** — [plate2.html](plate2.html), images/plate-2.png: the same
+argument with zero typography. 20 bars = the 20 calls; the growing slip down
+column 3 is each call guessing its own code; the tally strokes read 0·0·0·5.
+Made inside the same break after the ritual named it as the frontier.
+
 ## Self-critique ritual
 
 **1. What did I set out to make?**

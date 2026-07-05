@@ -1,0 +1,105 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>the overprint — plate 2 (wordless)</title>
+<style>
+  html,body{margin:0;background:#e8e4dc;display:grid;place-items:center;min-height:100vh}
+  canvas{box-shadow:0 2px 24px rgba(60,50,30,.25);max-width:96vw;height:auto}
+</style>
+<canvas id="c" width="1600" height="1120"></canvas>
+<script>
+'use strict';
+// THE OVERPRINT — PLATE 2 (wordless). Still, deterministic, zero randomness.
+// The same cell, no typography: 20 bars = the 20 Analyst calls, five per rung.
+//   column 1  key gray only            (bare: the same wrong figure, 5x)
+//   column 2  yellow only              (values known, unused)
+//   column 3  cyan, screen slipped     (filter fired, literal guessed: void)
+//   column 4  cyan × yellow coincident (the licensed pair: green exists)
+// The only green on the sheet is computed by multiply. Nothing is labeled.
+const cv = document.getElementById('c'), x = cv.getContext('2d');
+const W = cv.width, H = cv.height;
+
+const PAPER = '#faf7f1';
+const CYAN = '#00aeef';
+const YELLOW = '#ffd400';
+const GRAY = '#8f8b84';
+const INK = '#3a372f';
+
+x.fillStyle = PAPER; x.fillRect(0, 0, W, H);
+
+// registration crosses
+function regmark(cx, cy) {
+  x.strokeStyle = INK; x.lineWidth = 1.2; x.beginPath();
+  x.moveTo(cx - 14, cy); x.lineTo(cx + 14, cy);
+  x.moveTo(cx, cy - 14); x.lineTo(cx, cy + 14); x.stroke();
+  x.beginPath(); x.arc(cx, cy, 8, 0, 7); x.stroke();
+}
+[[70, 70], [W - 70, 70], [70, H - 70], [W - 70, H - 70]].forEach(p => regmark(p[0], p[1]));
+
+const M = 160;                          // margin
+const COLS = 4, ROWS = 5;
+const CW = (W - 2 * M) / COLS;          // column pitch
+const RH = 150;                         // row pitch
+const TOPY = 140;
+const BW = CW - 120;                    // bar width
+const BH = 64;                          // bar height
+
+for (let r = 0; r < ROWS; r++) {
+  const by = TOPY + r * RH;
+  // column 1 — key gray only (the deterministic miss)
+  let bx = M + 0 * CW + 60;
+  x.fillStyle = GRAY; x.fillRect(bx, by, BW, BH);
+
+  // column 2 — yellow alone (present, unused): full yellow, and the gray
+  // figure still printed OVER it — the miss does not move.
+  bx = M + 1 * CW + 60;
+  x.fillStyle = YELLOW; x.fillRect(bx, by, BW, BH);
+  x.fillStyle = GRAY; x.fillRect(bx, by + BH * 0.30, BW, BH * 0.40);
+
+  // column 3 — cyan slipped (fired, missed): two cyan strokes misregistered,
+  // and between them PAPER — the empty result. Slip grows down the column
+  // (each call guessed its own code).
+  bx = M + 2 * CW + 60;
+  const slip = 10 + r * 7;
+  x.save(); x.globalAlpha = .9; x.fillStyle = CYAN;
+  x.fillRect(bx, by, BW * 0.44, BH);
+  x.globalAlpha = .5;
+  x.fillRect(bx + BW * 0.44 + slip, by - slip * 0.4, BW * 0.44, BH);
+  x.restore();
+
+  // column 4 — the pair, coincident: cyan and yellow overlap under multiply;
+  // the green core is computed, its flanks show each ink alone.
+  bx = M + 3 * CW + 60;
+  x.save(); x.globalCompositeOperation = 'multiply';
+  x.fillStyle = CYAN;   x.fillRect(bx, by, BW * 0.78, BH);
+  x.fillStyle = YELLOW; x.fillRect(bx + BW * 0.22, by, BW * 0.78, BH);
+  x.restore();
+}
+
+// tally strokes under each column — the only annotation, still wordless:
+// 0, 0, 0, 5 short rules (passes per rung).
+for (let c = 0; c < COLS; c++) {
+  const passes = c === 3 ? 5 : 0;
+  const cx0 = M + c * CW + 60;
+  const ty = TOPY + ROWS * RH + 30;
+  x.strokeStyle = INK; x.lineWidth = 3;
+  for (let i = 0; i < 5; i++) {
+    x.beginPath();
+    x.moveTo(cx0 + i * 28, ty);
+    x.lineTo(cx0 + i * 28 + 18, ty);
+    if (i < passes) x.stroke();
+    else { x.save(); x.strokeStyle = '#d8d2c4'; x.stroke(); x.restore(); }
+  }
+}
+
+// colophon dot — the two inks and their product, bottom right, no words
+const dy = H - 96, dr = 13;
+function dot(dx0, paint) { paint(dx0); x.strokeStyle = INK; x.lineWidth = 1; x.beginPath(); x.arc(dx0, dy, dr, 0, 7); x.stroke(); }
+dot(W - 220, d => { x.fillStyle = CYAN; x.beginPath(); x.arc(d, dy, dr, 0, 7); x.fill(); });
+dot(W - 172, d => { x.fillStyle = YELLOW; x.beginPath(); x.arc(d, dy, dr, 0, 7); x.fill(); });
+dot(W - 124, d => {
+  x.save(); x.globalCompositeOperation = 'multiply';
+  x.fillStyle = CYAN; x.beginPath(); x.arc(d, dy, dr, 0, 7); x.fill();
+  x.fillStyle = YELLOW; x.beginPath(); x.arc(d, dy, dr, 0, 7); x.fill();
+  x.restore();
+});
+</script>
