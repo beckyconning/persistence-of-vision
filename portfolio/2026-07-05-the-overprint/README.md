@@ -19,6 +19,13 @@ difference normals → one raking light; no ink anywhere. New technique for the
 corpus (text-to-relief shading); baseline lit factor grayed the paper at first;
 normalized to 1.0-at-flat in the same break — the stamp now sits on warm white.
 
+**Plate 3 (registration)** — [plate3.html](plate3.html), images/plate-3.png:
+the relationship as a continuum — twelve pulls, the yellow plate sliding into
+register; green is born as a sliver at first contact and at exact register the
+whole bar is product: no flank of either ink remains. The geometry produced
+the piece's best line unplanned. (The right-margin registration ticks came out
+as near-invisible specks — fumbled arithmetic, left in as quiet furniture.)
+
 ## Self-critique ritual
 
 **1. What did I set out to make?**

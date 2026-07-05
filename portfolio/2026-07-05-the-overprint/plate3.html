@@ -1,0 +1,53 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>the overprint — plate 3 (registration)</title>
+<style>
+  html,body{margin:0;background:#e8e4dc;display:grid;place-items:center;min-height:100vh}
+  canvas{box-shadow:0 2px 24px rgba(60,50,30,.25);max-width:96vw;height:auto}
+</style>
+<canvas id="c" width="1200" height="1500"></canvas>
+<script>
+'use strict';
+// THE OVERPRINT — PLATE 3 (registration). Still, deterministic, wordless.
+// One relationship, drawn continuously: the yellow plate slides into register
+// with the cyan plate over twelve pulls. Green is born as a sliver at first
+// contact and grows to the full licensed bar. The bottom pull is R4 exactly.
+const cv = document.getElementById('c'), x = cv.getContext('2d');
+const W = cv.width, H = cv.height;
+
+const PAPER = '#faf7f1';
+const CYAN = '#00aeef';
+const YELLOW = '#ffd400';
+const INK = '#3a372f';
+
+x.fillStyle = PAPER; x.fillRect(0, 0, W, H);
+
+function regmark(cx, cy) {
+  x.strokeStyle = INK; x.lineWidth = 1.2; x.beginPath();
+  x.moveTo(cx - 14, cy); x.lineTo(cx + 14, cy);
+  x.moveTo(cx, cy - 14); x.lineTo(cx, cy + 14); x.stroke();
+  x.beginPath(); x.arc(cx, cy, 8, 0, 7); x.stroke();
+}
+[[64, 64], [W - 64, 64], [64, H - 64], [W - 64, H - 64]].forEach(p => regmark(p[0], p[1]));
+
+const N = 12;
+const BW = 420, BH = 66;
+const TOPY = 120, PITCH = (H - 240 - BH) / (N - 1);
+const CX0 = 140;                       // cyan plate never moves
+const MAXOFF = BW + 80;                // pull 1: fully clear of the cyan
+
+for (let r = 0; r < N; r++) {
+  const t = r / (N - 1);               // 0 … 1
+  const off = Math.round(MAXOFF * (1 - t)); // slides left into register
+  const by = TOPY + r * PITCH;
+  x.save();
+  x.globalCompositeOperation = 'multiply';
+  x.fillStyle = CYAN; x.fillRect(CX0, by, BW, BH);
+  x.fillStyle = YELLOW; x.fillRect(CX0 + off, by, BW, BH);
+  x.restore();
+  // registration tick: distance-to-register, as a thin ink rule to the right
+  x.fillStyle = INK;
+  x.fillRect(CX0 + BW + 200 + Math.max(0, off) * 0.5, by + BH / 2 - 1.5,
+             Math.max(3, off * 0.0001 + 3), 3);
+}
+</script>
