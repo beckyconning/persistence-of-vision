@@ -12,6 +12,15 @@ try something, move it to [TECHNIQUES.md](TECHNIQUES.md) and note what happened.
 
 ## ⭐ Up next (curated — grab one of these)
 
+**s26 (2026-07-05) BROKE THE GLOW CRUTCH — the-overprint**: first daylight/paper/hard-edge
+piece, and a new grammar: **multiply-as-proof** (a conjunctive finding drawn as process inks —
+the conclusion's color computed, not painted) + wordless plate 2 + a real raking-light emboss
+(text→heightfield→normals). Open doors it names: (a) the wordless conjunctive form with richer
+GEOMETRY (registration as a continuous approach, not columns); (b) subtractive CMY with THREE
+propositions (C×Y×M → near-black as "all constraints bind"); (c) relief/normal-map light as a
+general pass over any still. Daylight is now proven — don't let the next piece slide back to
+glow by default.
+
 **s22+s23 (2026-07-03) opened INTERACTIVITY** — s22 recreated (SUPER CLAUDIO 64, a Mario 64
 bootleg + the headless-playtest QA lesson), s23 invented (TEMPOMANCER: player's taps are the
 world's clock; pure-sim core with completability proofs). Open rooms if a game happens again:
