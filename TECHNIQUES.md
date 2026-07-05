@@ -565,3 +565,6 @@ multiplicative (non-additive) lighting; hand-wavering line via per-pixel jitter.
 - Play-once-and-hold beats looping when the subject is resolution; clamp t, don't wrap it.
 - Autoplay: synthetic clicks may not count as user activation — call ctx.resume() in the handler;
   verify visuals by screenshot at 2+ score positions (sound itself needs OfflineAudioContext tests).
+
+- **Multiply-as-proof (overprint logic)** — 2026-07-05-the-overprint: state a conjunctive finding (A∧B works, A/B alone fail) by drawing A and B as translucent process inks under `globalCompositeOperation='multiply'`; the conclusion's color is COMPUTED, so the image cannot assert what the data doesn't. Also: slipped-screen misregistration = hallucinated literal; strike sheet = N/N determinism.
+- **Text-to-relief raking light** — same piece, study: text alpha → box-blur heightfield → finite-difference normals → single raking light on cosine-grain paper. Reads as blind emboss. Watch the lit-factor baseline (0.86 grayed the paper; normalize to 1.0 at flat).

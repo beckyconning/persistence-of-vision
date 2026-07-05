@@ -1,0 +1,74 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>study — raking-light emboss</title>
+<style>
+  html,body{margin:0;background:#e8e4dc;display:grid;place-items:center;min-height:100vh}
+  canvas{box-shadow:0 2px 24px rgba(60,50,30,.25);max-width:96vw;height:auto}
+</style>
+<canvas id="c" width="1400" height="500"></canvas>
+<script>
+'use strict';
+// STUDY — raking-light blind emboss (the-overprint's craft debt).
+// The true figure pressed into the paper with NO ink at all: heightfield from
+// text alpha (blurred), normals by finite difference, one raking light from
+// the upper left. Deterministic; the only subject is relief.
+const cv = document.getElementById('c'), x = cv.getContext('2d');
+const W = cv.width, H = cv.height;
+
+// paper with faint deterministic laid texture (no randomness: cosine grain)
+const img = x.createImageData(W, H);
+const P = [250, 247, 241];
+for (let j = 0; j < H; j++) {
+  for (let i = 0; i < W; i++) {
+    const g = 2.2 * Math.cos(j * 0.9) + 1.2 * Math.cos(i * 0.13 + j * 0.07);
+    const k = (j * W + i) * 4;
+    img.data[k] = P[0] + g; img.data[k + 1] = P[1] + g; img.data[k + 2] = P[2] + g;
+    img.data[k + 3] = 255;
+  }
+}
+x.putImageData(img, 0, 0);
+
+// heightfield: text alpha drawn offscreen, box-blurred (the die's shoulder)
+const off = document.createElement('canvas'); off.width = W; off.height = H;
+const ox = off.getContext('2d');
+ox.font = '700 150px "SF Mono", Menlo, monospace';
+ox.fillStyle = '#fff';
+ox.fillText('410,000.00', 120, 300);
+ox.font = '700 44px "SF Mono", Menlo, monospace';
+ox.fillText('the figure no ink printed', 122, 386);
+let a = ox.getImageData(0, 0, W, H).data;
+let hgt = new Float32Array(W * H);
+for (let p = 0; p < W * H; p++) hgt[p] = a[p * 4 + 3] / 255;
+// two box-blur passes (radius 3) — soft die shoulder
+for (let pass = 0; pass < 2; pass++) {
+  const src = hgt; hgt = new Float32Array(W * H);
+  for (let j = 3; j < H - 3; j++) for (let i = 3; i < W - 3; i++) {
+    let s = 0;
+    for (let dj = -3; dj <= 3; dj++) for (let di = -3; di <= 3; di++) s += src[(j + dj) * W + i + di];
+    hgt[j * W + i] = s / 49;
+  }
+}
+
+// shade: light from upper-left, raking low; paper lit by normal ⋅ light
+const out = x.getImageData(0, 0, W, H);
+const L = [-0.62, -0.72, 0.32];              // raking
+const norm = Math.hypot(L[0], L[1], L[2]);
+L[0] /= norm; L[1] /= norm; L[2] /= norm;
+const DEPTH = 14;
+for (let j = 1; j < H - 1; j++) {
+  for (let i = 1; i < W - 1; i++) {
+    const p = j * W + i;
+    const gx = (hgt[p + 1] - hgt[p - 1]) * DEPTH;
+    const gy = (hgt[p + W] - hgt[p - W]) * DEPTH;
+    const nz = 1, ln = Math.hypot(gx, gy, nz);
+    // emboss is pressed IN: height negated
+    const shade = (gx * L[0] + gy * L[1] + nz * L[2]) / ln;
+    const lit = 0.86 + 0.42 * (shade - L[2]);   // flat paper -> 0.86 baseline
+    const k = p * 4;
+    out.data[k] = Math.min(255, out.data[k] * lit);
+    out.data[k + 1] = Math.min(255, out.data[k + 1] * lit);
+    out.data[k + 2] = Math.min(255, out.data[k + 2] * lit);
+  }
+}
+x.putImageData(out, 0, 0);
+</script>

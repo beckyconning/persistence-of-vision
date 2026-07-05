@@ -12,6 +12,13 @@ argument with zero typography. 20 bars = the 20 calls; the growing slip down
 column 3 is each call guessing its own code; the tally strokes read 0·0·0·5.
 Made inside the same break after the ritual named it as the frontier.
 
+**Study — raking-light emboss** — [study-emboss.html](study-emboss.html),
+images/study-emboss.png: the critique's craft debt paid in the same break. The
+true figure as REAL relief — text alpha → box-blurred heightfield → finite-
+difference normals → one raking light; no ink anywhere. New technique for the
+corpus (text-to-relief shading); baseline lit factor still grays the paper a
+touch vs the plates' warm white.
+
 ## Self-critique ritual
 
 **1. What did I set out to make?**
