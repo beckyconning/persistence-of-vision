@@ -171,3 +171,7 @@ quiet tone per resolved knot, av-synced by construction.
 ### Braid-group trace + citation tones (opened 2026-07-04)
 Derive crossing sequences from REAL event order (workflow journal timestamps) so a weave is the
 run's literal trace. Sound remains open: one tone per verified citation, silence for refuted.
+
+### Timed traces + the score (still open, sharpened 2026-07-05)
+Real durations from timestamped journals/transcript mtimes; and the-trace is already a score —
+one tone per result-drop, pitch by role, silence between: the sound frontier's cheapest entry.

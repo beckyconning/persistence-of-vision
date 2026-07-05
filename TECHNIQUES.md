@@ -550,3 +550,9 @@ multiplicative (non-additive) lighting; hand-wavering line via per-pixel jitter.
   examiners, redteam) cross and visibly LEAVE. The distinction carries meaning without labels.
 - Elimination as fray: 5 short splayed quadratic fibers at a strand's end reads as "cut" at a glance.
 - Debt named: the over/under key should be braid-group generators from real event order, not phase noise.
+
+### Found-composition from system artifacts (2026-07-05, the-trace)
+- Render the artifact verbatim (journal append order); invent only the PROJECTION (lane
+  allocation: rightmost-free-slot on start, compact on exit). The data's own structure —
+  phase combs, scheduler overlap, a lone final strand — beats designed drama.
+- Event-index time is honest ORDER but false DURATION; say so in the piece or get real timestamps.
