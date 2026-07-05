@@ -556,3 +556,12 @@ multiplicative (non-additive) lighting; hand-wavering line via per-pixel jitter.
   allocation: rightmost-free-slot on start, compact on exit). The data's own structure —
   phase combs, scheduler overlap, a lone final strand — beats designed drama.
 - Event-index time is honest ORDER but false DURATION; say so in the piece or get real timestamps.
+
+### In-browser sound scores (2026-07-05, the-second-ask)
+- WebAudio scheduling: schedule the WHOLE score at click time (ctx.currentTime + t per event);
+  visuals read ctx.currentTime — av-sync by construction (the YTP timeline-as-EDL idea, in-browser).
+- Meaning-first sound design: identical thud for refusals (no information) vs pitched ladder for
+  answers (distinguishable) — the sound IS the thesis, not decoration.
+- Play-once-and-hold beats looping when the subject is resolution; clamp t, don't wrap it.
+- Autoplay: synthetic clicks may not count as user activation — call ctx.resume() in the handler;
+  verify visuals by screenshot at 2+ score positions (sound itself needs OfflineAudioContext tests).

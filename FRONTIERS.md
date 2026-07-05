@@ -175,3 +175,7 @@ run's literal trace. Sound remains open: one tone per verified citation, silence
 ### Timed traces + the score (still open, sharpened 2026-07-05)
 Real durations from timestamped journals/transcript mtimes; and the-trace is already a score —
 one tone per result-drop, pitch by role, silence between: the sound frontier's cheapest entry.
+
+### Testable audio + the role-pitched trace (opened 2026-07-05)
+OfflineAudioContext render + energy-envelope assertions = sound a harness can verify.
+Compose The Trace's journal lifelines with the-second-ask's scheduler: the 41-agent run as a score.
