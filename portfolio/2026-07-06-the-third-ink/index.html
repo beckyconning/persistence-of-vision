@@ -1,0 +1,92 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>the third ink — 2026-07-06</title>
+<style>
+  html,body{margin:0;background:#e8e4dc;display:grid;place-items:center;min-height:100vh}
+  canvas{box-shadow:0 2px 24px rgba(60,50,30,.25);max-width:96vw;height:auto}
+</style>
+<canvas id="c" width="1500" height="1500"></canvas>
+<script>
+'use strict';
+// THE THIRD INK — 2026-07-06. Still, deterministic, zero randomness.
+// Subject: the night the cash advances landed. Three independent conditions
+// had to hold at once — the URL layout (the mock serving the prod kind's
+// paths), the parse form (the bare [:_] operator, not the quoted "[:_]" name),
+// and an unpoisoned job cache (the errored conclusion deleted). Each pair of
+// fixes still yielded zero. Only the triple overlap flowed: 500 advances.
+// Grammar: subtractive CMY under multiply — seven regions, one carries data.
+// Daylight, hard edges, no words but figures.
+const cv = document.getElementById('c'), x = cv.getContext('2d');
+const W = cv.width, H = cv.height;
+
+const PAPER = '#faf7f1';
+const CYAN = '#00aeef';    // the URL layout
+const MAGENTA = '#ec008c'; // the parse form
+const YELLOW = '#ffd400';  // the fresh cache
+const INK = '#3a372f';
+
+x.fillStyle = PAPER; x.fillRect(0, 0, W, H);
+
+function regmark(cx, cy) {
+  x.strokeStyle = INK; x.lineWidth = 1.2; x.beginPath();
+  x.moveTo(cx - 14, cy); x.lineTo(cx + 14, cy);
+  x.moveTo(cx, cy - 14); x.lineTo(cx, cy + 14); x.stroke();
+  x.beginPath(); x.arc(cx, cy, 8, 0, 7); x.stroke();
+}
+[[70, 70], [W - 70, 70], [70, H - 70], [W - 70, H - 70]].forEach(p => regmark(p[0], p[1]));
+
+// Three plates, triangular offset. Each is a large hard-edge rectangle.
+const S = 640;                       // plate side
+const CXc = W / 2, CYc = H / 2 - 40;
+const OFF = 190;                     // triangular offset radius
+const plates = [
+  { color: CYAN,    dx: -OFF * 0.87, dy: -OFF * 0.5 },
+  { color: MAGENTA, dx:  OFF * 0.87, dy: -OFF * 0.5 },
+  { color: YELLOW,  dx:  0,          dy:  OFF       },
+];
+
+x.save();
+x.globalCompositeOperation = 'multiply';
+for (const p of plates) {
+  x.fillStyle = p.color;
+  x.fillRect(CXc + p.dx - S / 2, CYc + p.dy - S / 2, S, S);
+}
+x.restore();
+
+// Region figures — every region's OBSERVED outcome from the night.
+// Singles and pairs all produced zero items; the triple produced 500.
+function mono(px, weight) { x.font = `${weight || 400} ${px}px "SF Mono", Menlo, monospace`; }
+function fig(s, fx, fy, px, color) {
+  x.save(); x.textAlign = 'center'; mono(px, 700);
+  x.fillStyle = color; x.fillText(s, fx, fy); x.restore();
+}
+const cx1 = CXc + plates[0].dx, cy1 = CYc + plates[0].dy;
+const cx2 = CXc + plates[1].dx, cy2 = CYc + plates[1].dy;
+const cx3 = CXc + plates[2].dx, cy3 = CYc + plates[2].dy;
+// singles (outer lobes)
+fig('0', cx1 - S * 0.28, cy1 - S * 0.24, 44, PAPER);
+fig('0', cx2 + S * 0.28, cy2 - S * 0.24, 44, PAPER);
+fig('0', cx3, cy3 + S * 0.33, 44, PAPER);
+// pairs (two-ink overlaps)
+fig('0', CXc, cy1 - S * 0.16, 44, PAPER);                       // C×M
+fig('0', (cx1 + cx3) / 2 - S * 0.16, (cy1 + cy3) / 2 + S * 0.10, 44, PAPER); // C×Y
+fig('0', (cx2 + cx3) / 2 + S * 0.16, (cy2 + cy3) / 2 + S * 0.10, 44, PAPER); // M×Y
+// the triple — near-black; the only region where data flows
+fig('500', CXc, CYc + 24, 84, PAPER);
+
+// colophon: three swatches and their product, tiny, bottom-left
+const ly = H - 140, lw = 84, lh = 50;
+const sw = [[CYAN, 0], [MAGENTA, 1], [YELLOW, 2]];
+for (const [c, i] of sw) {
+  x.fillStyle = c; x.fillRect(120 + i * (lw + 14), ly, lw, lh);
+  x.strokeStyle = INK; x.lineWidth = 1.2; x.strokeRect(120 + i * (lw + 14), ly, lw, lh);
+}
+x.save(); x.globalCompositeOperation = 'multiply';
+for (const [c] of sw) { x.fillStyle = c; x.fillRect(120 + 3 * (lw + 14), ly, lw, lh); }
+x.restore();
+x.strokeStyle = INK; x.strokeRect(120 + 3 * (lw + 14), ly, lw, lh);
+mono(15); x.fillStyle = INK; x.textAlign = 'left';
+x.fillText('C — the layout · M — the operator · Y — the cache · C×M×Y — five hundred advances', 120, ly + lh + 30);
+mono(17, 700);
+x.fillText('THE THIRD INK', 120, ly + lh + 62);
+</script>
