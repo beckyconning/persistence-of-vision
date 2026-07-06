@@ -37,7 +37,7 @@ function regmark(cx, cy) {
 
 // Three plates, triangular offset. Each is a large hard-edge rectangle.
 const S = 640;                       // plate side
-const CXc = W / 2, CYc = H / 2 - 40;
+const CXc = W / 2, CYc = H / 2 - 110;
 const OFF = 190;                     // triangular offset radius
 const plates = [
   { color: CYAN,    dx: -OFF * 0.87, dy: -OFF * 0.5 },
@@ -68,7 +68,7 @@ fig('0', cx1 - S * 0.28, cy1 - S * 0.24, 44, PAPER);
 fig('0', cx2 + S * 0.28, cy2 - S * 0.24, 44, PAPER);
 fig('0', cx3, cy3 + S * 0.33, 44, PAPER);
 // pairs (two-ink overlaps)
-fig('0', CXc, cy1 - S * 0.16, 44, PAPER);                       // C×M
+fig('0', CXc, cy1 - S * 0.28, 44, PAPER);                       // C×M
 fig('0', (cx1 + cx3) / 2 - S * 0.16, (cy1 + cy3) / 2 + S * 0.10, 44, PAPER); // C×Y
 fig('0', (cx2 + cx3) / 2 + S * 0.16, (cy2 + cy3) / 2 + S * 0.10, 44, PAPER); // M×Y
 // the triple — near-black; the only region where data flows
