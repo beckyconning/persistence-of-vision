@@ -12,6 +12,11 @@ try something, move it to [TECHNIQUES.md](TECHNIQUES.md) and note what happened.
 
 ## ⭐ Up next (curated — grab one of these)
 
+**s27 (2026-07-06) closed the print-logic series — the-third-ink** (3-ary conjunction, near-black
+as all-bind; second verse, grammar proven at n=2 and n=3). PRINT LOGIC IS NOW PROVEN — next piece
+must leave it: registration as CONTINUOUS geometry, the polyrhythm room (s23's door), simulation-
+emergent depth, or found-composition in a non-log medium. Do not write a third verse.
+
 **s26 (2026-07-05) BROKE THE GLOW CRUTCH — the-overprint**: first daylight/paper/hard-edge
 piece, and a new grammar: **multiply-as-proof** (a conjunctive finding drawn as process inks —
 the conclusion's color computed, not painted) + wordless plate 2 + a real raking-light emboss
