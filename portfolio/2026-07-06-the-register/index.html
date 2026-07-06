@@ -1,0 +1,76 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>the register — 2026-07-06</title>
+<style>
+  html,body{margin:0;background:#e8e4dc;display:grid;place-items:center;min-height:100vh}
+  canvas{box-shadow:0 2px 24px rgba(60,50,30,.25);max-width:96vw;height:auto}
+</style>
+<canvas id="c" width="1400" height="900"></canvas>
+<script>
+'use strict';
+// THE REGISTER — 2026-07-06. Kinetic, deterministic (pure function of the
+// clock), plays ONCE and HOLDS — a landed answer stays. The-overprint plate 3
+// made registration a column of twelve stills; this is the same relationship
+// as continuous motion: the yellow plate slides into register with the cyan,
+// green is BORN at first contact, grows, and at exact register nothing is
+// left of either parent ink. No randomness, no words.
+const cv = document.getElementById('c'), x = cv.getContext('2d');
+const W = cv.width, H = cv.height;
+
+const PAPER = '#faf7f1';
+const CYAN = '#00aeef';
+const YELLOW = '#ffd400';
+const INK = '#3a372f';
+
+const BW = 560, BH = 190;              // plate size
+const BX = (W - BW) / 2, BY = (H - BH) / 2 - 40;
+const MAXOFF = BW + 120;               // start: fully clear, right of the cyan
+const T = 9000;                        // ms to reach register, then hold
+// ?t=<ms> renders the deterministic still at that instant (for frames/prints).
+const FORCED = new URLSearchParams(location.search).get('t');
+const t0 = performance.now() - (FORCED ? Number(FORCED) : 0);
+
+// deterministic ease: smoothstep of clamped progress
+function progress(now) {
+  const p = Math.min(1, (now - t0) / T);
+  return p * p * (3 - 2 * p);
+}
+
+function regmark(cx, cy) {
+  x.strokeStyle = INK; x.lineWidth = 1.2; x.beginPath();
+  x.moveTo(cx - 14, cy); x.lineTo(cx + 14, cy);
+  x.moveTo(cx, cy - 14); x.lineTo(cx, cy + 14); x.stroke();
+  x.beginPath(); x.arc(cx, cy, 8, 0, 7); x.stroke();
+}
+
+function frame(now) {
+  const p = progress(now);
+  const off = Math.round(MAXOFF * (1 - p));
+
+  x.fillStyle = PAPER; x.fillRect(0, 0, W, H);
+  [[64, 64], [W - 64, 64], [64, H - 64], [W - 64, H - 64]].forEach(m => regmark(m[0], m[1]));
+
+  x.save();
+  x.globalCompositeOperation = 'multiply';
+  x.fillStyle = CYAN; x.fillRect(BX, BY, BW, BH);
+  x.fillStyle = YELLOW; x.fillRect(BX + off, BY, BW, BH);
+  x.restore();
+
+  // the registration scale: a thin rule under the plates, a tick riding the
+  // remaining offset, and a fixed home notch at zero — the only annotation.
+  const ry = BY + BH + 90;
+  x.strokeStyle = INK; x.lineWidth = 1.5;
+  x.beginPath(); x.moveTo(BX, ry); x.lineTo(BX + MAXOFF, ry); x.stroke();
+  x.beginPath(); x.moveTo(BX, ry - 12); x.lineTo(BX, ry + 12); x.stroke();  // home
+  x.lineWidth = 3;
+  x.beginPath(); x.moveTo(BX + off, ry - 9); x.lineTo(BX + off, ry + 9); x.stroke();
+
+  if (p < 1) requestAnimationFrame(frame);
+  else {
+    // register reached: the tick fuses with the home notch; hold forever.
+    x.fillStyle = INK; x.font = '700 17px "SF Mono", Menlo, monospace';
+    x.fillText('THE REGISTER', 120, H - 96);
+  }
+}
+requestAnimationFrame(frame);
+</script>
