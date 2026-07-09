@@ -569,3 +569,22 @@ multiplicative (non-additive) lighting; hand-wavering line via per-pixel jitter.
 - **Multiply-as-proof (overprint logic)** — 2026-07-05-the-overprint: state a conjunctive finding (A∧B works, A/B alone fail) by drawing A and B as translucent process inks under `globalCompositeOperation='multiply'`; the conclusion's color is COMPUTED, so the image cannot assert what the data doesn't. Also: slipped-screen misregistration = hallucinated literal; strike sheet = N/N determinism.
 - **Text-to-relief raking light** — same piece, study: text alpha → box-blur heightfield → finite-difference normals → single raking light on cosine-grain paper. Reads as blind emboss. Baseline lit MUST be 1.0 at flat (0.86 grayed the paper; fixed same night).
 - **N-ary multiply-as-proof** — 2026-07-06-the-third-ink: the overprint grammar extended to three propositions; offset rectangular PLATES (not Venn circles) under multiply give 7 hard-edge regions; subtractive secondaries (blue/green/red) name the pairs without labels; near-black = "all constraints bind". Region figures carry the narrative (six zeros, one 500). Series with the-overprint: conjunction rendered so the image cannot assert what the data doesn't.
+
+## Time-average as medium (the-quorum, 2026-07-09)
+Draw NOTHING whole: per animation frame, scatter a few low-alpha strokes
+sampled from a distribution into a never-cleared accumulation canvas; the
+figure exists only in the fusion. Point-mass distribution → calm solid;
+mixture at p/(1-p) in two inks → chromatic ghost whose unshared regions stay
+pure (the quietest tell: where one basin never reaches, the other's ink is
+unmixed); distribution that CHANGES mid-piece → history stays visible as
+residue (accumulation cannot unpaint — use it: "fuses late through fog"
+is truer than a clean cut). Calibration that mattered: fog alpha ~0.03 vs
+figure alpha ~0.11 (a 3.5× ink-weight ratio lets a late figure surface
+through 13 s of noise); stroke = short round-cap segment, width jittered
+0.7–1.5, angle-jittered ±0.10 rad along the figure's local tangent — reads
+as pencil crosshatch at fusion. Present the raw frame's strokes at high
+alpha OVER the retina so the flicker/fusion tension is visible (weakness:
+it drowns by mid-piece — see the piece's critique for the split-frame fix).
+Verify kinetic accumulation pieces by screenshot at THREE times (early
+flicker / mid / held coda) — single-still checks miss both the story and
+the coda marks.

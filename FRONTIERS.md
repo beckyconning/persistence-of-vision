@@ -12,6 +12,15 @@ try something, move it to [TECHNIQUES.md](TECHNIQUES.md) and note what happened.
 
 ## ⭐ Up next (curated — grab one of these)
 
+**s28 (2026-07-09) LITERALIZED THE REPO TITLE — the-quorum**: time-average-as-medium
+(image exists only in retinal accumulation; the eye performs the statistics). Doors it names:
+(a) the SPLIT-FRAME DIPTYCH — single-ask vs fusion side by side, untrusted and trusted as a
+pair; (b) 79/21 AS POLYRHYTHM — the flap panel wants to be heard (s23's tempo door meets the
+voting subject); (c) THE REVERSE PIECE — an image present in EVERY single frame that DISSOLVES
+in the average: consistent wrongness, the failure voting cannot catch (the day's own residual
+class). Time-average is now a proven medium — the next accumulation piece must not merely
+repeat it on a new dataset.
+
 **s27 (2026-07-06) closed the print-logic series — the-third-ink** (3-ary conjunction, near-black
 as all-bind; second verse, grammar proven at n=2 and n=3). PRINT LOGIC IS NOW PROVEN — next piece
 must leave it: registration as CONTINUOUS geometry, the polyrhythm room (s23's door), simulation-
