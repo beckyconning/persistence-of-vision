@@ -202,3 +202,31 @@ one tone per result-drop, pitch by role, silence between: the sound frontier's c
 ### Testable audio + the role-pitched trace (opened 2026-07-05)
 OfflineAudioContext render + energy-envelope assertions = sound a harness can verify.
 Compose The Trace's journal lifelines with the-second-ask's scheduler: the 41-agent run as a score.
+
+## 2026-07-04 — APEIRON (first-person raymarched fractal explorer)
+Shipped a complete C++/SDL2/GL3.3 game in one session: four fractal families
+(Mandelbulb/Mandelbox/Menger/pseudo-Kleinian) weight-blended across infinite
+tiled space, breathing on incommensurate sines, agitated by the player's
+presence. New techniques earned here:
+- **One file, two languages:** distance-field math written in the shared
+  GLSL/C++ subset, compiled by the CPU for collision and injected verbatim
+  into the fragment shader — GPU/CPU parity 0.00000. Single source of truth
+  as an aesthetic principle.
+- **Danger as composition:** the crush mechanic (warn >= 1s -> push -> death)
+  is enforced by a single gated code path, proven algebraically in review.
+  Fear with a guarantee behind it.
+- **Tuning by eye at 3 min/frame:** llvmpipe made every screenshot expensive;
+  learned to change 1-2 constants per iteration and diagnose speckle as
+  step-AO crushing + eps starvation, not marcher overshoot.
+Frontier next: temporal reprojection or blue-noise jitter for raymarcher AA;
+orbit-trap coloring; fractal soundscapes driven by orbit statistics.
+
+## 2026-07-13 — PAINTED OVER (occlusion series)
+The "series with a through-line" frontier is now walked: five variations of one
+scene, each captioned by a real rendering bug from the day's engine work (state
+guard / draw order / degenerate matrix / unbound texture / overlay fix). New
+technique: resampling a finished image through an interpolated near-singular 2x2
+with per-channel offsets = controllable anamorphic-smear glitch with honest
+provenance. Still open: constraint-made-visible (the rule printed IN the piece);
+the reflection-only occlusion image (occluder covers everything, subject visible
+only in its reflection) - possibly the strongest image not yet made.
