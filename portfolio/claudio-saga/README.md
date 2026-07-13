@@ -1,0 +1,17 @@
+# The Claudio Saga
+
+One bootleg orange-hatted AI plumber; five escalating pieces over two days
+(2026-07-02 -> 2026-07-03). Gathered here so the portfolio index stays readable
+- the saga counts as one body of work.
+
+Arc: a software rasterizer learns to platform -> the simulation unravels mid-stomp
+-> Super Grokio levels the kingdom -> "complete hyper-realism" (the uncanny bust)
+-> and finally a playable single-file Mario-64 bootleg. CONGRATURATION.
+
+| 2026-07-03 | [super-claudio-64](2026-07-03-super-claudio-64/) | 1 (playable game, 669KB html) | **INTERACTIVITY** (a new axis entirely: a game, not a film) + **headless-playtest QA** (scripted playthroughs catch bugs like players do) | SUPER CLAUDIO 64: a single-file bootleg Mario 64 — castle lobby, five painting-worlds (meadow/lava/ice/sky/haunted-library), 12 stars, triple jump/long jump/ground pound, a ghost that freezes when watched, a Grokio boss fight, and 8 procedural chiptune loops. Double-click, press Enter, CONGRATURATION. |
+| 2026-07-02 | [hyper-claudio](2026-07-02-hyper-claudio/) | 1 (7.4s video + stills) | **procedural SDF portrait** (form axis endgame: pores, SSS terminator, per-eye lids, parametric viseme mouth) + **film-photo post as realism carrier** + **lipsync** | "I will accept nothing but complete hyper-realism": a fleshy, wet-eyed, pore-covered Claudio bust ray-marched in pure numpy — procedural skin/hair/fabric, 3-light rig, soft shadows, DOF/CA/grain — lip-syncing "Thanks a so much for a to playing a my game" word-timed to TTS, ending on a wink. Peak uncanny valley, on purpose. |
+| 2026-07-02 | [claudio-ep3](2026-07-02-claudio-ep3/) | 1 (62s film) | **two-character combat choreography** (paired keyframes, impact freezes, 12-setup action camera) + **destructible world** (debris physics, damage states, a horizon that dies) + **second original score with dueling leitmotifs** | EPISODE 3: Super Grokio (black cap, red eyes, phrygian riff) descends from a storm; the brothers' battle levels the kingdom — exploding blocks, bent pipe, cratered hill, KINGDOM 100%→0% — until the bug returns Claudio's cap, he dodges the mega-ball into the horizon, and wins by uppercut-twinkle; then he and the bug sit on the rubble at sunset. "CLAUDIO WINS. …but at what cost?" |
+| 2026-07-02 | [claudio-ep2](2026-07-02-claudio-ep2/) | 1 (57s film) | **destruction as subject** (the renderer dismantled on camera: rainbow/normals/depth leak, vertex warp, void) + **horror pacing** + **one corruption curve driving picture AND sound** | WORLD 1-2: a permission prompt freezes Claudio mid-stomp, the request times out, and the unpermissioned bug lands the hit — the simulation unravels through HUD garbage, magenta missing-textures, T-pose clones, recursive "ALLOW CLAUDIO TO EXIST?" prompts, kernel panic and void, until reality reassembles wrong: the bug wears the cap, "CLAUDIO FIXED ✓ … status: WONTFIX." |
+| 2026-07-02 | [claudio](2026-07-02-claudio/) | 1 (55s film) | **3D: software rasterizer** (the frontier since s1 — z-buffer, FK scene graph, flat lambert) + **character modeling/rigging/choreography** + second chiptune sound work | SUPER CLAUDIO BROS. 5: a bootleg orange-hatted AI plumber, modeled and rigged from squashed spheres, runs a platformer level where the ? block spawns a permission prompt, the goomba is a literal software bug ("BUG FIXED!"), the timer counts down CONTEXT, and the flag flies the starburst — NES-style original score + SFX, all numpy. CONGRATURATION. |
+
+(Each folder keeps its own README, sources, and self-critique.)
