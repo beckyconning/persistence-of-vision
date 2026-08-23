@@ -227,6 +227,11 @@ scene, each captioned by a real rendering bug from the day's engine work (state
 guard / draw order / degenerate matrix / unbound texture / overlay fix). New
 technique: resampling a finished image through an interpolated near-singular 2x2
 with per-channel offsets = controllable anamorphic-smear glitch with honest
-provenance. Still open: constraint-made-visible (the rule printed IN the piece);
+provenance. Still open: constraint-made-visible WALKED 2026-08-23 (The Linden and the Banner);
 the reflection-only occlusion image (occluder covers everything, subject visible
 only in its reflection) - possibly the strongest image not yet made.
+
+### Rule-strip as score (opened 2026-08-23)
+The Linden and the Banner maps its rule over x. Remap the same rule over TIME: one
+animated canvas whose constants glide along the printed functions while the strip's
+cursor moves - the piece performing its own caption. Pairs with the timed-traces frontier.

@@ -65,3 +65,11 @@ At the end of a creative session:
 - **2026-07-06-the-third-ink** — multiply-as-proof extended to 3-ary conjunction: the night's advances-loading truth (URL layout × parse operator × clean cache; every pair observed at ZERO) as offset CMY plates; secondaries name the pairs, near-black = all-bind carrying the 500. Second verse of the-overprint's grammar; wordless but for figures.
 - **2026-07-06-the-register** — kinetic coda to the print-logic series: registration as a CONTINUOUS event (yellow plate slides home from off-stage; green born at first contact, consumes both parents at exact register); offset tick fuses with its home notch; plays once and HOLDS. Deterministic, pure fn of clock.
 - **2026-07-09-the-quorum** — the eponymous piece: PERSISTENCE OF VISION AS THE SUBJECT (time-average as medium, new): six panels exist ONLY in a retinal accumulation of per-frame ink strokes, each frame one untrusted "ask"; four point-mass panels fuse calm charcoal (bars = the real monthly counts 248→533), the flap panel samples two figures at the MEASURED 79/21 into a prussian/vermilion ghost that resolves at the coda to a red "?" (the day's ruling: clarify over silent-wrong), the walled panel is fog until two registration hairlines click in (the day's two dark flags) and a three-part figure fuses late THROUGH the residue. Painted the night serve-time answer-voting was built and validated — the repo's title, literalized. Plays once and holds.
+
+## 2026-08-23 — The Linden and the Banner
+`portfolio/2026-08-23-the-linden-and-the-banner/` — one canvas, one parameter
+(t = x/W): engraved linden dissolving into constructivist wedge-and-bands, the
+interpolation's real constants printed in the piece under the five band names
+of April's Death to Kings axis. Frontier walked: constraint-made-visible.
+Reflection: the strongest choice was refusing alpha blends - the styles meet
+only through their rules, which is the honest version of the mod's own thesis.

@@ -588,3 +588,15 @@ it drowns by mid-piece — see the piece's critique for the split-frame fix).
 Verify kinetic accumulation pieces by screenshot at THREE times (early
 flicker / mid / held coda) — single-still checks miss both the story and
 the coda marks.
+
+## 2026-08-23 — rule-interpolated canvas (The Linden and the Banner)
+- **One parameter mapped to x, structurally:** two complete rendering systems
+  (displaced-line engraving vs quantised flat poster) share one scene; every
+  stylistic constant is a scripted function of t = x/W and the transition is
+  in the RULES (period, cell size, fill threshold), never an alpha blend.
+- **Constraint made visible:** the actual functions and their constants are
+  typeset INSIDE the piece as a rule strip with the domain's band names; a
+  red tick marks the exact x where red is permitted to enter.
+- **Engraver's bulge:** horizontal lines displaced by a blurred scene mask
+  (phase = y - blur(mask)*k) gives banknote-style volume; local maxima ring
+  into "knots" — keep them small or they read as eyes.
