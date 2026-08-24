@@ -231,7 +231,7 @@ provenance. Still open: constraint-made-visible WALKED 2026-08-23 (The Linden an
 the reflection-only occlusion image (occluder covers everything, subject visible
 only in its reflection) - possibly the strongest image not yet made.
 
-### Rule-strip as score (opened 2026-08-23)
+### Rule-strip as score (opened 2026-08-23, WALKED 2026-08-25: the-linden-hourly)
 The Linden and the Banner maps its rule over x. Remap the same rule over TIME: one
 animated canvas whose constants glide along the printed functions while the strip's
 cursor moves - the piece performing its own caption. Pairs with the timed-traces frontier.

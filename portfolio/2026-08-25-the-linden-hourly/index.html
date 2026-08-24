@@ -1,0 +1,68 @@
+<!doctype html><meta charset="utf-8"><title>The Linden, Hourly</title>
+<style>body{margin:0;background:#EADFC4;display:grid;place-items:center;min-height:100vh;font-family:monospace}
+canvas{border:3px solid #6B4A26;box-shadow:0 4px 20px rgba(43,32,20,.3)}</style>
+<canvas id="c" width="900" height="640"></canvas>
+<script>
+// The Linden, Hourly - the 2026-08-23 canvas performed over time.
+// t no longer maps to x; it maps to NOW. The whole scene breathes one rule:
+// engraving at t=0, the poster and the wedge at t=1, and back. The strip's
+// cursor is the only honest clock. Frontier walked: rule-strip as score.
+const cv=document.getElementById('c'),g=cv.getContext('2d');
+const W=900,H=560,STRIP=80;
+const BANDS=["FREE COMMUNE","SYNDICALIST LEAGUE","POPULAR REPUBLIC","VANGUARD STATE","DICTATORSHIP"];
+function scene(t,time){
+  g.fillStyle='#EADFC4';g.fillRect(0,0,W,H);
+  const cx=W*.46,cy=H*.42,HOR=H*.8;
+  // rule constants, all functions of t (printed below, enacted here)
+  const period=6.5+8*t, duty=.55-.18*t, cell=1+14*t, red=Math.max(0,(t-.42)/.58);
+  // ground rows
+  for(let y=HOR;y<H;y+=4){
+    const ph=Math.sin(y*.11+time*.0003);
+    g.strokeStyle=`rgba(43,32,20,${.25+.15*ph})`;g.lineWidth=1+2*t;
+    g.beginPath();
+    if(t<.55){g.moveTo(0,y);for(let x=0;x<=W;x+=16)g.lineTo(x,y+3*Math.sin(x*.02+y*.2));}
+    else{const q=Math.floor(y/(cell*3))*(cell*3);g.moveTo(0,q);g.lineTo(W,q);}
+    g.stroke();}
+  // crown metaballs -> engraved bulge lines OR flat poster blob
+  const balls=[[cx,cy,120],[cx-95,cy+28,80],[cx+95,cy+26,86],[cx-42,cy-72,70],[cx+46,cy-70,64],[cx,cy+52,92]];
+  function inCrown(x,y){let s=0;for(const[bx,by,r]of balls)s+=r*r/((x-bx)**2+(y-by)**2+600);return s;}
+  if(t<.55){ // engraving: horizontal lines displaced by crown field
+    g.strokeStyle='#2B2014';g.lineWidth=1+1.2*t;
+    for(let y=40;y<HOR;y+=period){
+      g.beginPath();let pen=false;
+      for(let x=0;x<=W;x+=4){
+        const f=inCrown(x,y);const yy=y-Math.min(38,f*26);
+        const on=f>.55&&(Math.sin(x*.5+y)*.5+.5)<duty+f*.14;
+        if(on){if(!pen){g.moveTo(x,yy);pen=true}else g.lineTo(x,yy);}
+        else if(pen){g.stroke();g.beginPath();pen=false}}
+      if(pen)g.stroke();}
+  }else{ // poster: quantised flat crown
+    g.fillStyle='#191412';
+    const q=cell*3;
+    for(let y=20;y<HOR;y+=q)for(let x=0;x<W;x+=q)
+      if(inCrown(x+q/2,y+q/2)>.8)g.fillRect(x,y,q+.5,q+.5);}
+  // trunk
+  g.fillStyle='#2B2014';
+  for(let y=cy+40;y<HOR+4;y+=3){const p=(y-cy-40)/(HOR-cy-40);
+    const w=8+26*p**1.6,sx=cx+10*Math.sin(p*2.2);
+    g.fillRect(sx-w/2,y,w,3.5);}
+  // the red wedge
+  if(red>0){g.fillStyle=`rgba(196,30,28,${.92*red})`;
+    g.beginPath();g.moveTo(cx+70,cy-4);g.lineTo(W,cy-90-160*red);g.lineTo(W,cy+80+160*red);g.closePath();g.fill();}
+  // strip: the rule as score, cursor = now
+  g.fillStyle='#E0D2AE';g.fillRect(0,H,W,STRIP);
+  g.strokeStyle='#2B2014';g.lineWidth=2;g.beginPath();g.moveTo(0,H);g.lineTo(W,H);g.stroke();
+  g.font='10px monospace';g.fillStyle='#2B2014';
+  BANDS.forEach((b,i)=>{const x=i*W/5;g.fillRect(x,H,1,10);g.fillText(b,x+4,H+18);});
+  g.fillText(`t=(1-cos(time/9s))/2   period=6.5+8t   duty=.55-.18t   cell=1+14t   red:t>0.42`,10,H+40);
+  g.fillStyle='#9E2B25';g.fillText('the ground never changes. only the rule. and now, the rule never rests.',10,H+58);
+  // cursor
+  g.fillStyle='#9E2B25';g.fillRect(t*W-1,H,3,STRIP);
+  const rx=.42*W;g.strokeStyle='rgba(196,30,28,.7)';g.beginPath();g.moveTo(rx,H);g.lineTo(rx,H+STRIP);g.stroke();
+}
+let start;
+function frame(ts){if(!start)start=ts;const time=ts-start;
+  const t=(1-Math.cos(time/9000*Math.PI*2))/2; // 18s round trip, eased
+  scene(t,time);requestAnimationFrame(frame);}
+requestAnimationFrame(frame);
+</script>

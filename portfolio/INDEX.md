@@ -73,3 +73,9 @@ interpolation's real constants printed in the piece under the five band names
 of April's Death to Kings axis. Frontier walked: constraint-made-visible.
 Reflection: the strongest choice was refusing alpha blends - the styles meet
 only through their rules, which is the honest version of the mod's own thesis.
+
+## 2026-08-25 — The Linden, Hourly
+`portfolio/2026-08-25-the-linden-hourly/` — the rule-interpolated canvas
+performed over time: t = now, 18-second eased cycle, the strip cursor as the
+piece's only clock. Frontier walked: rule-strip-as-score. Reflection: motion
+gives the wedge what the still could not - the mercy of departure.
