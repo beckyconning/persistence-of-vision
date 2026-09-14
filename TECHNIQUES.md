@@ -614,3 +614,4 @@ the coda marks.
 - **Found-palette Albers homage** (`homage-to-the-gradient.py`): a real UI gradient's stops as nested Homage-to-the-Square plates, square side = 1 - stop position, Albers 1:3 low offset; inverted-nesting study for simultaneous contrast. First hard-edge saturated colour in the Mandeldive set.
 - **Executable as textile** (`the-binary.py`): a PE file's raw bytes at 1024 px per row, byte = ink on paper. Code reads as tweed, data sections as patterned borders. Image-as-data with zero arrangement.
 - **Quadtree Mondrian** (`composition-with-escape-counts.py`): recursive split while a block holds more than one escape band (min 8 px), majority-band fill in De Stijl primaries, line width from block size. Rule-based tiling from data.
+- **Punched card from a real coordinate** (inline in the session; Decimal doubling to extract fraction bits, 64 per row, clipped-corner card). Physical-media emulation of precision as a quantity.

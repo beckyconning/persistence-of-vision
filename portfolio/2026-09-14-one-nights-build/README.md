@@ -1,6 +1,6 @@
 # One Night's Build (2026-09-14, ~02:30-03:00)
 
-Ten plates and one sound made in the reward half hour after the overnight build of
+Eleven plates and one sound made in the reward half hour after the overnight build of
 Mandeldive, April's GPU Mandelbrot explorer (perturbation deep zoom to 10^280,
 Direct3D 11, subagent-driven, three real bugs found by testing). Every plate is
 drawn from a real event or real numbers from that build; nothing is invented.
@@ -100,6 +100,12 @@ drawn from a real event or real numbers from that build; nothing is invented.
   boundary, which is exactly where progressive refinement spends its effort.
   Honest note: centred and symmetric, the corpus's old corner, forgiven here
   because the grid is the subject.
+
+- **the-address.png** (physical media: the punched card). The real part of the
+  10^250 spiral's centre, as its first 1024 binary fraction bits: one row per
+  64-bit limb, sixteen rows, because the precision rule asks for sixteen limbs
+  at that depth. 523 holes. The picture needs this much address before a single
+  pixel can be drawn.
 
 Studies: `studies/one-gold-two-golds.png` (Albers's one-colour-reads-as-two exercise
 with the app's gold on its own navy and ice white, joined by a gold bridge that
