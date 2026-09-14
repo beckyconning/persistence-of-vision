@@ -1,6 +1,6 @@
 # One Night's Build (2026-09-14, ~02:30-03:00)
 
-Five plates made in the reward half hour after the overnight build of
+Seven plates made in the reward half hour after the overnight build of
 Mandeldive, April's GPU Mandelbrot explorer (perturbation deep zoom to 10^280,
 Direct3D 11, subagent-driven, three real bugs found by testing). Every plate is
 drawn from a real event or real numbers from that build; nothing is invented.
@@ -51,6 +51,16 @@ drawn from a real event or real numbers from that build; nothing is invented.
   limit can reach. This is the first data plate of the session whose number
   is carried by the form alone (answering self-critique point 3 within the
   same half hour).
+
+- **the-descent.gif** (motion through depth, no caption). Thirty-two zoom
+  steps (x1.18 each, 1e40 to 1.7e42) into the Misiurewicz point, each step's
+  escape counts rendered with the new `tools/voxelspace.py` as a tabletop of
+  land whose lakes have the spiral's filaments for shores. Each step is
+  normalised on its own, so the self-similar land keeps re-forming as the
+  camera goes down: a descent that never arrives. Lesson on the way: with one
+  normalisation for the whole sequence the land SINKS, because escape counts
+  climb with depth (about 2900 to 4900 over these steps) and a fixed sea drowns
+  it by the last frame. True, but it repeated the flood.
 
 Toolkit grown: `tools/voxelspace.py` (the column caster from the flood,
 generalised: any 2D field, optional water level, open floor beyond the map so
