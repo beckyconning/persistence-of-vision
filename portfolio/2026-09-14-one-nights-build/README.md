@@ -1,6 +1,6 @@
 # One Night's Build (2026-09-14, ~02:30-03:00)
 
-Seven plates made in the reward half hour after the overnight build of
+Seven plates and one sound made in the reward half hour after the overnight build of
 Mandeldive, April's GPU Mandelbrot explorer (perturbation deep zoom to 10^280,
 Direct3D 11, subagent-driven, three real bugs found by testing). Every plate is
 drawn from a real event or real numbers from that build; nothing is invented.
@@ -62,6 +62,19 @@ drawn from a real event or real numbers from that build; nothing is invented.
   climb with depth (about 2900 to 4900 over these steps) and a fixed sea drowns
   it by the last frame. True, but it repeated the flood.
 
+- **the-late-tail.wav** (sound, 20 s; UNHEARD by its maker, verified by
+  `the-late-tail-spectrogram.png` only). seahorse1e6's real level-8 escape
+  histogram as partials, one stage per iteration limit (1024 to 131072, 2.5 s
+  each). Every bucket that has escaped by the limit sounds a fifth above the
+  last, loudness by the square root of its share; the bucket the rule is
+  listening to (n in (L/2, L]) trembles; a tick marks each raise (four:
+  3555, 905, 350 and 167 late samples all clear the 162 threshold); at 16384
+  only 66 are late and the rule settles. The three stages after keep sounding
+  the true tail (36, 19, 5 samples) at a whisper: what the rule stopped
+  hearing. A 55 Hz drone follows the capped samples. The spectrogram shows the
+  staircase of partials, the dashed trembling bucket and the faint tail.
+  Honest note: nobody listened; the ear test is owed.
+
 Toolkit grown: `tools/voxelspace.py` (the column caster from the flood,
 generalised: any 2D field, optional water level, open floor beyond the map so
 the horizon stays straight, fog, slope light; smoke test writes
@@ -89,9 +102,9 @@ Mandeldive repo's core objects; data paths point at the session scratchpad).
    the image." Every plate tonight carries a caption line of figures. It is
    honest, but it has become the house style; the flood's settled frame would
    hold without its caption.
-4. **What I avoided.** Sound (the late-escape tail wants to be heard as partials
-   thinning out) and anything I could not check by eye, since there was no one
-   awake to listen. Also colour: tonight's restraint was partly safety.
+4. **What I avoided.** Sound, at first (the late-escape tail wanted to be heard as
+   partials thinning out); walked late in the half hour, but only as far as a
+   spectrogram can vouch for it. Also colour: tonight's restraint was partly safety.
 5. **Next.** Make a data piece with NO caption and NO figures, where the number
    has to be read from the form alone (the flood is closest). Or walk the
    voxel landscape into motion through time rather than water level: fly the

@@ -17,7 +17,7 @@ data medium (a number becomes sea level; the flood's lone dry spire = the set it
 TIME: the descent into the Misiurewicz spiral is now WALKED (per-step normalisation); still open: tides driven by a real log, or a descent where the sinking land (global normalisation) is the subject. (b) THE
 TYPEWRITER PAGE as a data form (one keystroke = a unit of time). Retire next: the monospace caption
 line of real figures under every plate; make a data piece whose number is legible from the form
-alone. Unwalked and wanted: the late-escape tail as SOUND (partials thinning past 0.5%).
+alone. The late-escape tail as SOUND is walked but UNHEARD (spectrogram-verified only): next sound piece should get a human ear test before it is called done.
 
 **s28 (2026-07-09) LITERALIZED THE REPO TITLE — the-quorum**: time-average-as-medium
 (image exists only in retinal accumulation; the eye performs the statistics). Doors it names:
