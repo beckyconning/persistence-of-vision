@@ -104,8 +104,8 @@ Reflection: the constraint is only the subject below 60 columns; next time desig
 FOR two colours per cell instead of fighting it.
 
 
-## 2026-09-14 — Loading
-`portfolio/2026-09-14-loading/` — a ZX Spectrum SCREEN$ designed for the
+## 2026-09-14: Loading
+`portfolio/2026-09-14-loading/`: a ZX Spectrum SCREEN$ designed for the
 attribute grid: Clawd peeking over a terminal (one cell per art pixel, eyes left as
 paper so the sky shows through, a half-size Claude off-grid that never clashes),
 the tape load as film with border stripes computed from ROM pulse timings over the

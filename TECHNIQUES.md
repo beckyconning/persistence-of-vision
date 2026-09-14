@@ -631,7 +631,7 @@ the coda marks.
   follows the piece's clock, muxed with ffmpeg concat (per-frame durations). Unheard.
 
 
-## Session 2026-09-14 — Loading (Clawd 2.1 reward)
+## Session 2026-09-14: Loading (Clawd 2.1 reward)
 - **Designing for an attribute grid** (`portfolio/2026-09-14-loading/src/loading.py`): compose in cells first
   (INK, PAPER, BRIGHT per 8x8), bitmap second. Art pixel = one cell makes a sprite clash-proof; holes left as
   PAPER take the background's colour (eyes become sky). Off-grid sprites are free on a uniform ground: clash
