@@ -1,6 +1,6 @@
 # One Night's Build (2026-09-14, ~02:30-03:00)
 
-Nine plates and one sound made in the reward half hour after the overnight build of
+Ten plates and one sound made in the reward half hour after the overnight build of
 Mandeldive, April's GPU Mandelbrot explorer (perturbation deep zoom to 10^280,
 Direct3D 11, subagent-driven, three real bugs found by testing). Every plate is
 drawn from a real event or real numbers from that build; nothing is invented.
@@ -91,6 +91,15 @@ drawn from a real event or real numbers from that build; nothing is invented.
   data sections below (string tables, the embedded HLSL, the 5x7 font, the
   relocations, the icon's PNGs) come out as patterned borders, like the end of
   a rug. Nothing arranged: the linker composed it.
+
+- **composition-with-escape-counts.png** (rule-based tiling, homage to
+  Mondrian). The home view as a quadtree split wherever escape-count bands
+  differ, down to 8-px cells, filled in De Stijl primaries (white far outside,
+  yellow, blue, red toward the boundary, black inside) with line weight
+  following block size. The empty regions keep big blocks; the grid crowds the
+  boundary, which is exactly where progressive refinement spends its effort.
+  Honest note: centred and symmetric, the corpus's old corner, forgiven here
+  because the grid is the subject.
 
 Toolkit grown: `tools/voxelspace.py` (the column caster from the flood,
 generalised: any 2D field, optional water level, open floor beyond the map so
