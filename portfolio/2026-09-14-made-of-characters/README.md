@@ -37,6 +37,15 @@ lit doorway, a sodium lamp and a wet street, at dusk.
   night itself (the logo's holes, `clawd_background` rgb(0,0,0)). The legs are
   the lit doorway: the last light left on.
 
+- **stack-trace.gif / stack-trace.sh** (text-mode, motion, designed for the medium, wordless). Clawd as
+  his own three lines of glyphs, each spawning a subagent printed below it two columns deeper, the way a
+  stack trace grows. In a 60 x 24 terminal the ninth Clawd starts the scroll and the one who began it
+  leaves the screen; at twenty deep printing stops. The overflow is the terminal's own scroll, not a
+  caption. No clash at all: one ink, one paper, native glyphs.
+- **studies/amber.png** (one-colour phosphor, error diffusion as glyph choice, 80 x 29). Half-works: the lit
+  windows and doorway survive, the fire escape and sky dissolve into dither noise. Glyph-level dithering
+  needs a scene built from large flat shapes, not this one.
+
 Toolkit: `tools/termblocks.py` (encode an image into quadrant glyphs + two
 colours per cell, write ANSI, render pixel-exact; CLI:
 `termblocks.py image.png 80 > out.ans`).
