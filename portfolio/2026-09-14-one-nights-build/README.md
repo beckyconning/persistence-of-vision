@@ -42,6 +42,22 @@ drawn from a real event or real numbers from that build; nothing is invented.
   front-to-back voxel-space column caster (after the 1992 demoscene technique),
   daylight sky and distance fog.
 
+- **the-dry-spire.png** (seascape, no words, no figures). The flood's settled
+  sea at full size with the caption retired, the horizon on the upper third
+  and the camera brought close. The spire's stepped foot is the honest shape
+  of the three pixels inside the set (an L); the speck at its base is one of
+  the last land pixels still above water. After Hiroshi Sugimoto's
+  *Seascapes*, but off-centre: the one thing that stands is what no iteration
+  limit can reach. This is the first data plate of the session whose number
+  is carried by the form alone (answering self-critique point 3 within the
+  same half hour).
+
+Toolkit grown: `tools/voxelspace.py` (the column caster from the flood,
+generalised: any 2D field, optional water level, open floor beyond the map so
+the horizon stays straight, fog, slope light; smoke test writes
+`tools/voxelspace-demo.png`). Known limitation: nearest sampling stair-steps
+close to the camera.
+
 `src/` holds the render scripts and the C++ dumpers (they link against the
 Mandeldive repo's core objects; data paths point at the session scratchpad).
 

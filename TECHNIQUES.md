@@ -607,3 +607,4 @@ the coda marks.
 - **Fractal escape counts as stone relief** (`the-cast.py`): -log(n) heightfield, bicubic 2x, light blur, finite-difference normals, low raking light, cheap AO (blurred minus height), two-stone ramp, plaster grain. Repeats raking relief (s3/s11/s26) on a new source; reads as Rococo stucco.
 - **Rank-ordered AM halftone** (`the-agreement.py`): dot area = rank of escape count (histogram-equalised), so ink follows the data's own ordering; diptych with a shared registration rule carrying the verdict line.
 - **Cyanotype-palette kinetic chart** (`the-ratchet.py`): palette only (no photogram physics), staircases drawn over frames with pawl teeth; GIF via PIL quantize. Weakest of the set.
+- **Toolkit: `tools/voxelspace.py`** (same session): the voxel-space caster generalised for reuse (any field, water, open floor, fog); used for the captionless seascape `the-dry-spire.png` (Sugimoto, off-centre).

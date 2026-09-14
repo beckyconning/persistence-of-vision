@@ -86,7 +86,8 @@ overnight build, each drawn from a real event: the parity test that agreed on
 a blank image (halftone diptych, 1 vs 362), the auto-iteration ratchet (motion),
 the timer tick (typewriter page, 37.65 s vs 4.27 s), the 1e250 spiral as stucco
 relief, and the flood (voxel-space landscape; the limit as sea level, only the
-set itself stays dry). Frontiers walked: consistent-wrongness-as-still,
+set itself stays dry), plus a sixth, captionless plate: the dry spire, after Sugimoto.
+Toolkit: tools/voxelspace.py. Frontiers walked: consistent-wrongness-as-still,
 landscape via a demoscene renderer. Reflection: the caption line of real
 figures has become the house style; next piece should carry its number in the
 form alone.
