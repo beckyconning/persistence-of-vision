@@ -109,8 +109,10 @@ drawn from a real event or real numbers from that build; nothing is invented.
 
 Studies: `studies/one-gold-two-golds.png` (Albers's one-colour-reads-as-two exercise
 with the app's gold on its own navy and ice white, joined by a gold bridge that
-proves they are the same paint), plus the harsher cast and the ratchet's last
-frame. `contact-sheet.png` gathers the set on one page.
+proves they are the same paint), plus the harsher cast, the ratchet's last
+frame, and `studies/the-dry-spire-dusk.png` (the same sea at dusk: it holds, but a
+pale form on dark warm water slides back toward the corpus's glow-on-dark habit,
+so it stays a study). `contact-sheet.png` gathers the set on one page.
 
 Toolkit grown: `tools/voxelspace.py` (the column caster from the flood,
 generalised: any 2D field, optional water level, open floor beyond the map so
