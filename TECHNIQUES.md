@@ -653,3 +653,6 @@ the coda marks.
   per-cell plan of control codes; render walks each row's state (fg, bg; 0x11-0x17 graphics colour, 0x1D new
   background = current fg); refuse any lit sextant whose planned colour differs from the row state. Mosaic code =
   0x20 + bits 0-4 + 0x40 for the sixth; `.tti` lines `OL,row,` with controls as ESC + chr(code + 0x40).
+- **A hardware limit as behaviour** (`ten.py`): simulate the DMG's ten-sprites-per-scan-line selection (per line,
+  the first ten OAM entries whose 8 px band covers it) and let the scene provoke it: sprites that settle on one line
+  cap what can be seen there, and a sprite crossing a full line is sliced. The count becomes the image.

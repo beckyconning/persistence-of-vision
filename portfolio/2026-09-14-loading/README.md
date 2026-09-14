@@ -69,7 +69,16 @@ has no orange.
   a real page file (control codes as ESC plus the code + 0x40), 2 x 3 sextant
   mosaic per cell.
 
-Source: `src/loading.py`, `src/clash.py`, `src/rain.py`, `src/lighthouse.py` (numpy, PIL, ffmpeg).
+- **ten.gif / ten.png** (a third rule, as behaviour; wordless). Snow on a Game
+  Boy: 160 x 144, four greens, forty sprites, and the rule that a scan line shows
+  at most ten sprites, the lowest OAM index first. Forty flakes fall through a
+  street lamp's light past a dim house and settle on one line of ground. That line
+  can never show more than ten. Flakes that land after the tenth are still there
+  and drawn nowhere; one arriving while its lines are full is cut to a dash or a
+  single pixel on the way down. The number is not written anywhere: count the
+  ground.
+
+Source: `src/loading.py`, `src/clash.py`, `src/rain.py`, `src/lighthouse.py`, `src/ten.py` (numpy, PIL, ffmpeg).
 
 ## Self-critique
 
@@ -94,6 +103,8 @@ Source: `src/loading.py`, `src/clash.py`, `src/rain.py`, `src/lighthouse.py` (nu
    the ear-test rule stands and there was no one to listen. Also the second
    plate's clash is legible but quiet; a braver version would build a whole scene
    that only reads BECAUSE of the clash.
-5. **Next.** A piece with no software in it at all, from a subject outside the
-   day's work, in a constraint chosen for the subject rather than found in the
-   build (see FRONTIERS).
+5. **Next.** Three hardware rules in one sitting (Spectrum attributes,
+   teletext control cells, Game Boy sprites per line) proved the rule-as-subject
+   move; do not write a fourth. Next session: a piece with no software and no
+   hardware rule in it at all, where the constraint comes from the subject (see
+   FRONTIERS).
