@@ -112,7 +112,10 @@ with the app's gold on its own navy and ice white, joined by a gold bridge that
 proves they are the same paint), plus the harsher cast, the ratchet's last
 frame, and `studies/the-dry-spire-dusk.png` (the same sea at dusk: it holds, but a
 pale form on dark warm water slides back toward the corpus's glow-on-dark habit,
-so it stays a study). `contact-sheet.png` gathers the set on one page.
+so it stays a study), and `studies/composition-seahorse-study.png` (the quadtree
+Mondrian in seahorse valley: asymmetric, a crenellated coastline between white
+blocks and black interior with the seahorse bulbs as yellow suns; it answers the
+home plate's centred composition and is arguably the stronger of the two). `contact-sheet.png` gathers the set on one page.
 
 Toolkit grown: `tools/voxelspace.py` (the column caster from the flood,
 generalised: any 2D field, optional water level, open floor beyond the map so
