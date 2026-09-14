@@ -656,3 +656,7 @@ the coda marks.
 - **A hardware limit as behaviour** (`ten.py`): simulate the DMG's ten-sprites-per-scan-line selection (per line,
   the first ten OAM entries whose 8 px band covers it) and let the scene provoke it: sprites that settle on one line
   cap what can be seen there, and a sprite crossing a full line is sliced. The count becomes the image.
+- **Toolkit: `tools/zxscreen.py`** extracted from the session: `encode` (indexed colour -> cell rule with the
+  two-most-used choice), `pack`/`unpack` (.scr bytes), `render` (TV view with a non-bright border), `write_tap`
+  (autostart loader + SCREEN$). `python3 tools/zxscreen.py *.scr` round-trips files; render of clawd.scr matches
+  loading.png pixel for pixel.
