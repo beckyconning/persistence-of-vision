@@ -630,3 +630,26 @@ the coda marks.
 - **Event score from an animation timeline**: per-event chimes (pitch by floor, pan by bay) + a hum whose level
   follows the piece's clock, muxed with ffmpeg concat (per-frame durations). Unheard.
 
+
+## Session 2026-09-14 — Loading (Clawd 2.1 reward)
+- **Designing for an attribute grid** (`portfolio/2026-09-14-loading/src/loading.py`): compose in cells first
+  (INK, PAPER, BRIGHT per 8x8), bitmap second. Art pixel = one cell makes a sprite clash-proof; holes left as
+  PAPER take the background's colour (eyes become sky). Off-grid sprites are free on a uniform ground: clash
+  only exists where a cell needs a third colour.
+- **Real Spectrum artefacts**: `.scr` = 6144 packbits bitmap bytes + 768 attribute bytes
+  (FLASH<<7|BRIGHT<<6|PAPER<<3|INK). `.tap` = blocks of [len LE][flag][payload][xor checksum]; header payload is
+  type, 10-char name, length, param1, param2. A tokenised BASIC autostart line: numbers are ASCII digits then
+  0x0E + 5-byte small-int form; BORDER 0xE7, LOAD 0xEF, SCREEN$ 0xAA, PAUSE 0xF2.
+- **Tape load as film from ROM timings**: expand blocks into half-pulse lengths (pilot 2168 T x 8063 or 3223,
+  sync 667/735, bit 0 = 2x855, bit 1 = 2x1710), cumulative T, sample one border colour per scan line (224 T)
+  with `searchsorted`; bytes appear when their last edge passes; bitmap fills before attributes, which is why
+  the colour arrives last.
+- **Clash as a diptych**: draw the scene in full indexed colour, encode per cell keeping the two most used
+  indices (nearest-RGB for the rest), and compare the same object on a uniform ground vs straddling a boundary.
+- **Clash as lighting** (`rain.py`): put a scene's light only in attributes (lit windows = whole PAPER cells) and
+  a moving element only in the bitmap (rain); each cell's single INK recolours the element as it passes. Show the
+  layers separately then together. Limit: white INK on BRIGHT yellow differs only in blue.
+- **Teletext page with a rule-checking encoder** (`lighthouse.py`): design on a 2x3-per-cell sextant canvas plus a
+  per-cell plan of control codes; render walks each row's state (fg, bg; 0x11-0x17 graphics colour, 0x1D new
+  background = current fg); refuse any lit sextant whose planned colour differs from the row state. Mosaic code =
+  0x20 + bits 0-4 + 0x40 for the sixth; `.tti` lines `OL,row,` with controls as ESC + chr(code + 0x40).

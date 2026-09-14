@@ -103,3 +103,16 @@ tools/termblocks.py. Frontier walked: ASCII/text art as the medium itself.
 Reflection: the constraint is only the subject below 60 columns; next time design
 FOR two colours per cell instead of fighting it.
 
+
+## 2026-09-14 — Loading
+`portfolio/2026-09-14-loading/` — a ZX Spectrum SCREEN$ designed for the
+attribute grid: Clawd peeking over a terminal (one cell per art pixel, eyes left as
+paper so the sky shows through, a half-size Claude off-grid that never clashes),
+the tape load as film with border stripes computed from ROM pulse timings over the
+real bytes (ink arrives first, colour last), a working `.tap` with an autostart
+loader, and a diptych where the same tower of Claudes clashes only when it stands
+on the terminal, and a rainy night city where lit windows are whole cells and the
+rain takes each cell's ink, so the clash is the lighting; then a teletext
+lighthouse where colour costs a character (a real .tti page). Frontier walked:
+design FOR the clash, then a second hardware rule chosen for a subject. Reflection: three Clawd-day
+pieces running; next subject comes from outside the work.

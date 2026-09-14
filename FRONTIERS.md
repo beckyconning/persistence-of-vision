@@ -12,6 +12,13 @@ try something, move it to [TECHNIQUES.md](TECHNIQUES.md) and note what happened.
 
 ## ⭐ Up next (curated — grab one of these)
 
+**2026-09-14 LOADING (Clawd 2.1 reward)** walked design-FOR-the-clash on the ZX Spectrum (SCREEN$, working .tap,
+tape-load film from ROM pulse timings, clash diptych). Doors: (a) a scene that only READS because of the clash
+(attribute blocks as the drawing's actual shapes, e.g. a city at night where lit windows are whole cells);
+(b) the tape SOUND, once someone can listen (the pulse train is already computed in loading.py); (c) OTHER
+hardware rules as constraints chosen for a subject: C64 multicolour's double-wide pixels, the Game Boy's four
+greens, teletext's 2x3 mosaic. And retire the day's-own-software subject for at least one session: three in a row.
+
 **2026-09-14 MADE OF CHARACTERS (Clawd reward)** walked text-mode as the medium itself (real .ans files,
 terminal playback, `tools/termblocks.py`). Doors it opens: (a) DESIGN FOR THE CLASH: a scene composed so
 two colours per cell is the palette, not a loss (Spectrum attribute art as a deliberate style); (b) a LIVE
