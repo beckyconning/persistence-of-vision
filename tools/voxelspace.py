@@ -11,7 +11,8 @@ Mandelbrot escape counts and the water was an iteration limit.
 
 Heights are in the same units as camera height; exaggerate small ranges (a flat frame of water with a sliver of
 land means the range is too small against the camera). Coordinates outside the map are open "floor" at
-floor_height (defaults to the map minimum), so the horizon stays straight.
+floor_height (defaults to the map minimum), so the horizon stays straight. Heights are sampled bilinearly by
+default (bilinear=False gives the blocky classic voxel look used by the-flood and the-descent).
 """
 import numpy as np
 
@@ -24,7 +25,8 @@ LAND_HIGH = np.array([206, 194, 164])
 
 def render(heights, water=None, size=(1200, 700), camera=None, horizon=0.33, focal=180.0, fov=1.25,
            depth=(2.0, 900.0), steps=(160, 420), fog_distance=900.0, slope_light=0.12, seed=0,
-           sky=(SKY_TOP, SKY_LOW), water_colour=WATER, land=(LAND_LOW, LAND_HIGH), floor_height=None):
+           sky=(SKY_TOP, SKY_LOW), water_colour=WATER, land=(LAND_LOW, LAND_HIGH), floor_height=None,
+           bilinear=True):
     """Render heights (2D array, rows = y forward, cols = x) to an RGB uint8 array of shape (H, W, 3)."""
     heights = np.asarray(heights, dtype=np.float64)
     ny, nx = heights.shape
@@ -43,18 +45,30 @@ def render(heights, water=None, size=(1200, 700), camera=None, horizon=0.33, foc
     ybuf = np.full(W, H)
     cols = np.arange(W)
     near, far = depth
-    mid = near + (far - near) * 0.065
-    zs = np.concatenate([np.linspace(near, mid, steps[0]), np.linspace(mid, far, steps[1])])
+    # geometric depth spacing: fine steps near the camera (where one step spans many screen rows), coarse far away
+    zs = np.geomspace(near, far, steps[0] + steps[1])
     rng = np.random.default_rng(seed)
 
     for z in zs:
         px = cam_x + (cols - W / 2) / W * z * fov
         py = cam_y + z
-        inside = (px >= 0) & (px < nx - 1) & (0 <= py < ny - 1)
-        ix = np.clip(px.astype(int), 0, nx - 2)
-        iy = int(np.clip(py, 0, ny - 2))
-        h = np.where(inside, heights[iy, ix], floor)
-        hx = np.where(inside, heights[iy, ix + 1], floor)
+        inside = (px >= 0) & (px < nx - 2) & (0 <= py < ny - 1)
+        if bilinear:
+            # smooth sampling removes the stair-steps close to the camera
+            fx = np.clip(px, 0, nx - 2.001)
+            fy = float(np.clip(py, 0, ny - 1.001))
+            ix, iy = fx.astype(int), int(fy)
+            ax, ay = fx - ix, fy - iy
+            row0 = heights[iy, ix] * (1 - ax) + heights[iy, ix + 1] * ax
+            row1 = heights[iy + 1, ix] * (1 - ax) + heights[iy + 1, ix + 1] * ax
+            h = np.where(inside, row0 * (1 - ay) + row1 * ay, floor)
+            nxt = heights[iy, ix + 1] * (1 - ax) + heights[iy, ix + 2] * ax
+            hx = np.where(inside, nxt * (1 - ay) + (heights[iy + 1, ix + 1] * (1 - ax) + heights[iy + 1, ix + 2] * ax) * ay, floor)
+        else:
+            ix = np.clip(px.astype(int), 0, nx - 2)
+            iy = int(np.clip(py, 0, ny - 2))
+            h = np.where(inside, heights[iy, ix], floor)
+            hx = np.where(inside, heights[iy, ix + 1], floor)
         surf = h if water is None else np.maximum(h, water)
         y = (hy + (cam_h - surf) / z * focal).astype(int)
         tone = np.clip((h - lo) / span, 0, 1)

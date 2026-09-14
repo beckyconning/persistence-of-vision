@@ -65,8 +65,10 @@ drawn from a real event or real numbers from that build; nothing is invented.
 Toolkit grown: `tools/voxelspace.py` (the column caster from the flood,
 generalised: any 2D field, optional water level, open floor beyond the map so
 the horizon stays straight, fog, slope light; smoke test writes
-`tools/voxelspace-demo.png`). Known limitation: nearest sampling stair-steps
-close to the camera.
+`tools/voxelspace-demo.png`). Its first version stair-stepped near the camera;
+fixed in the same half hour with bilinear height sampling plus geometric depth
+spacing (the steps came mostly from coarse depth steps, not the sampling).
+`bilinear=False` keeps the blocky classic look the flood and the descent use.
 
 `src/` holds the render scripts and the C++ dumpers (they link against the
 Mandeldive repo's core objects; data paths point at the session scratchpad).
