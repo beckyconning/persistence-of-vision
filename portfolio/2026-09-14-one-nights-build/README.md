@@ -1,6 +1,6 @@
 # One Night's Build (2026-09-14, ~02:30-03:00)
 
-Seven plates and one sound made in the reward half hour after the overnight build of
+Eight plates and one sound made in the reward half hour after the overnight build of
 Mandeldive, April's GPU Mandelbrot explorer (perturbation deep zoom to 10^280,
 Direct3D 11, subagent-driven, three real bugs found by testing). Every plate is
 drawn from a real event or real numbers from that build; nothing is invented.
@@ -74,6 +74,16 @@ drawn from a real event or real numbers from that build; nothing is invented.
   hearing. A 55 Hz drone follows the capped samples. The spectrogram shows the
   staircase of partials, the dashed trembling bucket and the faint tail.
   Honest note: nobody listened; the ear test is owed.
+
+- **homage-to-the-gradient.png** (colour, hard edge, art-historical homage).
+  Mandeldive's classic palette as Josef Albers's *Homage to the Square*: five
+  nested squares, one per gradient stop (navy, blue, ice white, gold,
+  near-black), each square's side = 1 - its stop position, so the gradient's
+  real spacing (0, 0.16, 0.42, 0.6425, 0.8575) IS the composition; squares sit
+  low with Albers's 1:3 gap. No line, no text. `studies/homage-inverted-study.png`
+  reverses the nesting: the navy core against blue shows the simultaneous
+  contrast Albers taught with. The only saturated colour of the session, made
+  in its last minutes: the axis the self-critique said was avoided out of safety.
 
 Toolkit grown: `tools/voxelspace.py` (the column caster from the flood,
 generalised: any 2D field, optional water level, open floor beyond the map so
