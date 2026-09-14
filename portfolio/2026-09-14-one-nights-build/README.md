@@ -101,6 +101,11 @@ drawn from a real event or real numbers from that build; nothing is invented.
   Honest note: centred and symmetric, the corpus's old corner, forgiven here
   because the grid is the subject.
 
+Studies: `studies/one-gold-two-golds.png` (Albers's one-colour-reads-as-two exercise
+with the app's gold on its own navy and ice white, joined by a gold bridge that
+proves they are the same paint), plus the harsher cast and the ratchet's last
+frame. `contact-sheet.png` gathers the set on one page.
+
 Toolkit grown: `tools/voxelspace.py` (the column caster from the flood,
 generalised: any 2D field, optional water level, open floor beyond the map so
 the horizon stays straight, fog, slope light; smoke test writes
