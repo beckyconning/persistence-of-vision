@@ -660,3 +660,5 @@ the coda marks.
   two-most-used choice), `pack`/`unpack` (.scr bytes), `render` (TV view with a non-bright border), `write_tap`
   (autostart loader + SCREEN$). `python3 tools/zxscreen.py *.scr` round-trips files; render of clawd.scr matches
   loading.png pixel for pixel.
+- **Gotcha: Pillow merges identical consecutive GIF frames** (durations summed), so a 60-image save can read back as
+  21 frames; index by `n_frames`, never by the count you wrote. Harmless for playback, fatal for `seek(38)`.
