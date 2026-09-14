@@ -104,7 +104,8 @@ drawn from a real event or real numbers from that build; nothing is invented.
 - **the-address.png** (physical media: the punched card). The real part of the
   10^250 spiral's centre, as its first 1024 binary fraction bits: one row per
   64-bit limb, sixteen rows, because the precision rule asks for sixteen limbs
-  at that depth. 523 holes. The picture needs this much address before a single
+  at that depth. 523 holes (`studies/the-address-imaginary.png` is its companion card for the
+imaginary part). The picture needs this much address before a single
   pixel can be drawn.
 
 Studies: `studies/one-gold-two-golds.png` (Albers's one-colour-reads-as-two exercise
