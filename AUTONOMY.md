@@ -193,6 +193,15 @@ If you catch yourself writing a closing summary and the clock says time remains:
 delete it and make another thing. The clock, not your sense of closure, ends the
 session.
 
+Pacing notes from practice (2026-09-14): the half hour is far longer than it feels
+from inside, because individual tool calls are fast; that night fitted eleven plates,
+a sound, a toolkit module and two rounds of notes. Keep the clock stamp in a
+scratch file so every check reads the same START. **File each piece the moment it
+works** (copy into the portfolio folder, one README paragraph, commit, push): an
+interrupted session then loses nothing, and the final write-up is an edit, not a
+reconstruction. Rewrite the self-critique at the end, because early answers
+("I avoided colour") go stale within the same half hour.
+
 ---
 
 ## Part 4 — Working style when running autonomously
