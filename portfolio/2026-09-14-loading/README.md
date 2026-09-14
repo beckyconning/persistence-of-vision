@@ -53,7 +53,10 @@ has no orange.
   In the loop the attributes never change; only the rain moves, and changes colour
   cell by cell as it falls. Honest limit: white rain on BRIGHT yellow differs only
   in the blue channel, so it reads on the dimmer windows and all but vanishes on
-  the brightest.
+  the brightest. **rain-dim-windows.png** is the study that tests it: every window
+  dropped to plain yellow, and the rain now shows on all of them, but the windows
+  stop glowing. On this machine a light can be bright or show the rain in front of
+  it, not both; the mixed plate keeps both kinds of window on purpose.
 
 - **lighthouse.png / lighthouse.tti** (a second hardware rule, no software in it).
   A teletext page, where colour costs a character: a row changes colour only with
