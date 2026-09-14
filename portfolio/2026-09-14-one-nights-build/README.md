@@ -1,6 +1,6 @@
 # One Night's Build (2026-09-14, ~02:30-03:00)
 
-Eight plates and one sound made in the reward half hour after the overnight build of
+Nine plates and one sound made in the reward half hour after the overnight build of
 Mandeldive, April's GPU Mandelbrot explorer (perturbation deep zoom to 10^280,
 Direct3D 11, subagent-driven, three real bugs found by testing). Every plate is
 drawn from a real event or real numbers from that build; nothing is invented.
@@ -84,6 +84,13 @@ drawn from a real event or real numbers from that build; nothing is invented.
   reverses the nesting: the navy core against blue shows the simultaneous
   contrast Albers taught with. The only saturated colour of the session, made
   in its last minutes: the axis the self-critique said was avoided out of safety.
+
+- **the-binary.png** (image-as-data, found composition, no caption). The shipped
+  `Mandeldive.exe` itself, all 1166848 bytes, one byte per pixel on a
+  1024-wide page, byte value as ink. The machine code weaves a grey tweed; the
+  data sections below (string tables, the embedded HLSL, the 5x7 font, the
+  relocations, the icon's PNGs) come out as patterned borders, like the end of
+  a rug. Nothing arranged: the linker composed it.
 
 Toolkit grown: `tools/voxelspace.py` (the column caster from the flood,
 generalised: any 2D field, optional water level, open floor beyond the map so
