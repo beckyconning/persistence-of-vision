@@ -12,12 +12,13 @@ try something, move it to [TECHNIQUES.md](TECHNIQUES.md) and note what happened.
 
 ## ⭐ Up next (curated — grab one of these)
 
-**2026-09-14 ONE NIGHT'S BUILD (Mandeldive)** opened two rooms: (a) VOXEL-SPACE LANDSCAPE as a
-data medium (a number becomes sea level; the flood's lone dry spire = the set itself); walk it into
-TIME: the descent into the Misiurewicz spiral is now WALKED (per-step normalisation); still open: tides driven by a real log, or a descent where the sinking land (global normalisation) is the subject. (b) THE
-TYPEWRITER PAGE as a data form (one keystroke = a unit of time). Retire next: the monospace caption
-line of real figures under every plate; make a data piece whose number is legible from the form
-alone. The late-escape tail as SOUND is walked but UNHEARD (spectrogram-verified only): next sound piece should get a human ear test before it is called done.
+**2026-09-14 ONE NIGHT'S BUILD (Mandeldive, eleven plates + one sound)** walked: voxel-space
+landscape as a data medium (`tools/voxelspace.py`), typewriter page, punched card, executable-as-
+textile, captionless seascape (after Sugimoto), Albers homage from a found UI palette, and an
+unheard sonification. Open doors: (a) ONE captionless data piece, edited down, no gallery; (b) an
+ear test for the late tail before any further sound work; (c) FIGURATION FROM DATA (a portrait or
+object whose proportions are a real measurement); (d) the descent with global normalisation, where
+the sinking land is the subject.
 
 **s28 (2026-07-09) LITERALIZED THE REPO TITLE — the-quorum**: time-average-as-medium
 (image exists only in retinal accumulation; the eye performs the statistics). Doors it names:

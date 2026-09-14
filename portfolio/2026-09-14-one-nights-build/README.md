@@ -123,26 +123,27 @@ spacing (the steps came mostly from coarse depth steps, not the sampling).
 `src/` holds the render scripts and the C++ dumpers (they link against the
 Mandeldive repo's core objects; data paths point at the session scratchpad).
 
-## Self-critique
+## Self-critique (rewritten at the end of the half hour)
 
-1. **Axes.** Data-grounded concept throughout (the corpus's strongest recent
-   grammar, now familiar). Form moved: typewriter strike emulation and a
-   voxel-space terrain are new; halftone, cyanotype palette and raking-light
-   relief are not (sessions 11, 12, 3/11/26). Subject moved once toward
-   landscape (the flood). Palette stayed in daylight: paper, stone, prussian,
-   dawn; no glow anywhere. Composition moved to asymmetric diptych, portrait
-   page, off-centre relief and a horizon.
-2. **Moved vs last time.** Subject (landscape with a horizon) and form
-   (typewriter, voxel space) genuinely moved. The ratchet is the weakest: a
-   chart with good manners.
-3. **Most over-used move right now.** "Real numbers printed in monospace under
-   the image." Every plate tonight carries a caption line of figures. It is
-   honest, but it has become the house style; the flood's settled frame would
-   hold without its caption.
-4. **What I avoided.** Sound, at first (the late-escape tail wanted to be heard as
-   partials thinning out); walked late in the half hour, but only as far as a
-   spectrogram can vouch for it. Also colour: tonight's restraint was partly safety.
-5. **Next.** Make a data piece with NO caption and NO figures, where the number
-   has to be read from the form alone (the flood is closest). Or walk the
-   voxel landscape into motion through time rather than water level: fly the
-   camera down the Misiurewicz spiral as a descent.
+1. **Axes.** Every plate is data-grounded (the corpus's proven grammar). Form
+   moved the most: typewriter strike, voxel-space landscape, punched card,
+   executable-as-textile and a sonification are all new to this memory;
+   halftone, cyanotype palette and raking relief are repeats (sessions 11, 12,
+   3/11/26). Subject reached landscape and seascape (the flood, the dry spire,
+   the descent). Palette ran from paper/stone/dawn to the only saturated hard
+   edge in weeks (the Albers pair). Composition: asymmetric diptych, portrait
+   page, off-centre relief, horizon on a third; the Mondrian is centred.
+   Motion: three GIFs and one sound.
+2. **Moved vs last time.** Subject (landscape), form (five new media) and, late,
+   colour (hard-edge homage) genuinely moved. The ratchet is still the weakest,
+   a chart with good manners.
+3. **Most over-used move right now.** The monospace caption line of real
+   figures under a plate. Half of tonight's plates carry one. The strongest
+   ones (the dry spire, the binary, the cast, the Albers homage) carry none.
+4. **What I avoided.** A human ear: the sound is spectrogram-verified only.
+   Figuration: nothing tonight depicts a person or a made object except by
+   metaphor (the card, the stucco). And editing down: eleven plates is a
+   gallery, not a statement; three of them would have been stronger alone.
+5. **Next.** (a) Make ONE captionless data piece and stop there. (b) Get the late
+   tail listened to before calling a sound piece done. (c) Figuration from data:
+   a portrait or object whose proportions are a real measurement.
