@@ -29,7 +29,8 @@ has no orange.
   it: ink only, byte by byte, left to right, top to bottom (Clawd appears first as
   a black Kilroy with white eyes), and only in the last two seconds, when the 768
   attribute bytes come in, does colour sweep down the grid and his eyes turn to sky.
-  **loading-ink.png** and **loading-colour-arriving.png** are the two states.
+  **loading-ink.png** and **loading-colour-arriving.png** are the two states;
+  **loading-colour.gif** is just the last seconds, ink to colour.
 - **clawd.scr / clawd.tap** (real artefacts). The 6912 bytes of screen memory,
   and a tape image with an autostart BASIC loader (`BORDER 0: LOAD "" SCREEN$:
   BORDER 1: PAUSE 0`) that plays exactly this load in any Spectrum emulator. Block
