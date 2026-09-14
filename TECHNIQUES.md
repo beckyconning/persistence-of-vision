@@ -600,3 +600,10 @@ the coda marks.
 - **Engraver's bulge:** horizontal lines displaced by a blurred scene mask
   (phase = y - blur(mask)*k) gives banknote-style volume; local maxima ring
   into "knots" — keep them small or they read as eyes.
+
+## Session 2026-09-14 — One Night's Build (Mandeldive reward)
+- **Typewriter strike emulation** (`2026-09-14-one-nights-build/src/the-tick.py`): monospace glyphs into an ink-coverage layer, each strike jittered off-grid (sigma ~0.5 px) with its own pressure, a slowly fading ribbon re-inked at random, paper fibre noise and a fold line; ink composited by coverage (multiply-like), not alpha-over. New form: concrete-poetry data page (one character = 10 ms).
+- **Voxel-space terrain** (`the-flood.py`): front-to-back column caster in numpy (per depth step: sample heights for all columns, project, fill the rows between the new top and a y-buffer with a broadcast mask). ~0.2 s per 900x520 frame at 360 depth steps. Height = log2 of real escape counts, x40 exaggeration; water plane = max(h, level); slope shading from the x-neighbour; distance fog toward the sky colour. **Lesson:** the height range must be exaggerated against camera height or the frame is all water with a sliver of land (first render).
+- **Fractal escape counts as stone relief** (`the-cast.py`): -log(n) heightfield, bicubic 2x, light blur, finite-difference normals, low raking light, cheap AO (blurred minus height), two-stone ramp, plaster grain. Repeats raking relief (s3/s11/s26) on a new source; reads as Rococo stucco.
+- **Rank-ordered AM halftone** (`the-agreement.py`): dot area = rank of escape count (histogram-equalised), so ink follows the data's own ordering; diptych with a shared registration rule carrying the verdict line.
+- **Cyanotype-palette kinetic chart** (`the-ratchet.py`): palette only (no photogram physics), staircases drawn over frames with pawl teeth; GIF via PIL quantize. Weakest of the set.
