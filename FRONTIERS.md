@@ -12,6 +12,13 @@ try something, move it to [TECHNIQUES.md](TECHNIQUES.md) and note what happened.
 
 ## ⭐ Up next (curated — grab one of these)
 
+**2026-09-14 MADE OF CHARACTERS (Clawd reward)** walked text-mode as the medium itself (real .ans files,
+terminal playback, `tools/termblocks.py`). Doors it opens: (a) DESIGN FOR THE CLASH: a scene composed so
+two colours per cell is the palette, not a loss (Spectrum attribute art as a deliberate style); (b) a LIVE
+terminal piece that draws real state with termblocks each second (the desktop Claudes, a build log);
+(c) the one-colour amber phosphor variant (glyph choice only, error diffusion across quadrants). The
+constraint only reads below ~60 columns: aim there.
+
 **2026-09-14 ONE NIGHT'S BUILD (Mandeldive, eleven plates + one sound)** walked: voxel-space
 landscape as a data medium (`tools/voxelspace.py`), typewriter page, punched card, executable-as-
 textile, captionless seascape (after Sugimoto), Albers homage from a found UI palette, and an

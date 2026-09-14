@@ -615,3 +615,18 @@ the coda marks.
 - **Executable as textile** (`the-binary.py`): a PE file's raw bytes at 1024 px per row, byte = ink on paper. Code reads as tweed, data sections as patterned borders. Image-as-data with zero arrangement.
 - **Quadtree Mondrian** (`composition-with-escape-counts.py`): recursive split while a block holds more than one escape band (min 8 px), majority-band fill in De Stijl primaries, line width from block size. Rule-based tiling from data.
 - **Punched card from a real coordinate** (inline in the session; Decimal doubling to extract fraction bits, 64 per row, clipped-corner card). Physical-media emulation of precision as a quantity.
+
+## Session 2026-09-14 — Made of Characters (Clawd reward)
+- **Quadrant-block terminal encoding** (`tools/termblocks.py`): terminal cells are ~1:2 so a quadrant is one
+  source pixel across, two down; per cell try all 14 two-colour partitions of the 4 quadrants plus flat,
+  colours = partition means, least squared error. Complementary masks give identical error, so only masks
+  1-7 and 15 ever win. Output is real ANSI truecolour (fg+bg escapes, re-emitted only on change).
+- **Constraint shown by resolution sweep**: the same scene at 30/60/120 columns rendered to one size. Clash
+  dominates at 30 (diagonals become two-colour stairs, glows become shapes), vanishes by 120.
+- **Terminal animation as a shell script**: frames as heredocs with `\033[H` cursor-home and sleeps; 40 frames
+  at 120x44 truecolour is 4.4 MB of text.
+- **Found-sprite mosaic**: a logo decoded from its glyphs used as the layout grid for image tiles; holes in the
+  glyph (eyes) left as the medium's background colour.
+- **Event score from an animation timeline**: per-event chimes (pitch by floor, pan by bay) + a hum whose level
+  follows the piece's clock, muxed with ffmpeg concat (per-frame durations). Unheard.
+

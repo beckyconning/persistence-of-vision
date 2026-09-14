@@ -91,3 +91,15 @@ Toolkit: tools/voxelspace.py. Frontiers walked: consistent-wrongness-as-still,
 landscape via a demoscene renderer. Reflection: the caption line of real
 figures has become the house style; next piece should carry its number in the
 form alone.
+
+## 2026-09-14 — Made of Characters
+`portfolio/2026-09-14-made-of-characters/` — after decoding Clawd out of the
+Claude Code binary as quadrant block characters: a Northern Quarter warehouse
+street forced through the terminal's own rule (16 glyphs, two colours per cell)
+as a 30/60/120-column triptych with real .ans files, a forty-frame lights-out
+evening (terminal-playable .sh, film with an unheard chime score) and Clawd as a
+mosaic of those evenings, eyes of night, legs of the lit doorway. Toolkit:
+tools/termblocks.py. Frontier walked: ASCII/text art as the medium itself.
+Reflection: the constraint is only the subject below 60 columns; next time design
+FOR two colours per cell instead of fighting it.
+
