@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>One Night's Build</title>
+<style>
+  :root { --paper: #f2ede3; --ink: #262422; --muted: #6b6560; --rule: #d9d2c4; --accent: #c4422a; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--paper); color: var(--ink); font: 16px/1.55 Georgia, "DejaVu Serif", serif; }
+  main { max-width: 1080px; margin: 0 auto; padding: 56px 20px 80px; }
+  h1 { font-weight: normal; font-size: 2.4rem; margin: 0 0 6px; }
+  .lede { color: var(--muted); max-width: 70ch; margin: 0 0 48px; }
+  figure { margin: 0 0 64px; padding-top: 28px; border-top: 1px solid var(--rule); }
+  figure img { display: block; max-width: 100%; height: auto; margin: 0 0 14px; }
+  figure audio { width: 100%; margin: 6px 0 14px; }
+  figcaption { max-width: 72ch; }
+  figcaption b { font-weight: normal; font-size: 1.25rem; display: block; margin-bottom: 4px; }
+  .mono { font-family: "DejaVu Sans Mono", ui-monospace, monospace; font-size: 0.86rem; color: var(--muted); }
+  .pair { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  @media (max-width: 700px) { .pair { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<main>
+  <h1>One Night's Build</h1>
+  <p class="lede">Seven plates and one sound from the overnight build of Mandeldive, a GPU Mandelbrot explorer with
+  perturbation deep zoom. Every piece is drawn from a real event or real numbers from that build.
+  2026-09-14, the reward half hour.</p>
+
+  <figure>
+    <img src="the-agreement.png" alt="Halftone diptych: a uniform grey field beside a detailed spiral, joined by a rule">
+    <figcaption><b>the agreement</b>The parity test passed at 1.0000 on a blank image: both renderers agreed that every
+    pixel was 42245. The question that caught it was how many different values there are. One, then 362.
+    <span class="mono">AM halftone, daylight, diptych</span></figcaption>
+  </figure>
+
+  <figure>
+    <img src="the-dry-spire.png" alt="A calm grey sea under a pale sky with one white stepped monolith off-centre">
+    <figcaption><b>the dry spire</b>The flood's settled sea, with no words and no figures. The one thing still standing
+    is the three pixels inside the set. After Sugimoto's <i>Seascapes</i>.
+    <span class="mono">voxel-space landscape, captionless</span></figcaption>
+  </figure>
+
+  <figure>
+    <div class="pair">
+      <img src="the-flood.gif" alt="Animated landscape flooding in three stages">
+      <img src="the-flood-65536.png" alt="Islands in a flat sea under a daylight sky">
+    </div>
+    <figcaption><b>the flood</b>Escape counts as land, the iteration limit as sea level. The rule raises the sea
+    while at least 0.5% of the land stands above it: 99.998%, then 12.386%, then 0.002%, and it settles.
+    <span class="mono">voxel space after the 1992 demoscene technique</span></figcaption>
+  </figure>
+
+  <figure>
+    <img src="the-descent.gif" alt="Animated flight over a plateau whose lakes have spiral shores">
+    <figcaption><b>the descent</b>Thirty-two zoom steps into a Misiurewicz point. The land keeps re-forming because the
+    set is self-similar there; the descent never arrives.
+    <span class="mono">tools/voxelspace.py, per-step normalisation</span></figcaption>
+  </figure>
+
+  <figure>
+    <img src="the-cast.png" alt="Ornate spiral scrollwork in pale plaster lit from the upper left">
+    <figcaption><b>the cast</b>The 10^250 spiral's escape counts as stucco under a raking light, with no colour ramp.
+    <span class="mono">heightfield relief, stone monochrome</span></figcaption>
+  </figure>
+
+  <figure>
+    <img src="the-tick.png" alt="A typewritten page with a long block of dots and hashes and a short dense block">
+    <figcaption><b>the tick</b>One struck character is ten milliseconds of the same render: 37.65 s of mostly sleep
+    before the timer fix, 4.27 s after.
+    <span class="mono">typewriter strike emulation</span></figcaption>
+  </figure>
+
+  <figure>
+    <img src="the-ratchet.gif" alt="Two animated staircases on cyanotype blue">
+    <figcaption><b>the ratchet</b>The old iteration rule climbed with every dive and kept its height; the replay
+    follows the terrain.
+    <span class="mono">kinetic chart, single hue (the weakest of the set)</span></figcaption>
+  </figure>
+
+  <figure>
+    <audio controls preload="none" src="the-late-tail.wav"></audio>
+    <img src="the-late-tail-spectrogram.png" alt="Spectrogram: partials stacking stage by stage, four ticks, faint high lines at the end">
+    <figcaption><b>the late tail</b>The seahorse view's escape histogram as partials; the bucket under the rule's ear
+    trembles, a tick marks each raise, and after the rule settles the true tail whispers on. Unheard by its maker:
+    the spectrogram is the only check so far.
+    <span class="mono">sonification, 20 s</span></figcaption>
+  </figure>
+</main>
+</body>
+</html>
