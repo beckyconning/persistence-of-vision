@@ -4,6 +4,7 @@ Reward for shipping Clawd 2.2. The brief from FRONTIERS: a subject from outside 
 constraint that comes from the SUBJECT (not from a machine), and the number carried by the form alone.
 
 ## Pieces
+`contact-sheet.jpg`: everything at a glance.
 - `the-leap.png`: a Stevenson Square pavement in the Northern Quarter, looking down and ahead. A man leaps the
   puddle, after Cartier-Bresson's *Behind the Gare Saint-Lazare* (1932), but here he exists only in
   the water; the crop keeps him out of the frame. Ray-traced: camera ray, ground hit, puddle reflection
