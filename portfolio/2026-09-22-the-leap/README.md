@@ -19,6 +19,12 @@ constraint that comes from the SUBJECT (not from a machine), and the number carr
   a private smile, a laugh, helpless laughter.
 - `laugh.mp4`: 3.6 s. The laugh builds, bursts in "ha" pulses 210 ms apart, settles. Lines fade in by
   weight rather than popping, so every frame keeps the same hand.
+- `looking-down.png` (study, made after the entry below was written, walking its own door (b)): the
+  occluder IN frame. Someone stands at the far end of a longer puddle; only their jeans and white trainers
+  reach the top edge. The water continues them down into a mustard coat and an upside-down laughing face.
+  `looking_down.py`, same tracer plus a person billboard seen both directly and reflected.
+- `looking-down-detail.png`: the same puddle at 13 degrees of view, aimed at the face. Flat as an
+  illustration, because the person is a flat cutout; the next step is a person with depth.
 
 ## The constraints (none of them captioned)
 - Open-Meteo, 53.48N 2.23W, 08:30: rain 0.0 mm, so no rain rings; wind 2.9 km/h, the only ripple
