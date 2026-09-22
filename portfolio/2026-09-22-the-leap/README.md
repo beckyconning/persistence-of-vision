@@ -29,6 +29,9 @@ constraint that comes from the SUBJECT (not from a machine), and the number carr
 - `0830-0845.jpg` (`the-leap-empty-0845.png`): the puddle as a weather instrument. At 08:45 Open-Meteo read
   100 percent cloud and 2.5 km/h, so the blue closed. Side by side, the number is legible from the images
   alone (one answer to this entry's own critique point 3).
+- `surprise.png` (`surprise.py`): a control test. The same crease vocabulary made to say surprise
+  (high brows, open almond eyes looking up, the O, the whole forehead) instead of joy. It reads at once,
+  so the lines are doing the work, not luck.
 
 ## The constraints (none of them captioned)
 - Open-Meteo, 53.48N 2.23W, 08:30: rain 0.0 mm, so no rain rings; wind 2.9 km/h, the only ripple
