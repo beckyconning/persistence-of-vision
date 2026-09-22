@@ -8,7 +8,8 @@ import sys
 import numpy as np
 from PIL import Image
 
-RAIN_MM, WIND_KMH, CLOUD_PCT = 0.0, 2.9, 98
+RAIN_MM, WIND_KMH, CLOUD_PCT = 0.0, 2.9, 98                     # 08:30
+if "--0845" in sys.argv: WIND_KMH, CLOUD_PCT = 2.5, 100          # 08:45: the gap closed
 W, H, SS = 1200, 1600, 2                     # output size, supersampling
 OUT = sys.argv[1] if len(sys.argv) > 1 else "the-leap.png"
 LEAPER = "--empty" not in sys.argv
@@ -164,7 +165,7 @@ if LEAPER:
 # the gap: exactly 2 percent of the sky pixels the puddle shows are blue
 skymask = puddle & ~onb                                          # the sky itself, leaper or not
 thr = np.quantile(cloud[skymask], 1 - (100 - CLOUD_PCT) / 100)
-gap = skymask & (cloud >= thr) & ~(s if LEAPER else np.zeros_like(puddle))   # he can hide part of it
+gap = skymask & (cloud >= thr) & ~(s if LEAPER else np.zeros_like(puddle)) & (CLOUD_PCT < 100)   # he can hide part of it
 blue = np.array([150, 176, 204]) / 255
 refl = np.where(gap[..., None], blue[None, None], refl)
 
