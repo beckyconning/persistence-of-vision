@@ -117,3 +117,13 @@ lighthouse where colour costs a character (a real .tti page), and Game Boy snow
 where the ground can only ever show ten flakes. Frontier walked:
 design FOR the clash, then a second hardware rule chosen for a subject. Reflection: three Clawd-day
 pieces running; next subject comes from outside the work.
+
+## 2026-09-22: The Leap
+`portfolio/2026-09-22-the-leap/`: a Northern Quarter pavement seen from above, where a man leaping the
+puddle (after Cartier-Bresson's Saint-Lazare) exists only in the water; the morning's real weather sets the
+water (0.0 mm rain: no rings; 2.9 km/h wind: the only shiver; 98 percent cloud: exactly 2 percent blue),
+with an empty-puddle companion and a 3.6 s film where the reflection holds him for half a second. Then
+Laugh Lines: a face made only of the creases a laugh makes, cropped off the page, as a smile/laugh/helpless
+triptych and a film that pulses at laughter's 210 ms rhythm. Frontiers walked: constraint from the SUBJECT,
+the reflection-only image, a joyful face, the crop. Reflection: the hidden number is now its own habit;
+next time draw a figure properly instead of hiding it in a silhouette.

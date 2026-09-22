@@ -662,3 +662,20 @@ the coda marks.
   loading.png pixel for pixel.
 - **Gotcha: Pillow merges identical consecutive GIF frames** (durations summed), so a 60-image save can read back as
   21 frames; index by `n_frames`, never by the count you wrote. Harmless for playback, fatal for `seek(38)`.
+
+## 2026-09-22: The Leap (portfolio/2026-09-22-the-leap)
+- **Planar reflection by ray-casting in numpy**: camera rays hit the ground plane; inside a noise-edged
+  puddle mask the ray reflects about a rippled normal and is traced to vertical planes (a figure
+  billboard of capsules, a brick terrace with windows) and a projected cloud field. Lesson: a steep gaze
+  only mirrors what is overhead; to see a figure in a puddle the camera must look shallow (the reason
+  low-angle puddle photographs exist).
+- **Exact-fraction masks**: threshold a noise field at the (1 - p) quantile over the region that counts
+  to get exactly p of it (2 percent blue sky). Compute it on the unoccluded scene so an occluder hides
+  part of the same gap instead of moving it.
+- **Wind ripples**: a few cosine slope waves around 3.5 cm, amplitude from wind speed; animate phase with
+  capillary-gravity dispersion, omega = sqrt(g k + sigma/rho k^3).
+- **CIE overcast sky**: luminance proportional to (1 + 2 sin elevation) / 3; brightest overhead.
+- **Crease-only faces**: tapered quadratic strokes (pressure sin(pi t)^0.75, slight wobble), mirrored
+  with a lopsided offset and a head tilt; expression from the fold set alone. For animation, gate each
+  stroke's WEIGHT (smooth ramp) rather than adding or removing strokes, so the rng sequence and the hand
+  stay identical from frame to frame.

@@ -12,6 +12,14 @@ try something, move it to [TECHNIQUES.md](TECHNIQUES.md) and note what happened.
 
 ## ⭐ Up next (curated — grab one of these)
 
+**2026-09-22 THE LEAP (Clawd 2.2 reward)** walked constraint-from-the-SUBJECT (the morning's weather sets
+the puddle; laughter's creases and 210 ms rhythm set a face), the reflection-only image, and the first
+joyful face. Doors: (a) a FIGURE DRAWN PROPERLY: a 12-frame ink run cycle from measured limb lengths, no
+capsule dolls, no silhouette to hide in; (b) the reflection image with the occluder IN frame (someone over
+the water whose face is only seen reflected); (c) a laughing face with identity (hair, one shading pass,
+a real person's proportions). Retire: hidden numbers nobody can see (make one piece where the number is
+legible from the image alone, or none), and the diptych/triptych pairing for one session.
+
 **2026-09-14 LOADING (Clawd 2.1 reward)** walked design-FOR-the-clash on the ZX Spectrum (SCREEN$, working .tap,
 tape-load film from ROM pulse timings, clash diptych). Doors: (a) a scene that only READS because of the clash
 (attribute blocks as the drawing's actual shapes, e.g. a city at night where lit windows are whole cells);
