@@ -14,7 +14,7 @@ try something, move it to [TECHNIQUES.md](TECHNIQUES.md) and note what happened.
 
 **2026-09-22 THE LEAP (Clawd 2.2 reward)** walked constraint-from-the-SUBJECT (the morning's weather sets
 the puddle; laughter's creases and 210 ms rhythm set a face), the reflection-only image, and the first
-joyful face (then surprise and defiance from the same crease vocabulary: expression is under control now). Doors: (a) a FIGURE DRAWN PROPERLY: a 12-frame ink run cycle from measured limb lengths, no
+joyful face (then surprise, defiance and serene from the same crease vocabulary: expression is under control now; the melancholy rut is broken). Doors: (a) a FIGURE DRAWN PROPERLY: a 12-frame ink run cycle from measured limb lengths, no
 capsule dolls, no silhouette to hide in; (b) the reflection image with the occluder IN frame (someone over
 the water whose face is only seen reflected); (c) a laughing face with identity (hair, one shading pass,
 a real person's proportions). Retire: hidden numbers nobody can see (make one piece where the number is

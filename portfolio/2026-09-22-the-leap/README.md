@@ -34,6 +34,8 @@ constraint that comes from the SUBJECT (not from a machine), and the number carr
   so the lines are doing the work, not luck.
 - `defiance.png` (`defiance.py`): and a third: brows pulled down and in, the frown line, narrowed eyes
   straight at you, a set mouth, the chin bunched up. Joy, surprise and defiance from one vocabulary.
+- `serene.png` (`serene.py`): and serene, the frontier's other untried expression: lids resting shut,
+  easy brows, a closed mouth. The calmer the face, the fewer lines it needs.
 
 ## The constraints (none of them captioned)
 - Open-Meteo, 53.48N 2.23W, 08:30: rain 0.0 mm, so no rain rings; wind 2.9 km/h, the only ripple
