@@ -26,8 +26,8 @@ constraint that comes from the SUBJECT (not from a machine), and the number carr
   `looking_down.py`, same tracer plus a person billboard seen both directly and reflected.
 - `looking-down-detail.png`: the same puddle at 13 degrees of view, aimed at the face. Flat as an
   illustration, because the person is a flat cutout; the next step is a person with depth.
-- `0830-0845.jpg` (`the-leap-empty-0845.png`): the puddle as a weather instrument. At 08:45 Open-Meteo read
-  100 percent cloud and 2.5 km/h, so the blue closed. Side by side, the number is legible from the images
+- `0830-0845-0900.jpg` (`the-leap-empty-0845.png`, `the-leap-empty-0900.png`): the puddle as a weather instrument. At 08:45 Open-Meteo read
+  100 percent cloud and 2.5 km/h, so the blue closed; at 09:00, 98 percent again, open somewhere else. Side by side, the number is legible from the images
   alone (one answer to this entry's own critique point 3).
 - `surprise.png` (`surprise.py`): a control test. The same crease vocabulary made to say surprise
   (high brows, open almond eyes looking up, the O, the whole forehead) instead of joy. It reads at once,

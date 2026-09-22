@@ -10,6 +10,8 @@ from PIL import Image
 
 RAIN_MM, WIND_KMH, CLOUD_PCT = 0.0, 2.9, 98                     # 08:30
 if "--0845" in sys.argv: WIND_KMH, CLOUD_PCT = 2.5, 100          # 08:45: the gap closed
+DRIFT = 0.0
+if "--0900" in sys.argv: WIND_KMH, CLOUD_PCT, DRIFT = 2.5, 98, 900.0   # 09:00: open again, somewhere else
 W, H, SS = 1200, 1600, 2                     # output size, supersampling
 OUT = sys.argv[1] if len(sys.argv) > 1 else "the-leap.png"
 LEAPER = "--empty" not in sys.argv
@@ -91,9 +93,10 @@ refl = np.zeros(X.shape + (3,))
 hit = np.zeros(X.shape, bool)
 
 # sky: overcast, with a gap that is exactly (100 - CLOUD_PCT) percent of the reflected sky
-sx = X + R[..., 0] / R[..., 2] * 900.0
+sx = X + R[..., 0] / R[..., 2] * 900.0 + DRIFT
 sy = Y + R[..., 1] / R[..., 2] * 900.0
-cloud = vfbm(sx / 260.0, sy / 700.0, 4, 1.0, 3) + 0.12 * vfbm(sx / 40.0, sy / 90.0, 3, 1.0, 5)   # one torn gap, stretched by the breeze
+CS = 40 if DRIFT else 0                             # half an hour later it is different cloud
+cloud = vfbm(sx / 260.0, sy / 700.0, 4, 1.0, 3 + CS) + 0.12 * vfbm(sx / 40.0, sy / 90.0, 3, 1.0, 5 + CS)   # one torn gap, stretched by the breeze
 overcast = np.array([226, 228, 229]) / 255
 grey = np.array([196, 200, 204]) / 255
 elev = np.arcsin(np.clip(R[..., 2], 0, 1))
