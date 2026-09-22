@@ -32,6 +32,8 @@ constraint that comes from the SUBJECT (not from a machine), and the number carr
 - `surprise.png` (`surprise.py`): a control test. The same crease vocabulary made to say surprise
   (high brows, open almond eyes looking up, the O, the whole forehead) instead of joy. It reads at once,
   so the lines are doing the work, not luck.
+- `defiance.png` (`defiance.py`): and a third: brows pulled down and in, the frown line, narrowed eyes
+  straight at you, a set mouth, the chin bunched up. Joy, surprise and defiance from one vocabulary.
 
 ## The constraints (none of them captioned)
 - Open-Meteo, 53.48N 2.23W, 08:30: rain 0.0 mm, so no rain rings; wind 2.9 km/h, the only ripple
