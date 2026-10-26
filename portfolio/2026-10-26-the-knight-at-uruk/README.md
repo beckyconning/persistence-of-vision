@@ -65,8 +65,9 @@ itself as the Muybridge grid: ashlar courses, a parapet of merlons, the ground l
    Concept: the piece is about the work, as asked.
 3. **The most over-used move right now.** Numbers in the caption doing the meaning; the
    image alone says "a knight" and not "a knight that beat these walls".
-4. **What I avoided.** The leg contours at sharply folded joints are still crude (frames
-   4 to 6 and 10 to 12 kink where the hock bisector runs out), the rider is a stick with a
+4. **What I avoided.** The leg contours at sharply folded joints are still crude (the
+   frame 4 to 6 kink turned out to be the femur's rest angle, fixed in the last ten minutes;
+   what remains is the contour at the fold), the rider is a stick with a
    helmet, and I never checked the twelve phases one by one against Muybridge's plate: the
    sequence is from the published footfall fractions, not from his frames.
 5. **Next.** Draw the wall's side of the story: the archer on the wall, the catapult, in

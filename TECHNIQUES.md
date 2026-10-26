@@ -696,3 +696,6 @@ the coda marks.
 - **Head and neck on their own axes**: neck from withers to poll with a throat latch at 0.26 m under the
   poll; head 0.62 m on an axis 36 degrees below horizontal with forehead, eye, cheek, jaw, chin, nostril.
 - Lesson: a horse reads from the head-neck shape and the hock first; get those two right before the body.
+- Lesson 2 (the kink in frames 4 to 6): the IK was fine, the REST ANGLE of the first bone was wrong. The femur
+  points forward-down from the hip to the stifle (sweep +55 to -5 degrees), the humerus back-down from the
+  shoulder joint to the elbow (-5 to -60). With those ranges the hock and knee fall where the photographs put them.

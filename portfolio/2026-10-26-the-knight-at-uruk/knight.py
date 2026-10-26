@@ -143,10 +143,12 @@ def horse_pose(t):
         tgt = (tgt[0], tgt[1] + 0.0)
         # first link swings with the hoof
         if fore:
-            ang = math.radians(12 + 44 * (tgt[0] - root[0]) / 0.6)
+            # the humerus runs back and down from the shoulder joint to the elbow
+            ang = math.radians(max(-60.0, min(-5.0, -35 + 30 * (tgt[0] - root[0]) / 0.6)))
             chain = leg_chain(root, FORE_LEN, tgt, ang, bend=-1.0)  # knee folds back
         else:
-            ang = math.radians(8 + 42 * (tgt[0] - root[0]) / 0.7)
+            # the femur points forward and down from the hip to the stifle
+            ang = math.radians(max(-5.0, min(55.0, 30 + 40 * (tgt[0] - root[0]) / 0.7)))
             chain = leg_chain(root, HIND_LEN, tgt, ang, bend=-1.0)  # hock points back
         legs[name] = chain
 
