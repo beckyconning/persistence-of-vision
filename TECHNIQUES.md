@@ -702,3 +702,16 @@ the coda marks.
 - Lesson 3 (from the sanguine study): a drawing kit must take its palette at CALL time. Default arguments
   bound to module constants froze the ink and the paper-back fill, so a palette swap left black strokes
   and a cream silhouette. `tools/inkfigure.py` now resolves both when drawing.
+
+## 2026-10-26: Rome, turn 1 (portfolio/2026-10-26-rome-turn-one)
+- **Hex map from offset coordinates**: Civ 6 pointy-top hexes, odd rows shifted east by half a width,
+  centre = ((x + 0.5*(y%2)) * sqrt(3)R, y * 1.5R), higher y north; draw northern rows first so southern
+  signs overprint shared edges.
+- **Conventional signs in ink**: hachures (two offset bands of short slanted strokes), outlined peaks with
+  flank hachures, trees as a trunk plus two canopy arcs, stipple densities for plains and desert, dashes
+  for tundra, a fine band for floodplains, a double ribbon for river tiles, edge waves for coast.
+- **A pixel-unit pen**: inkfigure.Pen resamples every 0.012 m, hopeless for a map drawn in pixels; the
+  piece carries its own Pen with a 3 px step and the same taper and drift. Worth folding into the kit as
+  a `step` parameter.
+- **Flipped-axis ellipses**: PIL's ellipse needs y1 >= y0; with a y-up scene a `box()` helper that sorts
+  the corners saves the day.
