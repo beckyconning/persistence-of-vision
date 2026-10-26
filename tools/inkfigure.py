@@ -124,11 +124,11 @@ def limb_polygon(chain, widths, hoof=True):
 
 
 class Pen:
-    def __init__(self, draw: ImageDraw.ImageDraw, to_px, rng: random.Random, ink=INK):
+    def __init__(self, draw: ImageDraw.ImageDraw, to_px, rng: random.Random, ink=None):
         self.d = draw
         self.to_px = to_px
         self.rng = rng
-        self.ink = ink
+        self.ink = ink or INK  # resolved at call time, so a palette swap on the module takes
 
     def stroke(self, pts, w0, w1, wobble=0.004, ink=None, taper=True):
         """A tapered ink stroke along a polyline (scene coords, metres)."""
@@ -176,9 +176,11 @@ class Pen:
         poly = [self.to_px(q) for q in left + list(reversed(right))]
         self.d.polygon(poly, fill=ink)
 
-    def outline(self, poly, w, ink=None, pieces=3, fill=PAPER, wobble=0.004):
+    def outline(self, poly, w, ink=None, pieces=3, fill="paper", wobble=0.004):
         """Paint the paper back under a part, then draw its contour as a few
         overlapping pen strokes."""
+        if fill == "paper":
+            fill = PAPER
         if fill is not None:
             self.d.polygon([self.to_px(p) for p in poly], fill=fill)
         n = len(poly)
