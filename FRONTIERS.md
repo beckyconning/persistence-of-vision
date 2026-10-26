@@ -19,7 +19,7 @@ earns a victory piece. Doors: (a) the wall's side of the matchup in the same ink
 catapult, Medieval Walls) so the image states era-relative without a caption; (b) a frame-by-frame check against
 Muybridge's actual plate, then a second gait (the trot's diagonal pairs, the walk's four-beat); (c) the rider as a
 real figure (thigh wrapped on the barrel, a cloak, a face) instead of a stick with a helmet. Retire: the numbers
-living only in the caption.
+living only in the caption. Toolkit: `tools/inkfigure.py` (IK chains, limb contours, tapered pen, paper-back occlusion).
 
 **2026-09-22 THE LEAP (Clawd 2.2 reward)** walked constraint-from-the-SUBJECT (the morning's weather sets
 the puddle; laughter's creases and 210 ms rhythm set a face), the reflection-only image, and the first
