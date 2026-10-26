@@ -31,6 +31,8 @@ Made in the art break April allowed on condition that it be about the campaign.
   wall, one walking stride in ten frames, one per turn (`warrior.py`): the frontier's
   original ask, a human figure drawn from measured limb lengths with the knee by IK, the
   far arm carrying a shield. The club hand is stiff on the back-swing.
+- `all-four-off-the-ground-sanguine.png`: the same frame in red chalk, a palette study.
+- `contact-sheet.jpg`: the session on one sheet.
 - `knight.py`: the plate and film. `python3 knight.py all` renders both. `archer.py` hooks
   into it (`EXTRA`, `WALL_TOP`, `MERLONS`) for the garrison piece.
 
