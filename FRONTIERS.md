@@ -17,7 +17,7 @@ thirty-five starting tiles of game 3 with a conventional-sign system. Doors: (a)
 VIEW from the hill (landscape from data, each tile at its bearing and distance); (b) the sheet REDRAWN every
 twenty turns of game 3 as the known world grows (a series with a through-line, the campaign's own atlas); (c)
 the river as an EDGE feature once a read gives banks; (d) fold a `step` into inkfigure.Pen so the kit works in
-pixels. Rule for this repo's breaks: about the campaign; a won game earns a victory piece.
+pixels. The COLUMN (`column.py`) is the standing series: carve the next winding every twenty turns of game 3 from the log, and put the statue up on the day of the win. Rule for this repo's breaks: about the campaign; a won game earns a victory piece.
 
 **2026-10-26 THE KNIGHT AT URUK (Civ VI campaign break)** walked the properly drawn figure (The Leap's door a):
 a galloping horse and rider from measured proportions and footfall fractions, contours from a joint chain, no

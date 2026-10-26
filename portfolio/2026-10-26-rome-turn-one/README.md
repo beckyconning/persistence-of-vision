@@ -31,6 +31,13 @@ the task.
   and the same block rising out of the flat plan over a second and holding.
 - `three-projections.jpg`: the set on one sheet: plan, elevation all round,
   and block, all from one read.
+- `the-column.png`: Trajan's own monument as the vessel for the campaign's
+  story (`column.py`): a column elevation with twelve windings of frieze, one
+  every twenty turns, the first carved with turn 1 (the mountain, the river,
+  the founding on the hill, the warriors walking north, the sea) and the rest
+  blank, labelled, waiting for the game; the first winding unrolled beside it;
+  the statue base empty until the game is won. A new form here (architectural
+  elevation as a narrative frame) and the piece the next breaks will add to.
 
 ## Signs
 
