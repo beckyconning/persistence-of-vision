@@ -699,3 +699,6 @@ the coda marks.
 - Lesson 2 (the kink in frames 4 to 6): the IK was fine, the REST ANGLE of the first bone was wrong. The femur
   points forward-down from the hip to the stifle (sweep +55 to -5 degrees), the humerus back-down from the
   shoulder joint to the elbow (-5 to -60). With those ranges the hock and knee fall where the photographs put them.
+- Lesson 3 (from the sanguine study): a drawing kit must take its palette at CALL time. Default arguments
+  bound to module constants froze the ink and the paper-back fill, so a palette swap left black strokes
+  and a cream silhouette. `tools/inkfigure.py` now resolves both when drawing.
