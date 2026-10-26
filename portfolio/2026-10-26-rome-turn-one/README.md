@@ -23,6 +23,14 @@ the task.
   water as wave bands. A landscape placed entirely by data. It still reads a
   little like three staves of music; the ridges would need to overlap more to
   read as one country.
+- `turning-on-the-hill.gif`: the view as a loop, a 100-degree window turning
+  once round the compass.
+- `rome-in-block.png` and `rome-rising.gif`: the third projection (`block.py`),
+  the tiles as hex prisms in an oblique view, hills raised, the mountain a
+  peak, the sea sunk, the walls hachured, the near tiles overprinting the far;
+  and the same block rising out of the flat plan over a second and holding.
+- `three-projections.jpg`: the set on one sheet: plan, elevation all round,
+  and block, all from one read.
 
 ## Signs
 
@@ -52,6 +60,7 @@ draws what it knows.
 4. **What I avoided.** River edges (unknown from the read) and relief shading
    (the hachure bands are a convention, not a slope). The forest marks are
    generic; a Civ 6 forest on tundra and on grass look alike here.
-5. **Next.** Draw the same place as a view: a 360-degree panorama from the hill,
-   each tile at its bearing and distance. And keep the sheet as a record: redraw
-   it every twenty turns of game 3 as the known world grows.
+5. **Next.** Keep the sheet as a record: redraw it every twenty turns of game 3
+   as the known world grows, the campaign's own atlas. Make the panorama's
+   ridges overlap so it reads as one country, not three staves. And when a
+   read gives river banks, draw the river as the edge feature it is.

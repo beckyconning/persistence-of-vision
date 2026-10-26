@@ -719,3 +719,8 @@ the coda marks.
   distance; x = bearing across the strip, depth by ring (far ring small and high, near ring low and large);
   each ring a continuous paper band the tiles overprint, far rings first. Wrap a tile near 0/360 by
   drawing it at bearing +/- 360.
+- **Oblique block diagram of hexes**: (x, y, h) -> (x + 0.42 y, 0.52 y + h); draw far (north) tiles first;
+  each prism is its top hexagon at h plus walls on the three south-facing edges (edges whose midpoint lies
+  south of the centre) down to the ground, hachured vertically; a mountain is a cone from the ground
+  hexagon's front edges to an apex; water sits at negative h. A RISE scale from 0 to 1 animates the
+  relief out of the plan.
