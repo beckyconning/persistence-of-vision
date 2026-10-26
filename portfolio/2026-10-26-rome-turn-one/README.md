@@ -15,6 +15,14 @@ the task.
 
 - `rome-turn-one.png`: the sheet, with a legend of signs and a compass.
 - `rome.py`: the drawing. The tile table at the top is the read, verbatim.
+- `the-view-from-the-hill.png`: the second piece, the same thirty-five tiles as
+  a 360-degree view from Rome's hill (`view.py`): each tile at its bearing
+  (north at the left edge, east a quarter along, south at the centre, west at
+  three quarters) and at a depth by its ring, the nearest ring lowest and
+  largest; hills as humps, the mountain as a peak, forests as rows of trees,
+  water as wave bands. A landscape placed entirely by data. It still reads a
+  little like three staves of music; the ridges would need to overlap more to
+  read as one country.
 
 ## Signs
 

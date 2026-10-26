@@ -715,3 +715,7 @@ the coda marks.
   a `step` parameter.
 - **Flipped-axis ellipses**: PIL's ellipse needs y1 >= y0; with a y-up scene a `box()` helper that sorts
   the corners saves the day.
+- **Panorama from hex data**: bearing = atan2(dx, dy) from the origin tile (0 north, 90 east), ring = hex
+  distance; x = bearing across the strip, depth by ring (far ring small and high, near ring low and large);
+  each ring a continuous paper band the tiles overprint, far rings first. Wrap a tile near 0/360 by
+  drawing it at bearing +/- 360.

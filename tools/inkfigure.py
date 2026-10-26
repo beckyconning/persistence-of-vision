@@ -19,7 +19,9 @@ image. What it gives you:
   hidden-line removal: draw far parts first, near parts last.
 
 Usage: draw at 2x or 3x and downsample with LANCZOS; stroke widths are in metres
-(0.011 m read well at 100 px per metre).
+(0.011 m read well at 100 px per metre). For a scene drawn in pixels pass
+step=3 (the resample length) and widths in pixels; the map sheet of
+2026-10-26 did this with its own copy before the parameter existed.
 """
 from __future__ import annotations
 
@@ -130,7 +132,7 @@ class Pen:
         self.rng = rng
         self.ink = ink or INK  # resolved at call time, so a palette swap on the module takes
 
-    def stroke(self, pts, w0, w1, wobble=0.004, ink=None, taper=True):
+    def stroke(self, pts, w0, w1, wobble=0.004, ink=None, taper=True, step=0.012):
         """A tapered ink stroke along a polyline (scene coords, metres)."""
         ink = ink or self.ink
         if len(pts) < 2:
@@ -144,7 +146,7 @@ class Pen:
             total += L
         if total < 1e-6:
             return
-        n = max(4, int(total / 0.012))
+        n = max(4, int(total / step))  # step: resample length in scene units (0.012 for metres, ~3 for pixels)
         samp = []
         dist = 0.0
         i = 0
