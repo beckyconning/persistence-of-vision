@@ -69,8 +69,16 @@ def draw_warrior(pen, far, d, to_px, body, t):
     pen.outline([(head[0] + r * 0.92 * math.cos(a), head[1] + r * math.sin(a)) for a in [i * 2 * math.pi / 18 for i in range(18)]], 0.011, pieces=2)
     pen.stroke([(head[0] - r, head[1] + 0.02), (head[0] - r * 0.6, head[1] + r + 0.03), (head[0] + r * 0.5, head[1] + r + 0.02)], 0.009, 0.005)  # hair
     hn = arm(pen, "near")
-    # club in the near hand, resting on the shoulder when the arm is back
-    pen.stroke([(hn[0] - 0.08, hn[1] - 0.12), (hn[0] + 0.18, hn[1] + 0.55)], 0.014, 0.026, taper=False)
+    # club in the near hand, continuing the forearm's line and canted up, so it rides
+    # over the shoulder on the back-swing and points ahead on the fore-swing
+    e = arms["near"][1]
+    cx, cy = hn[0] - e[0], hn[1] - e[1]
+    L = math.hypot(cx, cy) or 1e-6
+    cx, cy = cx / L, cy / L
+    ux, uy = cx * 0.5 - cy * 0.87, cx * 0.87 + cy * 0.5  # rotated 60 degrees upward
+    if uy < 0.2:
+        ux, uy = 0.35, 0.94
+    pen.stroke([(hn[0] - 0.10 * ux, hn[1] - 0.10 * uy), (hn[0] + 0.62 * ux, hn[1] + 0.62 * uy)], 0.014, 0.026, taper=False)
 
 
 def main():
