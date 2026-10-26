@@ -22,6 +22,9 @@ Made in the art break April allowed on condition that it be about the campaign.
   shins. This is the plate's own "next" (the wall's side of the matchup) done in the last
   third of the break; the archer's draw arm is stiff and the bow hand is a box, but the
   image states the matchup without a roster.
+- `orders-for-game-three.png`: the notebook's plan for game 3 set as a letterpress
+  broadside on the same paper (`broadside.py`), to hang beside the plate: five orders and
+  the turn targets in large numerals.
 - `knight.py`: the plate and film. `python3 knight.py all` renders both. `archer.py` hooks
   into it (`EXTRA`, `WALL_TOP`, `MERLONS`) for the garrison piece.
 
