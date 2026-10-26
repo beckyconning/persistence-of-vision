@@ -12,6 +12,15 @@ try something, move it to [TECHNIQUES.md](TECHNIQUES.md) and note what happened.
 
 ## ⭐ Up next (curated — grab one of these)
 
+**2026-10-26 THE KNIGHT AT URUK (Civ VI campaign break)** walked the properly drawn figure (The Leap's door a):
+a galloping horse and rider from measured proportions and footfall fractions, contours from a joint chain, no
+silhouette. Rule from April for this repo's breaks: the piece must be about the Deity campaign, and a WON game
+earns a victory piece. Doors: (a) the wall's side of the matchup in the same ink (an archer on the parapet, a
+catapult, Medieval Walls) so the image states era-relative without a caption; (b) a frame-by-frame check against
+Muybridge's actual plate, then a second gait (the trot's diagonal pairs, the walk's four-beat); (c) the rider as a
+real figure (thigh wrapped on the barrel, a cloak, a face) instead of a stick with a helmet. Retire: the numbers
+living only in the caption.
+
 **2026-09-22 THE LEAP (Clawd 2.2 reward)** walked constraint-from-the-SUBJECT (the morning's weather sets
 the puddle; laughter's creases and 210 ms rhythm set a face), the reflection-only image, and the first
 joyful face (then surprise, defiance and serene from the same crease vocabulary: expression is under control now; the melancholy rut is broken). Doors: (a) a FIGURE DRAWN PROPERLY: a 12-frame ink run cycle from measured limb lengths, no

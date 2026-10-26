@@ -7,6 +7,7 @@ session stand on this one instead of starting over.
 
 | Date | Session | Pieces | Axis moved | One-line |
 |---|---|---|---|---|
+| 2026-10-26 | [the-knight-at-uruk](2026-10-26-the-knight-at-uruk/) | 2 (plate + stride loop) | **subject: the first properly drawn FIGURE, and an animal** (measured skeleton, inverse kinematics, contours not silhouettes) + **concept: about the work, as April asked** (the Civ VI Deity campaign) | THE KNIGHT AT URUK, TURN 122: a Persian knight at full gallop in twelve numbered phases after Muybridge (1878), ink on paper against the Ancient Walls of Uruk that held a Dutch warrior army ten turns and fell in one night to this unit; the caption carries the real roster from the game log. Walls are era-relative. |
 | 2026-07-13 | [painted-over](2026-07-13-painted-over/) | 7 (5 stills + contact sheet + 52-frame loop) | **a SERIES with a through-line** (one scene, five variations arguing one idea - the FRONTIERS ask since June) + **response art from lived work** (each panel is a real bug from the day's engine debugging) | PAINTED OVER: a reload-cue demo - three countdown rings around a crosshair at dusk - shown five ways it can exist and not be seen: suppressed by a state guard (1.5% ghost), hidden behind an opaque settings panel (glow leaking round the edges, reflection still in the water), collapsed through a near-singular matrix into an anamorphic smear, drawn with an unbound texture (gui plate in the rings, magenta notexture checker for a crosshair), and finally drawn in the overlay pass - on top, flash firing. The loop plays the whole day in 52 frames; mid-collapse even the menu smears. |
 | 2026-07-03 | [tempomancer](2026-07-03-tempomancer/) | 1 (playable game, 52KB html) | **INVENTION over recreation** (an original never-done mechanic: the player's taps ARE the world's clock) + **audience-composed music** (live synth follows the player's tempo) + **completability PROOFS** (pure-sim core, TDD, scripted deathless clears of all 7 levels) | TEMPOMANCER: a rhythm game inverted — machines move only on your beat; slow conducting = slow world; jump off a presto lift for a momentum launch; stop and everything freezes while reality desaturates and dissolves. Seven movements, every tap is kick+bass, every machine sings in the level's key. |
 | 2026-07-02..03 | [claudio-saga](claudio-saga/) | 5 (3 films, 1 uncanny bust, 1 playable game) | **3D software rasterizer -> character/rig/choreography -> destruction -> SDF hyper-realism -> interactivity** (the whole arc, one saga) | THE CLAUDIO SAGA: a bootleg AI plumber is born, glitches, battles Super Grokio at kingdom-levelling scale, becomes a pore-covered hyper-real bust that lip-syncs and winks, and ends as a playable single-file Super Claudio 64. Full mini-index inside. |
@@ -128,3 +129,12 @@ triptych and a film that pulses at laughter's 210 ms rhythm; and a study with th
 (shoes at the top edge, the laughing face only in the water). Frontiers walked: constraint from the SUBJECT,
 the reflection-only image, a joyful face, the crop. Reflection: the hidden number is now its own habit;
 next time draw a figure properly instead of hiding it in a silhouette.
+
+## 2026-10-26: The Knight at Uruk
+`portfolio/2026-10-26-the-knight-at-uruk/`: made in the art break of the Civ VI Deity campaign, on April's
+condition that it be about the task. A Persian knight at full gallop, one stride in twelve phases after
+Muybridge, drawn as measured contours (equine canon, transverse-gallop footfalls, three-link legs by inverse
+kinematics, Drillis and Contini rider) in ink on paper, against the Ancient Walls of Uruk; the caption gives
+the roster that took the city on turn 125 of game 2. Frontiers walked: a figure drawn properly (The Leap's
+door), the first animal, no silhouette fill. Reflection: the caption still carries the meaning; next, draw
+the wall's side (archer, catapult) so the image alone states the matchup. After a won game: a victory piece.

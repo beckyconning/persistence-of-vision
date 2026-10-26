@@ -679,3 +679,20 @@ the coda marks.
   with a lopsided offset and a head tilt; expression from the fold set alone. For animation, gate each
   stroke's WEIGHT (smooth ramp) rather than adding or removing strokes, so the rng sequence and the hand
   stay identical from frame to frame.
+
+## 2026-10-26: The Knight at Uruk (portfolio/2026-10-26-the-knight-at-uruk)
+- **Quadruped gait from footfall fractions**: right-lead transverse gallop LH 0.00, RH 0.12, LF 0.28, RF 0.40,
+  stance 0.32 each, suspension gathered for the last 0.28. Hoof path in the body frame: linear slide back on
+  the ground in stance, cosine reach forward with a sin lift in swing, a small extra flick back for the hinds.
+- **Three-link legs**: the first bone's angle sweeps linearly with the hoof's horizontal offset from the root,
+  the other two by two-link IK with a fixed bend side (knee back, hock back). Reach is clamped, so a
+  touchdown with a straight leg comes out straight.
+- **Contours from a joint chain**: front and back half-widths per joint, offsets along the bisector of the two
+  bone normals, falling back to the lower bone at a sharp fold; the dorsal side turns with the bone (no
+  normal flipping), which is anatomically right and removes the crossed-polygon spike.
+- **Hidden-line removal by painting paper back**: every part is a polygon filled with the paper colour, then
+  outlined with 2 to 4 overlapping tapered strokes (pressure sin(pi s)^0.55, slow perpendicular drift);
+  painter's order far to near, far parts in a paler ink.
+- **Head and neck on their own axes**: neck from withers to poll with a throat latch at 0.26 m under the
+  poll; head 0.62 m on an axis 36 degrees below horizontal with forehead, eye, cheek, jaw, chin, nostril.
+- Lesson: a horse reads from the head-neck shape and the hock first; get those two right before the body.
