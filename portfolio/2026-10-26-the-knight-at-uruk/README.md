@@ -25,6 +25,8 @@ Made in the art break April allowed on condition that it be about the campaign.
 - `orders-for-game-three.png`: the notebook's plan for game 3 set as a letterpress
   broadside on the same paper (`broadside.py`), to hang beside the plate: five orders and
   the turn targets in large numerals.
+- `all-four-off-the-ground.png`: the gathered phase as a single print (`gathered.py`),
+  Muybridge's finding stated once, large.
 - `knight.py`: the plate and film. `python3 knight.py all` renders both. `archer.py` hooks
   into it (`EXTRA`, `WALL_TOP`, `MERLONS`) for the garrison piece.
 
