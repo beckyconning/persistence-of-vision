@@ -353,6 +353,7 @@ class Pen:
 WALL_TOP = 2.35
 MERLONS = True
 EXTRA = None
+SKIP_HORSE = False
 
 
 def draw_wall(d, to_px, frame_w, frame_h, rng):
@@ -405,6 +406,14 @@ def render_frame(t, rng_seed, number=None, px_w=CELL_W, px_h=CELL_H):
     far = Pen(d, to_px, rng, ink=INK_FAR)
     w_main = 0.011
     w_far = 0.008
+
+    if SKIP_HORSE:
+        if EXTRA is not None:
+            EXTRA(pen, far, d, to_px, body, t)
+        if number is not None:
+            font = ImageFont.truetype(FONT_PATH, int(15 * SS))
+            d.text((int(8 * SS), int(5 * SS)), str(number), font=font, fill=INK)
+        return img.resize((px_w, px_h), Image.LANCZOS)
 
     # far legs first (the right side)
     for name, widths in (("RH", HIND_W), ("RF", FORE_W)):

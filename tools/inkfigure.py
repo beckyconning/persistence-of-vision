@@ -84,6 +84,45 @@ def leg_chain(root, lengths, target, first_angle, bend):
     return [root, j1, j2, j3]
 
 
+def limb_polygon(chain, widths, hoof=True):
+    """Contour of a limb from its joints and (front, back) half-widths."""
+    n = len(chain)
+    dirs = []
+    for i in range(n - 1):
+        dx, dy = chain[i + 1][0] - chain[i][0], chain[i + 1][1] - chain[i][1]
+        L = math.hypot(dx, dy) or 1e-6
+        dirs.append((dx / L, dy / L))
+    front, back = [], []
+    for i in range(n):
+        if i == 0:
+            d = dirs[0]
+        elif i == n - 1:
+            d = dirs[-1]
+        else:
+            # bisector of the two bone normals; at a sharp fold fall back to the lower bone
+            n0 = (-dirs[i - 1][1], dirs[i - 1][0])
+            n1 = (-dirs[i][1], dirs[i][0])
+            bx, by = n0[0] + n1[0], n0[1] + n1[1]
+            L = math.hypot(bx, by)
+            if L < 0.35:
+                d = dirs[i]
+            else:
+                d = (by / L, -bx / L)  # a direction whose left normal is the bisector
+        # the dorsal (front) side of a bone is its left normal when it points down;
+        # it turns with the bone when the leg folds, as the real surface does
+        nx, ny = -d[1], d[0]
+        wf, wb = widths[i]
+        front.append((chain[i][0] + nx * wf, chain[i][1] + ny * wf))
+        back.append((chain[i][0] - nx * wb, chain[i][1] - ny * wb))
+    if hoof:
+        d = dirs[-1]
+        toe = (chain[-1][0] + d[0] * 0.08 + d[1] * 0.07, chain[-1][1] + d[1] * 0.08 - d[0] * 0.07)
+        heel = (chain[-1][0] + d[0] * 0.07 - d[1] * 0.06, chain[-1][1] + d[1] * 0.07 + d[0] * 0.06)
+        return front + [toe, heel] + list(reversed(back))
+    return front + list(reversed(back))
+
+
+
 class Pen:
     def __init__(self, draw: ImageDraw.ImageDraw, to_px, rng: random.Random, ink=INK):
         self.d = draw

@@ -27,6 +27,10 @@ Made in the art break April allowed on condition that it be about the campaign.
   the turn targets in large numerals.
 - `all-four-off-the-ground.png`: the gathered phase as a single print (`gathered.py`),
   Muybridge's finding stated once, large.
+- `ten-turns-at-the-wall.png` and `.gif`: the Dutch warrior of turns 73 to 83 at the same
+  wall, one walking stride in ten frames, one per turn (`warrior.py`): the frontier's
+  original ask, a human figure drawn from measured limb lengths with the knee by IK, the
+  far arm carrying a shield. The club hand is stiff on the back-swing.
 - `knight.py`: the plate and film. `python3 knight.py all` renders both. `archer.py` hooks
   into it (`EXTRA`, `WALL_TOP`, `MERLONS`) for the garrison piece.
 
