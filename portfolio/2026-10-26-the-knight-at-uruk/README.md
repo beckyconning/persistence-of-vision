@@ -15,7 +15,15 @@ Made in the art break April allowed on condition that it be about the campaign.
 
 - `the-knight-at-uruk.png`: the plate, 12 frames in two rows, caption.
 - `the-knight-at-uruk.mp4`: the stride as a loop, 24 phases at 48 fps, six strides.
-- `knight.py`: everything. `python3 knight.py all` renders plate and film.
+- `the-knight-at-uruk.gif`: the same loop, small, for the journal.
+- `the-garrison.png`: the second piece, one large frame of the gathered knight under the
+  parapet with Uruk's whole defence above him, one archer, drawn from the same human
+  proportions as the rider and aiming down the wall. The merlons are painted over his
+  shins. This is the plate's own "next" (the wall's side of the matchup) done in the last
+  third of the break; the archer's draw arm is stiff and the bow hand is a box, but the
+  image states the matchup without a roster.
+- `knight.py`: the plate and film. `python3 knight.py all` renders both. `archer.py` hooks
+  into it (`EXTRA`, `WALL_TOP`, `MERLONS`) for the garrison piece.
 
 ## What is measured, not drawn by eye
 

@@ -348,12 +348,17 @@ class Pen:
             self.stroke(seg, w * self.rng.uniform(0.75, 1.1), w * self.rng.uniform(0.75, 1.1), wobble=wobble, ink=ink)
 
 
+WALL_TOP = 2.35
+MERLONS = True
+EXTRA = None
+
+
 def draw_wall(d, to_px, frame_w, frame_h, rng):
     """The Ancient Walls as the Muybridge backdrop: ashlar courses, a parapet,
     the ground line."""
     course = 0.33
     block = 0.72
-    top = 2.35
+    top = WALL_TOP
     # wall face
     y = 0.0
     row = 0
@@ -369,7 +374,7 @@ def draw_wall(d, to_px, frame_w, frame_h, rng):
     d.line([to_px((-5, top)), to_px((5, top))], fill=WALL_DARK, width=max(1, int(1.4 * SS)))
     # merlons
     x = -5 + 0.15
-    while x < 5:
+    while MERLONS and x < 5:
         d.rectangle([to_px((x, top + 0.26)), to_px((x + 0.45, top))], outline=WALL_DARK, width=max(1, int(1.2 * SS)))
         x += 0.9
     # ground line
@@ -493,6 +498,9 @@ def render_frame(t, rng_seed, number=None, px_w=CELL_W, px_h=CELL_H):
     pen.stroke([(tip[0] - 0.2 * lx, tip[1] - 0.2 * ly), (tip[0] + 0.1 * lx, tip[1] + 0.1 * ly)], 0.02, 0.002, taper=False)
     # fist
     d.ellipse([to_px((hand[0] - 0.04, hand[1] + 0.04)), to_px((hand[0] + 0.04, hand[1] - 0.04))], fill=PAPER, outline=INK, width=int(2 * SS))
+
+    if EXTRA is not None:
+        EXTRA(pen, far, d, to_px, body, t)
 
     # frame number
     if number is not None:
