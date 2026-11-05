@@ -724,3 +724,26 @@ the coda marks.
   south of the centre) down to the ground, hachured vertically; a mountain is a cone from the ground
   hexagon's front edges to an apex; water sits at negative h. A RISE scale from 0 to 1 animates the
   relief out of the plan.
+
+## 2026-11-05: Angels on Your Body (YTP from real footage; commissioned by April)
+- **Second YTP, first from REAL footage** (21 s Louis Theroux clip; she chants "angels on your body", blesses
+  her car, "warring angels", he: "I need faith in order to see the angels, basically"). Closes the Session 17
+  frontier: true sentence mixing from **faster-whisper word timestamps** (base.en, int8 CPU; feed it a numpy
+  array, PyAV 19 breaks its file decoder), edges snapped to 5 ms energy minima.
+- **Lip-sync by construction**: `clip(t, s0, s1)` places audio AND a video clip mapping output time to source
+  time, so every spliced word shows the mouth that said it; `vs=` swaps the picture for a cutaway. Gaps must
+  extend the clip (`vpad`) and the renderer must hold the last frame when nothing is scheduled (v1 had eleven
+  black flashes because vpad was accepted and silently ignored).
+- **Machine ear**: re-transcribe each spliced SENTENCE with whisper to check the joke reads ("I can't see my
+  body", "Angels on my car" came back word-perfect). Useless on single words and on singing over a beat
+  (hallucinates "Thanks for watching!"). Boundary grid search found real fixes ("my body" from 6.00 not 5.95,
+  else "slow my body") but whisper flips between near-identical cuts, so stop tuning at ~20 ms.
+- **YTPMV**: `sing()` = phase-vocoder pitch shift (duration kept) or tape resample, fitted/sustained to the
+  note; picture runs at the tape rate then freezes. Tune with PER-WORD f0 guarded by the speaker's typical
+  pitch (fixed per-speaker base left Louis 2.8 semitones flat). Verify by measuring f0 of the output.
+- Angel kit (engine.py): glowing halo sprite (blur the ALPHA, fill with gold; blurring RGBA drags black in),
+  sparkles, god rays, bloom/heaven wash, colour emoji via seguiemj.ttf `embedded_color=True` (wing U+1FABD,
+  whitened), feathered-ellipse face cut-outs as flying cherub heads, Win98 error-dialog cascade, a car's
+  ghost ascending. Master: RMS compressor before the soft clip evened 4 s windows to -14..-18 dB.
+- Open frontier: syllable-level splicing inside words (only word level here); a real beat-matched video
+  edit where cuts land on the drum grid, not just on note starts; stereo (still dual mono).
