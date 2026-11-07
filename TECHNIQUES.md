@@ -747,3 +747,33 @@ the coda marks.
   ghost ascending. Master: RMS compressor before the soft clip evened 4 s windows to -14..-18 dB.
 - Open frontier: syllable-level splicing inside words (only word level here); a real beat-matched video
   edit where cuts land on the drum grid, not just on note starts; stereo (still dual mono).
+
+## 2026-11-07: The Floor Under 3-SAT (riso explainer video; commissioned by April)
+- **First argument-shaped film** (8.5 min, 1080p30): P vs NP, k-SAT, ETH and the Oct 2026 claimed refutation.
+  Left the neon-on-black corner on purpose: **risograph print in motion**. Each ink (yellow, fluorescent pink,
+  blue, black) is its own canvas layer; layers multiply onto a cream paper canvas with per-ink fixed offsets plus
+  a 12 fps jitter (misregistration "boil"), and a destination-out grain texture (pinholes + uneven coverage)
+  cycles through 3 variants. Pink over blue overprints to purple for free, so overprinted display type
+  (same string in two inks, 6 px apart) became the signature title treatment.
+- **Halftone as fill**: per-ink CanvasPatterns of dots at the ink's screen angle, cached at 20 density steps.
+  **Knockouts** (draw with destination-out on chosen inks) give paper-coloured stencils, label patches over
+  halftone bands, terminal text cut out of solid black. Rule learned: text on a halftone is illegible when the
+  dot pitch is near the stroke width; knock a paper patch behind it or drop the screen to ~0.1.
+- **Maths**: MathJax tex-svg with fontCache 'local' -> serialized SVG -> Image per (tex, ink), drawn into the
+  ink layer. Baseline from viewBox y.
+- **Sync by construction** (Session 17's EDL idea, upgraded): Edge neural TTS returns per-word offsets; every
+  visual cue is `S.word(lineId, 'word')`, and the same setup code registers the SFX at those times, so the audio
+  mixer reads the cue list from the page. Scene starts snap to 100 BPM bar lines, so each chord change in the
+  FluidSynth score (marimba ostinato with a 3-against-8 accent cycle, vibes, strings) lands on a page turn.
+  Closed the Session 17 frontier: **side-chain ducking** of music under the voice, then a 2 ms compressor.
+- **Recurring diagrams carry the argument**: brick wall -> ETH foundation stone -> staircase of exponent
+  constants with a hatched "floor" -> the floor cracks when a x11/12 staircase goes through it -> an endless
+  self-similar zoom down the stairs (steps shrink by q while the camera scales by 1/q: infinite descent with
+  bounded draw cost) for the ending.
+- Bugs worth remembering: easeOutBack(0) is ~1e-16, not 0, so `if (p <= 0) return` let elements leak in early
+  (ticks before labels, stray dots); clamp the raw progress before easing. Plex Mono has no U+2713: the tick
+  fell back to a glyph that looks like a square-root sign (fatal in a maths video); draw ticks as paths.
+- Process: fact-check subagent on the script before voicing; fresh-eyes Opus review of contact sheets of the
+  rendered file (found 13 execution issues: attribution of a lab's claim, overlaps, illegal Sudoku guesses).
+- Open frontier: true stereo staging of the two labs (OpenAI left, Anthropic right) in the mix; a riso piece
+  where misregistration is the subject (the two inks as the two labs drifting into register).
