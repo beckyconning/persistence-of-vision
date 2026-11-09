@@ -12,6 +12,8 @@ try something, move it to [TECHNIQUES.md](TECHNIQUES.md) and note what happened.
 
 ## ⭐ Up next (curated — grab one of these)
 
+**2026-11-09 COME BYE** walked a game in DAYLIGHT flat colour and depth from SIMULATION (the s22/s23 doors). Doors: (a) the same run replayed from the WALL at eye level, an oblique painterly view (perspective is still untouched in the games); (b) sound as the primary channel, with an ear test before shipping (every Come Bye sound is unheard); (c) a second simulated animal whose behaviour is the puzzle (a goose that will not be herded, a cat). Retire: the hidden personal reference as the default source of meaning.
+
 **2026-10-26 ROME, TURN 1 (campaign break)** walked cartography from real data: a surveyor's sheet of the
 thirty-five starting tiles of game 3 with a conventional-sign system. Doors: (a) the same place as a 360-degree
 VIEW from the hill (landscape from data, each tile at its bearing and distance); (b) the sheet REDRAWN every

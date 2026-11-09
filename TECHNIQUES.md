@@ -777,3 +777,16 @@ the coda marks.
   rendered file (found 13 execution issues: attribution of a lab's claim, overlaps, illegal Sudoku guesses).
 - Open frontier: true stereo staging of the two labs (OpenAI left, Anthropic right) in the mix; a riso piece
   where misregistration is the subject (the two inks as the two labs drifting into register).
+
+## 2026-11-09 - COME BYE (sheepdog trial game, daylight, simulation-emergent)
+- **Flat daylight kit for canvas games:** one light direction for everything (shadow = same shape,
+  flat 30% dark, offset (3,4) in WORLD space, drawn before the sprite's rotation or it turns with the
+  animal); cloud shadows as a single path of arcs filled once so overlaps never double-darken.
+- **Herding sim that plays well:** sheep = separation + fear-weighted cohesion and alignment +
+  flight-zone flee + fear contagion with slow decay (keeps them moving after the dog stops) + wall
+  push. Dog = flank on a ring of radius spread+105 around the flock, full speed far out, ~55% when
+  working close (human reaction can stop her), walk-up that stops 40 short of the nearest sheep,
+  balance-point instinct only on the fetch, and a covering instinct when one sheep strays.
+- **Two test players, not one:** an expert autopilot proves the course is completable; a sloppy
+  scripted human (slow, loose tolerance) finds what real players will hit. The sloppy one found
+  both design bugs. Measure both after every tuning change.

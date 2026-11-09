@@ -1,0 +1,1461 @@
+<title>Come Bye</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Cabin:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap">
+<style>
+/* Layout: the live field fills the screen on a canvas; show-poster chips with hard offset shadows sit at the edges.
+   One daylight look by choice (an overcast Pennine afternoon), so no dark variant. */
+:root{
+  --moor:#7d6b51;
+  --paper:#f6f3ea;
+  --card:#e8ddbd;
+  --ink:#23251e;
+  --ink-soft:#4b4e42;
+  --grass:#55702f;
+  --red:#b9382c;
+  --scrim:rgba(35,37,30,.38);
+  --display:"Alfa Slab One","Rockwell","Roboto Slab",Georgia,serif;
+  --ui:"Cabin","Gill Sans","Gill Sans MT",Calibri,system-ui,sans-serif;
+  color-scheme:light;
+}
+html,body{height:100%}
+[hidden]{display:none!important}
+body{background:var(--moor);color:var(--ink);font-family:var(--ui);overflow:hidden;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent}
+#stage{position:fixed;inset:0}
+#field{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none}
+button{font-family:var(--ui);color:var(--ink)}
+button:focus-visible{outline:3px solid var(--red);outline-offset:2px}
+.chip{background:var(--paper);border:2px solid var(--ink);box-shadow:3px 3px 0 var(--ink)}
+
+/* HUD */
+.hud{position:fixed;top:calc(10px + env(safe-area-inset-top,0px));left:calc(10px + env(safe-area-inset-left,0px));right:calc(10px + env(safe-area-inset-right,0px));display:flex;justify-content:space-between;align-items:flex-start;gap:10px;pointer-events:none;flex-wrap:wrap}
+.hud .chip{pointer-events:auto;display:flex;align-items:center;gap:12px;padding:6px 10px;min-width:0}
+.wordmark{font-family:var(--display);font-size:19px;line-height:1;letter-spacing:.01em}
+.phase{display:flex;flex-direction:column;gap:1px;min-width:0}
+.phase b{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.1em}
+.phase span{font-size:12.5px;color:var(--ink-soft);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.clock{font-variant-numeric:tabular-nums;font-weight:700;font-size:17px;min-width:3.2em;text-align:right}
+.dogname{font-size:12px;text-transform:uppercase;letter-spacing:.1em;font-weight:600;color:var(--ink-soft)}
+.hud button{font-size:11.5px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;background:transparent;border:1.5px solid var(--ink);padding:5px 8px;cursor:pointer}
+.hud button:hover{background:var(--ink);color:var(--paper)}
+
+/* PA ticker */
+.pa{position:fixed;left:calc(10px + env(safe-area-inset-left,0px));bottom:calc(10px + env(safe-area-inset-bottom,0px));width:min(540px,calc(100vw - 320px));padding:8px 12px 10px;pointer-events:none}
+.pa-label{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:var(--red)}
+#pa-prev{font-size:12.5px;font-style:italic;color:var(--ink-soft);margin:3px 0 0;min-height:1.2em;line-height:1.3}
+#pa-line{font-size:16px;font-style:italic;font-weight:500;margin:2px 0 0;line-height:1.32;min-height:1.32em;text-wrap:pretty}
+
+/* Whistle pad */
+.pad{position:fixed;right:calc(10px + env(safe-area-inset-right,0px));bottom:calc(10px + env(safe-area-inset-bottom,0px));display:grid;grid-template-columns:repeat(3,92px);grid-template-rows:repeat(2,60px);gap:7px}
+.k{background:var(--paper);border:2px solid var(--ink);box-shadow:3px 3px 0 var(--ink);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;cursor:pointer;padding:2px 4px;touch-action:manipulation}
+.k b{font-size:13px;font-weight:700;line-height:1.05}
+.k kbd{font:600 10.5px var(--ui);color:var(--ink-soft);letter-spacing:.04em}
+.k .rot{font-size:15px;line-height:1}
+.k.walk{grid-column:2;grid-row:1}
+.k.away{grid-column:1;grid-row:2}
+.k.lie{grid-column:2;grid-row:2}
+.k.bye{grid-column:3;grid-row:2}
+.k.on{background:var(--ink);color:var(--paper)}
+.k.on kbd{color:#d8d2bf}
+.k:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink)}
+
+/* Overlays */
+.overlay{position:fixed;inset:0;display:flex;align-items:center;padding-block:max(16px,env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-bottom,0px));padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+#intro{justify-content:flex-start}
+#intro .poster{margin-left:clamp(0px,4vw,60px)}
+#result{justify-content:center;background:var(--scrim)}
+.poster{background:var(--paper);border:2px solid var(--ink);box-shadow:7px 7px 0 var(--ink);width:min(500px,100%);max-height:100%;overflow:auto;padding:20px 24px 18px}
+.eyebrow{font-size:11.5px;font-weight:700;text-transform:uppercase;letter-spacing:.16em;color:var(--red);margin:0}
+.poster h1{font-family:var(--display);font-weight:400;font-size:clamp(46px,9vw,74px);line-height:.92;margin:6px 0 4px;letter-spacing:.005em;text-wrap:balance}
+.band{background:var(--grass);color:var(--paper);font-weight:700;text-transform:uppercase;letter-spacing:.12em;font-size:12px;padding:5px 10px;margin:8px -24px 12px;display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.lede{font-size:15.5px;line-height:1.45;margin:0 0 12px;max-width:62ch}
+.whistles{display:grid;grid-template-columns:auto 1fr;gap:5px 12px;margin:0 0 12px;font-size:14px}
+.whistles dt{font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}
+.whistles dd{margin:0;color:var(--ink-soft)}
+.whistles dd strong{color:var(--ink)}
+.tip{font-size:13.5px;line-height:1.4;color:var(--ink-soft);margin:0 0 14px}
+.actions{display:flex;gap:10px;flex-wrap:wrap}
+.btn{font-size:14px;font-weight:700;border:2px solid var(--ink);background:var(--paper);padding:10px 16px;cursor:pointer;box-shadow:3px 3px 0 var(--ink)}
+.btn.primary{background:var(--ink);color:var(--paper)}
+.btn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink)}
+.small{font-size:12px;color:var(--ink-soft);margin:12px 0 0}
+
+/* Judge's card */
+.card{background:var(--card);border:2px solid var(--ink);box-shadow:7px 7px 0 var(--ink);width:min(580px,100%);max-height:100%;overflow:auto;padding:18px 22px 18px}
+.card-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.card h2{font-family:var(--display);font-weight:400;font-size:30px;line-height:1;margin:4px 0 4px}
+.card .meta{font-size:13px;color:var(--ink-soft);margin:0}
+.card table{width:100%;border-collapse:collapse;margin:12px 0 6px;font-variant-numeric:tabular-nums}
+.card th{font-size:10.5px;text-transform:uppercase;letter-spacing:.12em;text-align:right;padding:4px 6px;border-bottom:2px solid var(--ink)}
+.card th:first-child,.card td:first-child{text-align:left}
+.card td{padding:6px 6px;border-bottom:1px solid rgba(35,37,30,.25);text-align:right;font-size:15px;vertical-align:top}
+.card td .note{display:block;font-size:12px;font-style:italic;color:var(--ink-soft);margin-top:1px;text-align:left}
+.card tr.total td{border-bottom:none;border-top:2px solid var(--ink);font-weight:700;font-size:18px}
+.card tr.shed td{color:var(--ink-soft);font-style:italic;font-size:13px}
+.placing{display:flex;gap:14px;align-items:center;margin:8px 0 12px}
+#rosette{flex:0 0 auto;width:72px;height:102px}
+.placing p{margin:0;font-size:14.5px;line-height:1.4}
+.placing .verdict{font-style:italic;color:var(--ink-soft);margin-top:4px}
+@media (max-aspect-ratio:10/11){
+  .pad{left:50%;right:auto;transform:translateX(-50%);grid-template-columns:repeat(3,min(29vw,104px));grid-template-rows:repeat(2,58px)}
+  .pa{width:auto;right:calc(10px + env(safe-area-inset-right,0px));bottom:calc(150px + env(safe-area-inset-bottom,0px))}
+  #pa-prev{display:none}
+  .wordmark{font-size:16px}
+  #intro{justify-content:center}
+  #intro .poster{margin-left:0}
+}
+@media (max-height:520px) and (min-aspect-ratio:10/11){
+  .pad{grid-template-columns:repeat(3,76px);grid-template-rows:repeat(2,46px);gap:5px}
+  .k kbd{display:none}
+  .pa{width:min(460px,calc(100vw - 280px))}
+  #pa-prev{display:none}
+}
+@media (prefers-reduced-motion:reduce){.k:active,.btn:active{transform:none}}
+</style>
+
+<div id="stage">
+  <canvas id="field" aria-label="The trial field, seen from above"></canvas>
+
+  <div class="hud">
+    <div class="chip">
+      <span class="wordmark">Come Bye</span>
+      <div class="phase"><b id="phase-name">At the post</b><span id="phase-hint">Send the dog</span></div>
+    </div>
+    <div class="chip">
+      <span class="dogname" id="dogname">Meg</span>
+      <span class="clock" id="clock" title="Time left">7:00</span>
+      <button id="mute" type="button" aria-pressed="false">Sound on</button>
+      <button id="retire" type="button">Retire</button>
+    </div>
+  </div>
+
+  <div class="pa chip" aria-live="polite">
+    <div class="pa-label">On the PA</div>
+    <p id="pa-prev"></p>
+    <p id="pa-line"></p>
+  </div>
+
+  <div class="pad" id="pad">
+    <button class="k walk" type="button" data-cmd="walk" id="k-walk"><b>Walk up</b><kbd>↑ W</kbd></button>
+    <button class="k away" type="button" data-cmd="away" id="k-away"><span class="rot">↺</span><b>Away to me</b><kbd>← A</kbd></button>
+    <button class="k lie" type="button" data-cmd="lie" id="k-lie"><b>Lie down</b><kbd>↓ S Space</kbd></button>
+    <button class="k bye" type="button" data-cmd="bye" id="k-bye"><span class="rot">↻</span><b>Come bye</b><kbd>→ D</kbd></button>
+  </div>
+
+  <section class="overlay" id="intro">
+    <div class="poster">
+      <p class="eyebrow">Cribden Side Open Sheepdog Trial</p>
+      <h1>Come Bye</h1>
+      <div class="band"><span>Five Lonk ewes</span><span>One collie</span><span>Seven minutes</span></div>
+      <p class="lede">Your dog is lying at your feet. Send her round behind the sheep, bring them down through the fetch gates to you, drive them round the triangle, and pen them before the judge calls time.</p>
+      <dl class="whistles">
+        <dt>→ or D</dt><dd><strong>Come bye.</strong> She circles the sheep clockwise ↻</dd>
+        <dt>← or A</dt><dd><strong>Away to me.</strong> She circles anticlockwise ↺</dd>
+        <dt>↑ or W</dt><dd><strong>Walk up.</strong> She walks steadily on to the sheep</dd>
+        <dt>↓ S Space</dt><dd><strong>Lie down.</strong> She stops</dd>
+      </dl>
+      <p class="tip">She keeps doing the last thing you whistled until you whistle something else. Sheep walk away from the dog, so put her on the far side of them from where you want them to go. Quiet and steady scores better than fast.</p>
+      <div class="actions">
+        <button class="btn primary" id="go" type="button">Walk to the post</button>
+        <button class="btn" id="demo" type="button">Watch last year's winner</button>
+      </div>
+      <p class="small" id="best-line">Sound: whistles, wind, ewes and the odd curlew.</p>
+    </div>
+  </section>
+
+  <section class="overlay" id="result" hidden>
+    <div class="card" role="dialog" aria-labelledby="card-title">
+      <div class="card-head">
+        <div>
+          <p class="eyebrow">Judge's card</p>
+          <h2 id="card-title">Cribden Side</h2>
+          <p class="meta" id="card-meta">Judge: Mr H. Ashworth</p>
+        </div>
+      </div>
+      <table>
+        <thead><tr><th>Phase</th><th>Out of</th><th>Lost</th><th>Points</th></tr></thead>
+        <tbody id="card-rows"></tbody>
+      </table>
+      <div class="placing">
+        <canvas id="rosette" width="144" height="204" aria-hidden="true"></canvas>
+        <div><p id="placing-text"></p><p class="verdict" id="verdict"></p></div>
+      </div>
+      <div class="actions">
+        <button class="btn primary" id="again" type="button">Run again</button>
+        <button class="btn" id="to-poster" type="button">Back to the poster</button>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script>
+(() => {
+'use strict';
+
+/* ---------------- world ---------------- */
+const W = 1600, H = 1000;
+const F = { x0: 30, y0: 30, x1: 1570, y1: 870 };          // inside line of the dry stone wall
+const WALL_IN = 10;                                        // half wall thickness
+const POST = { x: 250, y: 450 };
+const HANDLER_HOME = { x: 250, y: 468 };
+const RELEASE = { x: 1350, y: 450 };
+const TIME_LIMIT = 420;
+const RUN = 285, WALK = 62;
+const STEP = 1 / 60;
+const PEN = { x0: 342, y0: 703, x1: 418, y1: 767 };
+const PEN_HINGE = { x: 418, y: 767 };
+const PEN_GATE_LEN = 64;
+const PEN_HANDLER = { x: 492, y: 790 };
+const PEN_MOUTH = { x: 440, y: 735 };
+// the dog never goes in the pen or into the mouth beside the open gate
+const DOG_NOGO = { x0: PEN.x0 - 8, y0: PEN.y0 - 8, x1: PEN_HINGE.x + PEN_GATE_LEN + 6, y1: PEN.y1 + 8 };
+
+const COL = {
+  moor: '#7d6b51', heather: '#77586a', bracken: '#957549', moorDark: '#6a5a44',
+  grass: '#8ea35d', grassLight: '#9bb068', tussock: '#7b904c', rush: '#566a37',
+  shadow: 'rgba(34,40,22,0.30)', cloud: 'rgba(36,44,58,0.10)',
+  wallBase: '#5f5d57', stones: ['#8d8a80', '#a09c90', '#787569', '#b0ab9d', '#96928a'],
+  wool: '#efe9da', wool2: '#d5ccb6', face: '#2b2724', muzzle: '#e8e0cc', horn: '#c4b693',
+  smit: '#c23b2e', raddle: '#2f5f9e',
+  dogBlack: '#1e1c1a', dogWhite: '#f3f0e6',
+  wood: '#b48d59', woodDark: '#7a5c37',
+  jacket: '#4b5a38', cap: '#7b6750', capDark: '#5d4e3c', crook: '#8b6b42',
+  verge: '#7f8f55', gravel: '#b6aa8e', gravel2: '#a39679',
+  tent: '#f2ede1', tentStripe: '#3f6b4a', ink: '#23251e', paper: '#f6f3ea', red: '#b9382c'
+};
+
+function mkGateGeom(key, name, cx, cy, dx, dy, gap) {
+  const l = Math.hypot(dx, dy), ux = dx / l, uy = dy / l, px = -uy, py = ux, len = 36;
+  const segs = [];
+  for (const s of [-1, 1]) {
+    const mx = cx + px * s * (gap / 2 + 2), my = cy + py * s * (gap / 2 + 2);
+    segs.push({ x1: mx - ux * len / 2, y1: my - uy * len / 2, x2: mx + ux * len / 2, y2: my + uy * len / 2 });
+  }
+  return { key, name, x: cx, y: cy, ux, uy, px, py, gap, segs };
+}
+const GATE_GEOM = {
+  fetch: mkGateGeom('fetch', 'fetch gates', 820, 450, -1, 0, 78),
+  drive: mkGateGeom('drive', 'drive gate', 640, 175, 640 - POST.x, 175 - POST.y, 78),
+  cross: mkGateGeom('cross', 'cross-drive gate', 640, 730, 0, 1, 78)
+};
+const PEN_SEGS = [
+  { x1: PEN.x0, y1: PEN.y0, x2: PEN.x1, y2: PEN.y0 },
+  { x1: PEN.x0, y1: PEN.y1, x2: PEN.x1, y2: PEN.y1 },
+  { x1: PEN.x0, y1: PEN.y0, x2: PEN.x0, y2: PEN.y1 }
+];
+const STATIC_SEGS = [...GATE_GEOM.fetch.segs, ...GATE_GEOM.drive.segs, ...GATE_GEOM.cross.segs, ...PEN_SEGS];
+
+const PHASES = {
+  ready:  ['At the post', 'Send the dog: → come bye or ← away'],
+  outrun: ['Outrun', 'Let her get right round behind them'],
+  lift:   ['Lift', 'Steady. First steps matter'],
+  fetch:  ['Fetch', 'Through the fetch gates, down to you'],
+  drive:  ['Drive away', 'Away through the top gate (flag)'],
+  cross:  ['Cross-drive', 'Across and through the bottom gate'],
+  pen:    ['Pen', 'Into the pen beside the handler'],
+  done:   ['Finished', "That'll do"]
+};
+
+/* ---------------- helpers ---------------- */
+function mulberry32(a) { return function () { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+let rand = mulberry32(1);
+const hyp = Math.hypot;
+const clamp = (v, a, b) => v < a ? a : v > b ? b : v;
+const pickR = arr => arr[Math.floor(rand() * arr.length)];
+function wrapAng(a) { while (a > Math.PI) a -= 2 * Math.PI; while (a < -Math.PI) a += 2 * Math.PI; return a; }
+function perpDist(x, y, A, B) { const dx = B.x - A.x, dy = B.y - A.y; return Math.abs(dx * (y - A.y) - dy * (x - A.x)) / (hyp(dx, dy) || 1); }
+function fmtClock(s) { s = Math.max(0, Math.ceil(s)); return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0'); }
+function ordinal(n) { const s = ['th', 'st', 'nd', 'rd'], v = n % 100; return n + (s[(v - 20) % 10] || s[v] || s[0]); }
+
+function segPush(o, rad, segs) {
+  for (const s of segs) {
+    const dx = s.x2 - s.x1, dy = s.y2 - s.y1, L2 = dx * dx + dy * dy;
+    const t = clamp(((o.x - s.x1) * dx + (o.y - s.y1) * dy) / L2, 0, 1);
+    const px = s.x1 + dx * t, py = s.y1 + dy * t, ex = o.x - px, ey = o.y - py, e = hyp(ex, ey);
+    if (e < rad) {
+      const L = Math.sqrt(L2);
+      const nx = e > 1e-6 ? ex / e : -dy / L, ny = e > 1e-6 ? ey / e : dx / L;
+      o.x = px + nx * rad; o.y = py + ny * rad;
+      const vn = o.vx * nx + o.vy * ny;
+      if (vn < 0) { o.vx -= vn * nx; o.vy -= vn * ny; }
+    }
+  }
+}
+function boxPush(o, b) {
+  if (o.x <= b.x0 || o.x >= b.x1 || o.y <= b.y0 || o.y >= b.y1) return;
+  const dl = o.x - b.x0, dr = b.x1 - o.x, dt = o.y - b.y0, db = b.y1 - o.y, m = Math.min(dl, dr, dt, db);
+  if (m === dl) { o.x = b.x0; if (o.vx > 0) o.vx = 0; }
+  else if (m === dr) { o.x = b.x1; if (o.vx < 0) o.vx = 0; }
+  else if (m === dt) { o.y = b.y0; if (o.vy > 0) o.vy = 0; }
+  else { o.y = b.y1; if (o.vy < 0) o.vy = 0; }
+}
+function fieldClamp(o, rad) {
+  const x0 = F.x0 + WALL_IN + rad, x1 = F.x1 - WALL_IN - rad, y0 = F.y0 + WALL_IN + rad, y1 = F.y1 - WALL_IN - rad;
+  if (o.x < x0) { o.x = x0; if (o.vx < 0) o.vx = 0; }
+  if (o.x > x1) { o.x = x1; if (o.vx > 0) o.vx = 0; }
+  if (o.y < y0) { o.y = y0; if (o.vy < 0) o.vy = 0; }
+  if (o.y > y1) { o.y = y1; if (o.vy > 0) o.vy = 0; }
+}
+function penGateSeg() {
+  const a = g.penGate;
+  return { x1: PEN_HINGE.x, y1: PEN_HINGE.y, x2: PEN_HINGE.x + Math.cos(a) * PEN_GATE_LEN, y2: PEN_HINGE.y + Math.sin(a) * PEN_GATE_LEN };
+}
+function allSegs() { return [...STATIC_SEGS, penGateSeg()]; }
+function inPen(s) { return s.x > PEN.x0 + 5 && s.x < PEN.x1 - 4 && s.y > PEN.y0 + 5 && s.y < PEN.y1 - 5; }
+
+/* ---------------- commentary ---------------- */
+const DOG_NAMES = ['Meg', 'Fly', 'Nell', 'Bess', 'Gyp', 'Moss', 'Jess', 'Floss', 'Nan', 'Mist', 'Kim', 'Lass', 'Tess', 'Peg'];
+const LINES = {
+  attract: ["Last year's winner, showing how it's done. Walk to the post when you're ready."],
+  ready: [
+    "{dog} is lying at your feet. Five Lonk ewes are out at the top end. Send her when you're ready.",
+    "Next to run, with {dog}. The sheep have settled at the top. In your own time."
+  ],
+  sendBye: ["And {dog}'s away on the come-bye side.", "Sent left-handed. Come bye.", "Off she goes, come bye."],
+  sendAway: ["Sent away to me, right-handed.", "And {dog} goes on the away side.", "Away to me, and she's off."],
+  sendWalk: ["Straight up the middle? Bold.", "Walking straight at them. That's a choice."],
+  outrunWide: ["Lovely shape on that outrun. Plenty of width.", "Nice and wide. The sheep never saw her coming.", "A proper pear-shaped outrun. The judge will like that."],
+  outrunTight: ["She's come in tight at the top.", "Bit narrow there. The ewes have noticed.", "Tight on the outrun. The sheep were told before they were asked."],
+  crossover: ["Oh, she's crossed over. That'll cost.", "Crossed over in front of the sheep. The judge's pencil is moving."],
+  redirect: ["A redirect on the outrun.", "Stopped and redirected. That's a point, probably."],
+  top: ["She's got to the top and taken them on herself. Natural dog.", "Stopped at the top, and she's lifting them herself."],
+  liftGood: ["Nice quiet lift.", "They've lifted kindly. Walking, not running.", "A tidy lift. Five heads up and moving."],
+  liftBad: ["That was less of a lift and more of an evacuation.", "They've left at a gallop.", "Lively lift. Somebody's had a coffee."],
+  fetchLine: ["Coming down nicely on the line.", "Good straight fetch, this.", "Steady and on line. Lovely to watch."],
+  drift: ["Drifting off line now.", "Off line. Sheep have their own ideas about geometry.", "The fetch gates are over there, ladies."],
+  running: ["Steady now. They're running.", "Too much pace on those sheep.", "That's a canter. The judge wants a walk."],
+  split: ["We've got a split.", "One's gone her own way.", "The flock has had a disagreement."],
+  splitBlue: ["The ewe with the blue spot has left the group to pursue other interests.", "Blue spot's off again. There's one in every five."],
+  wall: ["They're on the wall now. Tricky.", "Sheep on the wall. Every handler's favourite.", "Hugging the wall. You can't blame them, it's a nice wall."],
+  gateAll: ["Through the {gate}. All five. Very tidy.", "All five through the {gate}. Lovely.", "Clean through the {gate}."],
+  gatePart: ["{n} through the {gate}, {m} round the outside.", "{m} missed at the {gate}. There's always one."],
+  gateNone: ["They've missed the {gate} entirely.", "Round the {gate} altogether. That's expensive."],
+  driveStart: ["At the post and away on the drive.", "Fetch done. Now the drive, which is where it gets interesting."],
+  crossStart: ["Turned at the gate and onto the cross-drive.", "Cross-drive now. Long way across."],
+  penStart: ["Handler's walking to the pen. Rope in hand.", "Off to the pen. This is where trials go to die.", "The pen. Deep breaths."],
+  penSome: ["{n} in. {m} thinking about it.", "{n} in the pen. Still {m} to convince."],
+  penBreak: ["One's broken away from the pen.", "Bolted from the pen mouth. Back round we go."],
+  penned: ["In! And the gate's shut. That'll do.", "Penned. Shut the gate. Lovely.", "And they're in. A round of applause from the tea tent."],
+  grip: ["Oh dear. That's a grip. The judge won't like that.", "She's had a nip at one. That'll be marked."],
+  lieIdle: ["Nothing happening, which in fairness is sometimes the right thing.", "Dog down, sheep grazing. Very peaceful. The clock is still going."],
+  time2: ["Two minutes left."],
+  time30: ["Thirty seconds."],
+  timeUp: ["Time. The judge has called time.", "And that's time."],
+  retire: ["The handler's retired. No shame in that. Happens to everyone.", "Retired. Back to the trailer for a sit down."],
+  takeover: ["And the handler's taken over from last year's winner. Brave."],
+  idle: [
+    "A curlew going over, if you're listening for it.",
+    "Lovely clear view across to Pendle today.",
+    "The tea tent reports the Eccles cakes have gone. Chorley cakes still available.",
+    "Wind's coming over the top from Cribden.",
+    "Rain's holding off. For now.",
+    "Could the owner of the green Land Rover please move it. It's in the judge's space.",
+    "The judge has asked for a tea, no sugar, which tells you everything about the judge.",
+    "If anyone's found a crook with a horn handle, the owner is in the beer tent.",
+    "Good crowd on the wall today. Somebody's brought a flask.",
+    "Lot of handlers up from Bacup way this year.",
+    "Lovely sound, that. A collie on wet grass."
+  ]
+};
+
+const pa = { cur: '', since: 99, quiet: 0, queue: [], lastSaid: {}, used: {} };
+const elLine = document.getElementById('pa-line'), elPrev = document.getElementById('pa-prev');
+function paShow(line) {
+  elPrev.textContent = pa.cur;
+  pa.cur = line; elLine.textContent = line;
+  pa.since = 0; pa.quiet = 0;
+  if (/curlew/i.test(line)) curlew();
+}
+function say(key, prio = 1, vars = {}, cd = 0) {
+  if (!g) return;
+  if (cd && g.t - (pa.lastSaid[key] ?? -1e9) < cd) return;
+  pa.lastSaid[key] = g.t;
+  const pool = LINES[key]; if (!pool) return;
+  let line = pool[Math.floor(Math.random() * pool.length)];
+  if (pool.length > 1 && pa.used[key] === line) line = pool[(pool.indexOf(line) + 1) % pool.length];
+  pa.used[key] = line;
+  line = line.replace(/\{(\w+)\}/g, (_, k) => k === 'dog' ? g.dogName : String(vars[k] ?? ''));
+  if (prio >= 2 || pa.since > 2.4) paShow(line);
+  else { pa.queue.push(line); if (pa.queue.length > 2) pa.queue.shift(); }
+}
+function paTick(dt) {
+  pa.since += dt; pa.quiet += dt;
+  if (pa.queue.length && pa.since > 3.2) paShow(pa.queue.shift());
+  if (pa.quiet > 21 && g.phase !== 'done') say('idle', 0);
+}
+function paReset() { pa.cur = ''; pa.queue = []; pa.lastSaid = {}; pa.since = 99; pa.quiet = 0; elLine.textContent = ''; elPrev.textContent = ''; }
+
+/* ---------------- sound ---------------- */
+const audio = { ctx: null, master: null, on: true, curlewT: 30 };
+function audioInit() {
+  if (audio.ctx) { if (audio.ctx.state === 'suspended') audio.ctx.resume(); return; }
+  try {
+    const AC = window.AudioContext || window.webkitAudioContext;
+    audio.ctx = new AC();
+    audio.master = audio.ctx.createGain();
+    audio.master.gain.value = audio.on ? 0.9 : 0;
+    audio.master.connect(audio.ctx.destination);
+    startWind();
+  } catch (e) { audio.ctx = null; }
+}
+function live() { return audio.ctx && audio.on && audio.ctx.state === 'running' && g && !g.attract; }
+function panNode(p) {
+  const c = audio.ctx;
+  if (c.createStereoPanner) { const n = c.createStereoPanner(); n.pan.value = clamp(p, -1, 1); return n; }
+  return c.createGain();
+}
+function worldPan(x) { return clamp((x - W / 2) / (W / 2), -1, 1) * 0.7; }
+function startWind() {
+  const c = audio.ctx, len = c.sampleRate * 3, buf = c.createBuffer(1, len, c.sampleRate), d = buf.getChannelData(0);
+  let b = 0; for (let i = 0; i < len; i++) { b = (b + 0.02 * (Math.random() * 2 - 1)) / 1.02; d[i] = b * 3.5; }
+  const src = c.createBufferSource(); src.buffer = buf; src.loop = true;
+  const lp = c.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 520;
+  const gn = c.createGain(); gn.gain.value = 0.05;
+  const lfo = c.createOscillator(); lfo.frequency.value = 0.07; const lg = c.createGain(); lg.gain.value = 0.03;
+  lfo.connect(lg); lg.connect(gn.gain);
+  src.connect(lp); lp.connect(gn); gn.connect(audio.master);
+  src.start(); lfo.start();
+}
+const WHISTLE = {
+  bye:  [[0, 0.28, 1800, 2750], [0.34, 0.22, 2500, 2100]],
+  away: [[0, 0.16, 2900, 2600], [0.2, 0.32, 2600, 1900]],
+  walk: [[0, 0.07, 2500, 2900], [0.12, 0.07, 2500, 2900], [0.24, 0.13, 2500, 3050]],
+  lie:  [[0, 0.56, 2700, 2520]],
+  home: [[0, 0.24, 2200, 2600], [0.3, 0.24, 2600, 2000], [0.6, 0.36, 2000, 2450]]
+};
+function whistle(cmd) {
+  if (!live()) return;
+  const c = audio.ctx, t0 = c.currentTime + 0.01, pat = WHISTLE[cmd]; if (!pat) return;
+  const out = panNode(worldPan(g.handler.x)); out.connect(audio.master);
+  for (const [t, d, f0, f1] of pat) {
+    const o = c.createOscillator(), e = c.createGain(), v = c.createOscillator(), vg = c.createGain();
+    o.type = 'sine'; o.frequency.setValueAtTime(f0, t0 + t); o.frequency.exponentialRampToValueAtTime(f1, t0 + t + d);
+    v.frequency.value = 9; vg.gain.value = 22; v.connect(vg); vg.connect(o.frequency);
+    e.gain.setValueAtTime(0, t0 + t); e.gain.linearRampToValueAtTime(0.11, t0 + t + 0.015);
+    e.gain.setValueAtTime(0.11, t0 + t + d - 0.03); e.gain.linearRampToValueAtTime(0, t0 + t + d);
+    o.connect(e); e.connect(out);
+    o.start(t0 + t); v.start(t0 + t); o.stop(t0 + t + d + 0.02); v.stop(t0 + t + d + 0.02);
+  }
+}
+let bleatGlobal = 0;
+function bleat(x, pitch) {
+  if (!live() || bleatGlobal > 0) return;
+  bleatGlobal = 1.4;
+  const c = audio.ctx, t = c.currentTime + 0.01, f = 205 * pitch;
+  const o = c.createOscillator(); o.type = 'sawtooth';
+  o.frequency.setValueAtTime(f * 1.06, t); o.frequency.linearRampToValueAtTime(f * 0.9, t + 0.75);
+  const lfo = c.createOscillator(); lfo.frequency.value = 7.5; const lg = c.createGain(); lg.gain.value = f * 0.045; lfo.connect(lg); lg.connect(o.frequency);
+  const trem = c.createGain(); trem.gain.value = 0.62; const tlg = c.createGain(); tlg.gain.value = 0.38; lfo.connect(tlg); tlg.connect(trem.gain);
+  const b1 = c.createBiquadFilter(); b1.type = 'bandpass'; b1.frequency.value = 820; b1.Q.value = 3;
+  const b2 = c.createBiquadFilter(); b2.type = 'bandpass'; b2.frequency.value = 1750; b2.Q.value = 5;
+  const env = c.createGain(); env.gain.setValueAtTime(0, t); env.gain.linearRampToValueAtTime(0.3, t + 0.06);
+  env.gain.setValueAtTime(0.3, t + 0.5); env.gain.linearRampToValueAtTime(0, t + 0.82);
+  const out = panNode(worldPan(x));
+  o.connect(trem); trem.connect(b1); trem.connect(b2); b1.connect(env); b2.connect(env); env.connect(out); out.connect(audio.master);
+  o.start(t); lfo.start(t); o.stop(t + 0.9); lfo.stop(t + 0.9);
+}
+function curlew() {
+  if (!live()) return;
+  const c = audio.ctx, t0 = c.currentTime + 0.05;
+  const out = panNode(Math.random() * 1.4 - 0.7); out.connect(audio.master);
+  const note = (t, d, f0, f1, trill) => {
+    const o = c.createOscillator(), e = c.createGain();
+    o.frequency.setValueAtTime(f0, t); o.frequency.exponentialRampToValueAtTime(f1, t + d);
+    if (trill) { const l = c.createOscillator(), lg = c.createGain(); l.frequency.value = 21; lg.gain.value = 170; l.connect(lg); lg.connect(o.frequency); l.start(t); l.stop(t + d); }
+    e.gain.setValueAtTime(0, t); e.gain.linearRampToValueAtTime(0.035, t + 0.05); e.gain.setValueAtTime(0.035, t + d - 0.12); e.gain.linearRampToValueAtTime(0, t + d);
+    o.connect(e); e.connect(out); o.start(t); o.stop(t + d + 0.02);
+  };
+  note(t0, 0.42, 1500, 2250); note(t0 + 0.62, 0.42, 1500, 2250);
+  note(t0 + 1.3, 1.5, 1950, 2650, true);
+}
+
+/* ---------------- game state ---------------- */
+let g = null;
+let best = 0;
+
+function newGame(opts = {}) {
+  const seed = (opts.seed ?? (Math.random() * 4294967296)) >>> 0;
+  rand = mulberry32(seed);
+  const sheep = [];
+  const stubborn = Math.floor(rand() * 5);
+  for (let i = 0; i < 5; i++) {
+    const a = rand() * Math.PI * 2, r = 8 + rand() * 24;
+    sheep.push({
+      x: RELEASE.x + Math.cos(a) * r, y: RELEASE.y + Math.sin(a) * r, vx: 0, vy: 0, h: rand() * Math.PI * 2,
+      fear: 0, fT: 0, flight: i === stubborn ? 108 : 132 + rand() * 16, stubborn: i === stubborn,
+      gz: rand() * 3, gzMove: false, gzDir: 0, gate: {}, prevS: {}, inPen: false, nearPen: false,
+      bob: rand() * 6, pitch: 0.85 + rand() * 0.35, lastFear: 0
+    });
+  }
+  const gates = {};
+  for (const k in GATE_GEOM) gates[k] = { ...GATE_GEOM[k], decided: false, through: 0 };
+  g = {
+    seed, auto: !!opts.auto, attract: !!opts.attract, phase: 'ready', t: 0, clock: 0,
+    sheep, gates, dogName: pickR(DOG_NAMES),
+    dog: { x: HANDLER_HOME.x + 20, y: HANDLER_HOME.y + 10, vx: 0, vy: 0, h: 0, cmd: 'lie', prevCmd: 'lie', react: 0, R: 150, wag: 0, gripCd: 0, run: 0, keen: 0.7 + rand() * 0.6 },
+    handler: { x: HANDLER_HOME.x, y: HANDLER_HOME.y, h: 0, tx: HANDLER_HOME.x, ty: HANDLER_HOME.y },
+    penGate: 0, penClosing: false,
+    fs: null, flockSp: 0,
+    score: {
+      outrun: { label: 'Outrun', max: 20, lost: 0, notes: [] },
+      lift:   { label: 'Lift',   max: 10, lost: 0, notes: [] },
+      fetch:  { label: 'Fetch',  max: 20, lost: 0, notes: [] },
+      drive:  { label: 'Drive',  max: 30, lost: 0, notes: [] },
+      pen:    { label: 'Pen',    max: 10, lost: 0, notes: [] }
+    },
+    completed: new Set(),
+    st: {
+      outMinD: 1e9, outCmds: 0, side: 0, crossed: false, outStartC: null,
+      liftStart: null, liftMaxSp: 0,
+      samp: { fetch: { t: 0, dev: 0, run: 0, split: 0 }, drive: { t: 0, dev: 0, run: 0, split: 0 }, cross: { t: 0, dev: 0, run: 0, split: 0 } },
+      penStart: 0, penMax: 0, breaks: 0, runT: 0, calmLieT: 0, onLineT: 0
+    },
+    bubbles: [], labels: [], result: null, endT: null, warned: {}, botT: 0, gripCount: 0, cardShown: false
+  };
+  g.dog.h = Math.atan2(RELEASE.y - g.dog.y, RELEASE.x - g.dog.x);
+  g.handler.h = Math.atan2(RELEASE.y - HANDLER_HOME.y, RELEASE.x - HANDLER_HOME.x);
+  g.fs = flockStats();
+  bleatGlobal = 0;
+  return g;
+}
+
+function flockStats() {
+  let S = g.sheep;
+  if (g.phase === 'pen') { const out = S.filter(s => !s.inPen); if (out.length) S = out; }
+  const n = S.length;
+  let cx = 0, cy = 0, sp = 0, vx = 0, vy = 0;
+  for (const s of S) { cx += s.x; cy += s.y; vx += s.vx; vy += s.vy; sp += hyp(s.vx, s.vy); }
+  cx /= n; cy /= n; vx /= n; vy /= n; sp /= n;
+  let spread = 0, far = S[0], split = 0, splitter = null;
+  for (const s of S) {
+    const d = hyp(s.x - cx, s.y - cy); if (d > spread) { spread = d; far = s; }
+    if (n > 1) {
+      const ox = (cx * n - s.x) / (n - 1), oy = (cy * n - s.y) / (n - 1), ds = hyp(s.x - ox, s.y - oy);
+      if (ds > split) { split = ds; splitter = s; }
+    }
+  }
+  return { cx, cy, vx, vy, sp, spread, far, split, splitter, n };
+}
+function nearestSheepDist(o) { let m = 1e9; for (const s of g.sheep) { const d = hyp(s.x - o.x, s.y - o.y); if (d < m) m = d; } return m; }
+function avgFear() { let f = 0; for (const s of g.sheep) f += s.fear; return f / g.sheep.length; }
+
+function lose(bucket, pts, note) {
+  const p = g.score[bucket]; if (!p) return;
+  pts = Math.max(0, Math.round(pts));
+  const take = Math.min(pts, p.max - p.lost);
+  p.lost += take;
+  if (note && pts > 0) p.notes.push(note);
+}
+function bucketOf(phase) { return phase === 'cross' ? 'drive' : phase === 'ready' ? 'outrun' : phase; }
+
+/* ---------------- commands ---------------- */
+const BUBBLE_TEXT = { bye: 'Come bye', away: 'Away to me', walk: 'Walk up', lie: 'Lie down', home: "That'll do" };
+function issue(cmd, byPlayer) {
+  if (!g || g.phase === 'done') return;
+  if (byPlayer && g.auto) { g.auto = false; if (!g.attract && g.phase !== 'ready') say('takeover', 2); }
+  const d = g.dog;
+  whistle(cmd);
+  g.bubbles.push({ text: BUBBLE_TEXT[cmd], t: g.t });
+  if (g.bubbles.length > 3) g.bubbles.shift();
+  if (g.phase === 'ready') {
+    if (cmd === 'lie') return;
+    g.phase = 'outrun';
+    g.st.outStartC = { x: g.fs.cx, y: g.fs.cy };
+    say(cmd === 'bye' ? 'sendBye' : cmd === 'away' ? 'sendAway' : 'sendWalk', 2);
+  } else if (g.phase === 'outrun' && cmd !== d.cmd) {
+    g.st.outCmds++;
+    say('redirect', 1, {}, 6);
+  }
+  if (cmd !== d.cmd) { d.prevCmd = d.cmd; d.cmd = cmd; d.react = 0.14 + rand() * 0.14; }
+}
+
+/* ---------------- simulation ---------------- */
+function step(dt) {
+  g.t += dt;
+  bleatGlobal = Math.max(0, bleatGlobal - dt);
+  g.fs = flockStats();
+  updateHandler(dt);
+  updateDog(dt);
+  updateSheep(dt);
+  g.fs = flockStats();
+  updateCourse(dt);
+  if (g.auto) bot(dt);
+  paTick(dt);
+  if (!g.attract && audio.ctx) { audio.curlewT -= dt; if (audio.curlewT <= 0) { audio.curlewT = 45 + Math.random() * 50; curlew(); } }
+}
+
+function updateHandler(dt) {
+  const h = g.handler, dx = h.tx - h.x, dy = h.ty - h.y, d = hyp(dx, dy);
+  h.moving = d > 1;
+  if (d > 1) { const sp = Math.min(70, d * 4); h.x += dx / d * sp * dt; h.y += dy / d * sp * dt; h.h = Math.atan2(dy, dx); }
+  else { const f = g.fs; h.h += wrapAng(Math.atan2(f.cy - h.y, f.cx - h.x) - h.h) * Math.min(1, dt * 2); }
+}
+
+function updateDog(dt) {
+  const d = g.dog, f = g.fs;
+  const dx = d.x - f.cx, dy = d.y - f.cy, r = hyp(dx, dy) || 1, ux = dx / r, uy = dy / r;
+  const pen = g.phase === 'pen';
+  const R = clamp(f.spread + (pen ? 62 : 105), pen ? 80 : 130, 300);
+  d.R = R;
+  d.react -= dt;
+  const cmd = d.react > 0 ? d.prevCmd : d.cmd;
+  let tx = 0, ty = 0;
+  if (cmd === 'bye' || cmd === 'away') {
+    const sg = cmd === 'bye' ? 1 : -1;
+    const t1 = -uy * sg, t2 = ux * sg;
+    const rs = clamp((r - R) * 0.85 * (g.phase === 'outrun' ? d.keen : 1), -RUN * 0.55, RUN * 0.5);
+    const ts = Math.sqrt(Math.max(0, RUN * RUN - rs * rs));
+    // flat out on the way round, steadier once she's working close to the sheep
+    const spd = (pen ? 0.6 : 1) * (g.phase === 'outrun' ? 1 : clamp(0.55 + (r - R) / 300, 0.55, 1));
+    tx = (t1 * ts - ux * rs) * spd; ty = (t2 * ts - uy * rs) * spd;
+  } else if (cmd === 'walk' && f.split > 95 && f.splitter && !pen) {
+    // covering: a stray gets fetched back to the others before she walks on
+    const s = f.splitter, ox = (f.cx * f.n - s.x) / (f.n - 1), oy = (f.cy * f.n - s.y) / (f.n - 1);
+    const ax = s.x - ox, ay = s.y - oy, al = hyp(ax, ay) || 1;
+    const vx = s.x + ax / al * 55 - d.x, vy = s.y + ay / al * 55 - d.y, vl = hyp(vx, vy) || 1;
+    const sp = vl > 30 ? RUN * 0.6 : WALK;
+    tx = vx / vl * sp; ty = vy / vl * sp;
+    d.covering = true;
+  } else if (cmd === 'walk') {
+    const nd = nearestSheepDist(d);
+    let sp = WALK; if (nd < 40) sp = WALK * clamp((nd - 30) / 10, 0, 1);
+    tx = -ux * sp; ty = -uy * sp;
+    if (g.phase === 'lift' || g.phase === 'fetch') {
+      // a trained dog feels for the balance point: opposite the handler
+      const angB = Math.atan2(f.cy - POST.y, f.cx - POST.x), angD = Math.atan2(dy, dx);
+      const delta = wrapAng(angB - angD), k = clamp(Math.abs(delta) / 0.6, 0, 1) * 0.9 * Math.sign(delta);
+      tx += -uy * WALK * k; ty += ux * WALK * k;
+    }
+  } else if (cmd === 'home') {
+    const hx = g.handler.x + 16 - d.x, hy = g.handler.y + 12 - d.y, hd = hyp(hx, hy) || 1;
+    const sp = hd > 6 ? Math.min(RUN * 0.75, hd * 3) : 0;
+    tx = hx / hd * sp; ty = hy / hd * sp;
+  }
+  const covering = d.covering; d.covering = false;
+  if (cmd !== 'lie' && cmd !== 'home') {
+    const rad = cmd === 'walk' && !covering ? 26 : 44;
+    for (const s of g.sheep) {
+      const ex = d.x - s.x, ey = d.y - s.y, e = hyp(ex, ey);
+      if (e < rad && e > 0.01) { const k = (rad - e) / rad * RUN * 0.9; tx += ex / e * k; ty += ey / e * k; }
+    }
+  }
+  const m = 22;
+  const dl = d.x - (F.x0 + WALL_IN), dr = (F.x1 - WALL_IN) - d.x, dtp = d.y - (F.y0 + WALL_IN), db = (F.y1 - WALL_IN) - d.y;
+  if (dl < m) tx += (m - dl) * 6; if (dr < m) tx -= (m - dr) * 6;
+  if (dtp < m) ty += (m - dtp) * 6; if (db < m) ty -= (m - db) * 6;
+  const spd = hyp(d.vx, d.vy);
+  const acc = cmd === 'lie' ? (spd > 150 ? 4.5 : 10) : 7;
+  d.vx += (tx - d.vx) * Math.min(1, dt * acc);
+  d.vy += (ty - d.vy) * Math.min(1, dt * acc);
+  const s2 = hyp(d.vx, d.vy); if (s2 > RUN * 1.05) { d.vx *= RUN * 1.05 / s2; d.vy *= RUN * 1.05 / s2; }
+  d.x += d.vx * dt; d.y += d.vy * dt;
+  segPush(d, 6, allSegs()); boxPush(d, DOG_NOGO); fieldClamp(d, 7);
+  const sp = hyp(d.vx, d.vy);
+  if (sp > 6) d.h += wrapAng(Math.atan2(d.vy, d.vx) - d.h) * Math.min(1, dt * 10);
+  else if (g.phase !== 'ready' && g.phase !== 'done') d.h += wrapAng(Math.atan2(f.cy - d.y, f.cx - d.x) - d.h) * Math.min(1, dt * 3);
+  d.run = sp; d.wag += dt * (4 + sp / 25);
+  d.gripCd -= dt;
+  if (sp > 110 && d.gripCd <= 0 && g.phase !== 'ready' && g.phase !== 'done') {
+    for (const s of g.sheep) if (hyp(s.x - d.x, s.y - d.y) < 13) {
+      d.gripCd = 6; g.gripCount++;
+      lose(bucketOf(g.phase), 4, 'grip');
+      say('grip', 3); bleat(s.x, s.pitch * 1.15);
+      break;
+    }
+  }
+}
+
+function updateSheep(dt) {
+  const d = g.dog, hd = g.handler, ds = hyp(d.vx, d.vy), S = g.sheep;
+  const lying = d.cmd === 'lie' && ds < 20;
+  for (const s of S) {
+    const ex = s.x - d.x, ey = s.y - d.y, e = hyp(ex, ey) || 1;
+    const fr = s.flight * (1 + 0.2 * Math.min(1, ds / RUN)) * (lying ? 0.78 : 1);
+    s.fT = clamp(1 - e / fr, 0, 1); s.dux = ex / e; s.duy = ey / e;
+  }
+  const segs = allSegs();
+  const penPhase = g.phase === 'pen';
+  for (const s of S) {
+    let ax = 0, ay = 0, sx = 0, sy = 0, cx = 0, cy = 0, cn = 0, avx = 0, avy = 0, fsum = 0;
+    const sepR = (penPhase && (s.inPen || inPen(s))) ? 12 : 19;
+    for (const o of S) {
+      if (o === s) continue;
+      const ox = o.x - s.x, oy = o.y - s.y, od = hyp(ox, oy) || 0.01;
+      if (od < sepR) { const k = (sepR - od) / sepR; sx -= ox / od * k; sy -= oy / od * k; }
+      if (od < 150) { cx += o.x; cy += o.y; cn++; avx += o.vx; avy += o.vy; fsum += o.fear; }
+    }
+    const target = Math.pow(s.fT, 0.9);
+    if (target > s.fear) s.fear += (target - s.fear) * Math.min(1, dt * 7);
+    else s.fear = Math.max(target, s.fear - dt * 0.3);
+    if (cn) { const nf = fsum / cn * 0.65; if (nf > s.fear) s.fear += (nf - s.fear) * Math.min(1, dt * 3); }
+    // the handler moves sheep too
+    const hx = s.x - hd.x, hy = s.y - hd.y, hh = hyp(hx, hy) || 1;
+    if (hh < 75) { const k = (75 - hh) / 75; ax += hx / hh * k * 1.6; ay += hy / hh * k * 1.6; s.fear = Math.max(s.fear, k * 0.45); }
+    const fear = s.fear;
+    ax += s.dux * s.fT * 2.4; ay += s.duy * s.fT * 2.4;
+    const vs = hyp(s.vx, s.vy);
+    if (fear > 0.05 && vs > 1) { ax += s.vx / vs * fear * 0.8; ay += s.vy / vs * fear * 0.8; }
+    if (cn) {
+      cx /= cn; cy /= cn;
+      const qx = cx - s.x, qy = cy - s.y, qd = hyp(qx, qy) || 1;
+      const w = (0.12 + 1.3 * fear) * Math.min(1, qd / 50) * (s.stubborn ? 0.7 : 1);
+      ax += qx / qd * w; ay += qy / qd * w;
+      if (fear > 0.05) { const al = hyp(avx, avy) || 1; ax += avx / al * 0.5 * fear; ay += avy / al * 0.5 * fear; }
+    }
+    ax += sx * 2.2; ay += sy * 2.2;
+    const m = 40;
+    const dl = s.x - (F.x0 + WALL_IN), dr = (F.x1 - WALL_IN) - s.x, dtp = s.y - (F.y0 + WALL_IN), db = (F.y1 - WALL_IN) - s.y;
+    if (dl < m) ax += (m - dl) / m * 1.8; if (dr < m) ax -= (m - dr) / m * 1.8;
+    if (dtp < m) ay += (m - dtp) / m * 1.8; if (db < m) ay -= (m - db) / m * 1.8;
+    let want;
+    if (fear < 0.08) {
+      s.gz -= dt;
+      if (s.gz <= 0) { s.gzMove = rand() < 0.45; s.gz = 1.2 + rand() * 3.5; s.gzDir = rand() * Math.PI * 2; }
+      if (s.gzMove) { ax += Math.cos(s.gzDir) * 0.6; ay += Math.sin(s.gzDir) * 0.6; }
+      const mag = hyp(ax, ay);
+      want = s.gzMove ? 7 : 9 * Math.min(1, mag * 1.5);
+    } else {
+      want = (12 + (s.stubborn ? 95 : 118) * Math.pow(fear, 1.15)) * Math.min(1, hyp(ax, ay));
+    }
+    const mag = hyp(ax, ay) || 1;
+    const vdx = ax / mag * want, vdy = ay / mag * want;
+    const k = Math.min(1, dt * (2.2 + 5 * fear));
+    s.vx += (vdx - s.vx) * k; s.vy += (vdy - s.vy) * k;
+    s.x += s.vx * dt; s.y += s.vy * dt;
+    segPush(s, 7, segs); fieldClamp(s, 7);
+    const sp = hyp(s.vx, s.vy);
+    if (sp > 3) s.h += wrapAng(Math.atan2(s.vy, s.vx) - s.h) * Math.min(1, dt * 6);
+    s.bob += dt * (sp > 3 ? 6 + sp / 10 : 1.2);
+    if (s.fear > 0.62 && s.lastFear <= 0.62 && rand() < 0.5) bleat(s.x, s.pitch);
+    s.lastFear = s.fear;
+  }
+  if (!g.attract && rand() < dt / 22) { const s = pickR(S); if (s.fear < 0.1) bleat(s.x, s.pitch * 0.95); }
+}
+
+function gateCheck(gate) {
+  if (gate.decided) return;
+  for (const s of g.sheep) {
+    const rx = s.x - gate.x, ry = s.y - gate.y;
+    const al = rx * gate.ux + ry * gate.uy, lat = rx * gate.px + ry * gate.py;
+    const prev = s.prevS[gate.key];
+    if (prev !== undefined && !s.gate[gate.key] && prev < 0 && al >= 0) {
+      if (Math.abs(lat) < gate.gap / 2) s.gate[gate.key] = 'through';
+      else if (Math.abs(lat) < 280) s.gate[gate.key] = 'missed';
+    }
+    s.prevS[gate.key] = al;
+  }
+  if (g.sheep.every(s => s.gate[gate.key])) decideGate(gate);
+}
+function decideGate(gate) {
+  if (gate.decided) return;
+  gate.decided = true;
+  let n = 0; for (const s of g.sheep) if (s.gate[gate.key] === 'through') n++;
+  const m = 5 - n; gate.through = n;
+  const bucket = gate.key === 'fetch' ? 'fetch' : 'drive';
+  if (m > 0) lose(bucket, Math.min(gate.key === 'fetch' ? 6 : 5, m * 2), n === 0 ? 'missed the ' + gate.name : m + ' missed the ' + gate.name);
+  g.labels.push({ x: gate.x, y: gate.y, text: n === 5 ? 'All five through' : n === 0 ? 'Missed' : n + ' of 5 through', t: g.t, good: n === 5 });
+  say(n === 5 ? 'gateAll' : n === 0 ? 'gateNone' : 'gatePart', 2, { gate: gate.name, n, m });
+}
+// the whole flock is well beyond the gate line: anyone not counted by now has missed
+function pastGate(gate) {
+  return g.sheep.every(s => (s.x - gate.x) * gate.ux + (s.y - gate.y) * gate.uy > 70);
+}
+function sample(key, A, B, dt) {
+  const f = g.fs, s = g.st.samp[key];
+  s.t += dt; s.dev += perpDist(f.cx, f.cy, A, B) * dt;
+  if (f.sp > 75) s.run += dt;
+  if (f.split > 125) s.split += dt;
+}
+function endLeg(key, bucket) {
+  const s = g.st.samp[key]; if (s.t <= 0) return;
+  const avg = s.dev / s.t;
+  lose(bucket, Math.min(6, avg / 20), 'off line');
+  lose(bucket, s.run / s.t * 4, 'sheep running');
+  lose(bucket, s.split / s.t * 3, 'flock split');
+}
+
+function updateCourse(dt) {
+  const f = g.fs, st = g.st, d = g.dog, G = g.gates;
+  if (g.phase !== 'ready' && g.phase !== 'done') g.clock += dt;
+  g.flockSp += (f.sp - g.flockSp) * Math.min(1, dt * 3);
+
+  if (g.phase === 'outrun') {
+    const ux = d.x - f.cx, uy = d.y - f.cy, r = hyp(ux, uy) || 1;
+    const px = POST.x - f.cx, py = POST.y - f.cy, pr = hyp(px, py) || 1;
+    const dot = (ux * px + uy * py) / (r * pr);
+    if (dot > -0.5) st.outMinD = Math.min(st.outMinD, nearestSheepDist(d));
+    const ax = f.cx - POST.x, ay = f.cy - POST.y, L2 = ax * ax + ay * ay || 1;
+    const proj = ((d.x - POST.x) * ax + (d.y - POST.y) * ay) / L2;
+    const side = Math.sign(ax * (d.y - POST.y) - ay * (d.x - POST.x));
+    if (side !== 0 && st.side !== 0 && side !== st.side && proj > 0.12 && proj < 0.85 && !st.crossed) { st.crossed = true; say('crossover', 3); }
+    if (side !== 0) st.side = side;
+    const behind = dot < -0.8 && r < d.R + 80;
+    if (behind || avgFear() > 0.3) endOutrun(behind);
+  } else if (g.phase === 'lift') {
+    st.liftMaxSp = Math.max(st.liftMaxSp, g.flockSp);
+    if (hyp(f.cx - st.liftStart.x, f.cy - st.liftStart.y) > 90) endLift();
+  } else if (g.phase === 'fetch') {
+    gateCheck(G.fetch);
+    sample('fetch', RELEASE, POST, dt);
+    if (hyp(f.cx - POST.x, f.cy - POST.y) < 125) {
+      decideGate(G.fetch); endLeg('fetch', 'fetch'); g.completed.add('fetch');
+      g.phase = 'drive'; say('driveStart', 1);
+    }
+  } else if (g.phase === 'drive') {
+    gateCheck(G.drive);
+    sample('drive', POST, G.drive, dt);
+    if (!G.drive.decided && (pastGate(G.drive) || hyp(f.cx - G.cross.x, f.cy - G.cross.y) < 230 || hyp(f.cx - PEN_MOUTH.x, f.cy - PEN_MOUTH.y) < 110)) decideGate(G.drive);
+    if (G.drive.decided) { endLeg('drive', 'drive'); g.phase = 'cross'; say('crossStart', 1); }
+  } else if (g.phase === 'cross') {
+    gateCheck(G.cross);
+    sample('cross', G.drive, G.cross, dt);
+    if (!G.cross.decided && (pastGate(G.cross) || hyp(f.cx - PEN_MOUTH.x, f.cy - PEN_MOUTH.y) < 110)) decideGate(G.cross);
+    if (G.cross.decided) {
+      endLeg('cross', 'drive'); g.completed.add('drive');
+      g.phase = 'pen'; st.penStart = g.t;
+      g.handler.tx = PEN_HANDLER.x; g.handler.ty = PEN_HANDLER.y;
+      say('penStart', 1);
+    }
+  } else if (g.phase === 'pen') {
+    let n = 0;
+    for (const s of g.sheep) {
+      s.inPen = inPen(s); if (s.inPen) n++;
+      const dp = hyp(s.x - 380, s.y - 735);
+      if (dp < 100) s.nearPen = true;
+      else if (s.nearPen && dp > 190) { s.nearPen = false; st.breaks++; say('penBreak', 1, {}, 8); }
+    }
+    if (n > st.penMax) { st.penMax = n; if (n >= 2 && n < 5) say('penSome', 1, { n, m: 5 - n }, 6); }
+    if (n === 5) g.penClosing = true;
+    else if (g.penClosing && g.penGate > -Math.PI / 2) g.penClosing = false;
+    if (g.penClosing) {
+      g.penGate = Math.max(-Math.PI / 2, g.penGate - dt * 2.4);
+      if (g.penGate <= -Math.PI / 2) finishPenned();
+    } else g.penGate = Math.min(0, g.penGate + dt * 2.4);
+  }
+
+  if (g.phase !== 'ready' && g.phase !== 'done') {
+    const left = TIME_LIMIT - g.clock;
+    if (left < 120 && !g.warned.t2) { g.warned.t2 = true; say('time2', 2); }
+    if (left < 30 && !g.warned.t30) { g.warned.t30 = true; say('time30', 2); }
+    if (left <= 0) endRun('time');
+    monitors(dt);
+  }
+  if (g.phase === 'done' && g.endT !== null && g.t > g.endT && !g.cardShown) {
+    g.cardShown = true;
+    onRunEnd();
+  }
+}
+
+function monitors(dt) {
+  const f = g.fs, st = g.st, ph = g.phase;
+  const moving = ph === 'lift' || ph === 'fetch' || ph === 'drive' || ph === 'cross';
+  if (moving) {
+    st.runT = g.flockSp > 80 ? st.runT + dt : 0;
+    if (st.runT > 1.2) say('running', 1, {}, 14);
+    if (f.split > 140) say(f.splitter && f.splitter.stubborn ? 'splitBlue' : 'split', 1, {}, 18);
+    const wd = Math.min(f.cx - F.x0, F.x1 - f.cx, f.cy - F.y0, F.y1 - f.cy);
+    if (wd < 60) say('wall', 1, {}, 25);
+  }
+  if (ph === 'fetch') {
+    const dev = perpDist(f.cx, f.cy, RELEASE, POST);
+    if (dev > 130) say('drift', 1, {}, 18);
+    st.onLineT = (dev < 40 && g.flockSp > 15 && g.flockSp < 75) ? st.onLineT + dt : 0;
+    if (st.onLineT > 6) { st.onLineT = -30; say('fetchLine', 1, {}, 30); }
+  }
+  if (ph !== 'outrun') {
+    st.calmLieT = (g.dog.cmd === 'lie' && g.flockSp < 8) ? st.calmLieT + dt : 0;
+    if (st.calmLieT > 12) { st.calmLieT = -20; say('lieIdle', 1, {}, 40); }
+  }
+}
+
+function endOutrun(behind) {
+  const st = g.st, f = g.fs, d = g.dog;
+  const tight = st.outMinD < 140 ? (140 - st.outMinD) / 140 * 8 : 0;
+  lose('outrun', tight, 'came in tight');
+  if (st.outStartC && hyp(f.cx - st.outStartC.x, f.cy - st.outStartC.y) > 40) lose('outrun', 2, 'disturbed the sheep');
+  if (st.outCmds) lose('outrun', Math.min(4, st.outCmds), st.outCmds + (st.outCmds === 1 ? ' redirect' : ' redirects'));
+  if (st.crossed) lose('outrun', 5, 'crossed over');
+  g.completed.add('outrun');
+  if (Math.round(tight) >= 3) say('outrunTight', 1);
+  else if (Math.round(tight) === 0 && !st.outCmds && !st.crossed) say('outrunWide', 1);
+  g.phase = 'lift';
+  st.liftStart = { x: f.cx, y: f.cy, t: g.t };
+  if (behind && (d.cmd === 'bye' || d.cmd === 'away')) { d.prevCmd = d.cmd; d.cmd = 'walk'; d.react = 0.25; say('top', 1); }
+}
+function endLift() {
+  const st = g.st, f = g.fs;
+  const bolt = st.liftMaxSp > 60 ? Math.min(6, (st.liftMaxSp - 60) / 12) : 0;
+  lose('lift', bolt, 'bolted at the lift');
+  const mx = f.cx - st.liftStart.x, my = f.cy - st.liftStart.y, ml = hyp(mx, my) || 1;
+  const px = POST.x - st.liftStart.x, py = POST.y - st.liftStart.y, pl = hyp(px, py) || 1;
+  const ang = Math.acos(clamp((mx * px + my * py) / (ml * pl), -1, 1));
+  lose('lift', Math.min(4, ang / (Math.PI / 2) * 4), 'lifted off line');
+  if (g.t - st.liftStart.t > 15) lose('lift', 2, 'sticky lift');
+  g.completed.add('lift');
+  say(Math.round(bolt) >= 2 ? 'liftBad' : 'liftGood', 1);
+  g.phase = 'fetch';
+}
+function finishPenned() {
+  const st = g.st, t = g.t - st.penStart;
+  lose('pen', Math.min(5, Math.max(0, Math.floor((t - 35) / 15) + (t > 35 ? 1 : 0))), 'slow at the pen');
+  lose('pen', Math.min(3, st.breaks), st.breaks === 1 ? 'a break at the pen' : 'breaks at the pen');
+  g.completed.add('pen');
+  g.result = 'penned';
+  g.phase = 'done';
+  g.dog.prevCmd = g.dog.cmd; g.dog.cmd = 'home';
+  g.bubbles.push({ text: BUBBLE_TEXT.home, t: g.t + 0.6 });
+  setTimeout(() => whistle('home'), 600);
+  say('penned', 3);
+  g.endT = g.t + 4;
+}
+function endRun(why) {
+  if (g.phase === 'done') return;
+  g.result = why;
+  g.phase = 'done';
+  g.dog.prevCmd = g.dog.cmd; g.dog.cmd = 'home';
+  say(why === 'time' ? 'timeUp' : 'retire', 3);
+  g.endT = g.t + 3;
+}
+function finalCard() {
+  for (const k of Object.keys(g.score)) if (!g.completed.has(k)) { const p = g.score[k]; p.lost = p.max; p.notes = ['not completed']; }
+  let total = 0, max = 0;
+  for (const k in g.score) { total += g.score[k].max - g.score[k].lost; max += g.score[k].max; }
+  return { total, max };
+}
+
+/* ---------------- the autopilot (last year's winner) ---------------- */
+// steer onto the gate's centre line well before the gate, then straight through
+function approach(gate) {
+  const f = g.fs, al = (f.cx - gate.x) * gate.ux + (f.cy - gate.y) * gate.uy;
+  if (al < -70) return { x: gate.x + gate.ux * al * 0.45, y: gate.y + gate.uy * al * 0.45 };
+  return { x: gate.x + gate.ux * 220, y: gate.y + gate.uy * 220 };
+}
+function botTarget() {
+  const G = g.gates, f = g.fs;
+  switch (g.phase) {
+    case 'lift': case 'fetch': return G.fetch.decided ? { x: POST.x + 40, y: POST.y } : approach(G.fetch);
+    case 'drive': return approach(G.drive);
+    case 'cross': return approach(G.cross);
+    case 'pen': {
+      const inMouth = f.cx > 405 && f.cx < 480 && f.cy > 708 && f.cy < 762;
+      return inMouth ? { x: 360, y: 735 } : { x: 478, y: 735 };
+    }
+  }
+  return null;
+}
+function bot(dt) {
+  const d = g.dog, f = g.fs;
+  g.botT -= dt; if (g.botT > 0) return;
+  if (g.phase === 'ready') { if (g.t > 2.5) issue(rand() < 0.5 ? 'bye' : 'away', false); g.botT = 1; return; }
+  if (g.phase === 'done' || g.phase === 'outrun') { g.botT = 0.3; return; }
+  const T = botTarget(); if (!T) return;
+  let bx = f.cx, by = f.cy;
+  let [nx, ny] = [T.x - f.cx, T.y - f.cy]; const nl = hyp(nx, ny) || 1; nx /= nl; ny /= nl;
+  let angB = Math.atan2(-ny, -nx);
+  if (f.split > 110 && f.splitter && g.phase !== 'pen') angB = Math.atan2(f.splitter.y - f.cy, f.splitter.x - f.cx);
+  const angD = Math.atan2(d.y - by, d.x - bx);
+  const delta = wrapAng(angB - angD);
+  const tol = g.phase === 'pen' ? 0.32 : 0.3;
+  let want;
+  if (Math.abs(delta) > tol) {
+    want = delta > 0 ? 'bye' : 'away';
+    if ((d.cmd === 'bye' || d.cmd === 'away') && Math.abs(delta) > 2.6) want = d.cmd;
+  } else if (g.flockSp > (g.phase === 'pen' ? 30 : 55)) want = 'lie';
+  else want = 'walk';
+  if (want !== d.cmd) { issue(want, false); g.botT = 0.55; } else g.botT = 0.15;
+}
+
+/* ---------------- rendering ---------------- */
+const canvas = document.getElementById('field');
+const ctx = canvas.getContext('2d');
+const bg = document.createElement('canvas');
+const bgx = bg.getContext('2d');
+const view = { s: 1, ox: 0, oy: 0, rot: false, dpr: 1, cw: 0, ch: 0 };
+const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+function layout() {
+  const cw = innerWidth, ch = innerHeight, dpr = Math.min(2, devicePixelRatio || 1);
+  view.cw = cw; view.ch = ch; view.dpr = dpr;
+  canvas.width = Math.round(cw * dpr); canvas.height = Math.round(ch * dpr);
+  bg.width = canvas.width; bg.height = canvas.height;
+  view.rot = ch > cw * 1.1;
+  if (view.rot) {
+    const top = 118, bottom = 228;
+    const availH = Math.max(200, ch - top - bottom);
+    const s = Math.min(cw / H, availH / W);
+    view.s = s; view.ox = (cw - H * s) / 2; view.oy = top + (availH - W * s) / 2 + W * s;
+  } else {
+    const s = Math.min(cw / W, ch / H);
+    view.s = s; view.ox = (cw - W * s) / 2; view.oy = (ch - H * s) / 2;
+  }
+  drawStatic();
+}
+function worldTransform(c) {
+  const { s, ox, oy, dpr } = view;
+  if (view.rot) c.setTransform(0, -s * dpr, s * dpr, 0, ox * dpr, oy * dpr);
+  else c.setTransform(s * dpr, 0, 0, s * dpr, ox * dpr, oy * dpr);
+}
+function toScreen(x, y) {
+  return view.rot ? [view.s * y + view.ox, -view.s * x + view.oy] : [view.s * x + view.ox, view.s * y + view.oy];
+}
+
+function blob(c, x, y, r, n, rr) {
+  c.beginPath();
+  for (let i = 0; i < n; i++) {
+    const a = rr() * Math.PI * 2, d = i === 0 ? 0 : r * (0.35 + rr() * 0.5), rad = r * (0.45 + rr() * 0.5);
+    const bx = x + Math.cos(a) * d, by = y + Math.sin(a) * d;
+    c.moveTo(bx + rad, by); c.arc(bx, by, rad, 0, Math.PI * 2);
+  }
+  c.fill();
+}
+function ell(c, x, y, rx, ry) { c.beginPath(); c.ellipse(x, y, rx, ry, 0, 0, Math.PI * 2); c.fill(); }
+
+function drawHurdle(c, s, shadow = true) {
+  const dx = s.x2 - s.x1, dy = s.y2 - s.y1, L = hyp(dx, dy), a = Math.atan2(dy, dx);
+  const body = (col, colDark, ox, oy) => {
+    c.save(); c.translate(s.x1 + ox, s.y1 + oy); c.rotate(a);
+    c.fillStyle = col; c.fillRect(0, -1.7, L, 3.4);
+    if (colDark) { c.fillStyle = colDark; for (let t = 7; t < L - 3; t += 8) c.fillRect(t, -1.7, 1.3, 3.4); }
+    c.fillStyle = colDark || col; c.fillRect(-2.2, -2.2, 4.4, 4.4); c.fillRect(L - 2.2, -2.2, 4.4, 4.4);
+    c.restore();
+  };
+  if (shadow) body(COL.shadow, null, 3, 4);
+  body(COL.wood, COL.woodDark, 0, 0);
+}
+
+function drawStatic() {
+  const c = bgx;
+  c.setTransform(1, 0, 0, 1, 0, 0);
+  c.fillStyle = COL.moor; c.fillRect(0, 0, bg.width, bg.height);
+  worldTransform(c);
+  const r = mulberry32(20261109);
+  // moor beyond the wall
+  for (let i = 0; i < 420; i++) {
+    const x = -700 + r() * (W + 1400), y = -700 + r() * (H + 1400), rad = 8 + r() * 30, n = 3 + Math.floor(r() * 3);
+    if (x > F.x0 - 30 && x < F.x1 + 30 && y > F.y0 - 30 && y < 1010) continue;
+    c.fillStyle = r() < 0.55 ? COL.heather : r() < 0.6 ? COL.bracken : COL.moorDark;
+    blob(c, x, y, rad, n, r);
+  }
+  // spectator strip
+  c.fillStyle = COL.verge; c.fillRect(F.x0 - 10, 880, F.x1 - F.x0 + 20, 125);
+  c.fillStyle = COL.gravel; c.fillRect(F.x0 - 10, 922, F.x1 - F.x0 + 20, 44);
+  c.fillStyle = COL.gravel2; for (let i = 0; i < 160; i++) c.fillRect(F.x0 + r() * (F.x1 - F.x0), 924 + r() * 40, 2 + r() * 3, 1.5);
+  // the field
+  c.save(); c.beginPath(); c.rect(F.x0, F.y0, F.x1 - F.x0, F.y1 - F.y0); c.clip();
+  c.fillStyle = COL.grass; c.fillRect(F.x0, F.y0, F.x1 - F.x0, F.y1 - F.y0);
+  c.fillStyle = COL.grassLight; for (let i = 0; i < 26; i++) blob(c, F.x0 + r() * (F.x1 - F.x0), F.y0 + r() * (F.y1 - F.y0), 24 + r() * 46, 5, r);
+  c.fillStyle = COL.tussock; for (let i = 0; i < 170; i++) blob(c, F.x0 + r() * (F.x1 - F.x0), F.y0 + r() * (F.y1 - F.y0), 4 + r() * 11, 3, r);
+  c.strokeStyle = COL.rush; c.lineWidth = 1.3; c.lineCap = 'round';
+  for (let i = 0; i < 70; i++) {
+    const x = F.x0 + r() * (F.x1 - F.x0), y = F.y0 + r() * (F.y1 - F.y0), k = 6 + Math.floor(r() * 6);
+    c.beginPath();
+    for (let j = 0; j < k; j++) { const a = r() * Math.PI * 2, l = 4 + r() * 6; c.moveTo(x, y); c.lineTo(x + Math.cos(a) * l, y + Math.sin(a) * l); }
+    c.stroke();
+  }
+  // worn line where handlers stand
+  c.fillStyle = COL.tussock; ell(c, POST.x, POST.y + 10, 22, 16);
+  c.restore();
+  // dry stone wall
+  const bands = [
+    [F.x0 - WALL_IN, F.y0 - WALL_IN, F.x1 - F.x0 + WALL_IN * 2, WALL_IN * 2, 'h'],
+    [F.x0 - WALL_IN, F.y1 - WALL_IN, F.x1 - F.x0 + WALL_IN * 2, WALL_IN * 2, 'h'],
+    [F.x0 - WALL_IN, F.y0 - WALL_IN, WALL_IN * 2, F.y1 - F.y0 + WALL_IN * 2, 'v'],
+    [F.x1 - WALL_IN, F.y0 - WALL_IN, WALL_IN * 2, F.y1 - F.y0 + WALL_IN * 2, 'v']
+  ];
+  c.fillStyle = COL.shadow; for (const [x, y, w, h] of bands) c.fillRect(x + 5, y + 6, w, h);
+  c.fillStyle = COL.wallBase; for (const [x, y, w, h] of bands) c.fillRect(x, y, w, h);
+  for (const [x, y, w, h, o] of bands) {
+    if (o === 'h') for (let p = x; p < x + w - 2;) { const sw = 3.5 + r() * 5; c.fillStyle = COL.stones[Math.floor(r() * 5)]; c.fillRect(p + 0.5, y + 1.5 + r() * 2, Math.min(sw, x + w - p) - 1, h - 3 - r() * 2); p += sw; }
+    else for (let p = y; p < y + h - 2;) { const sw = 3.5 + r() * 5; c.fillStyle = COL.stones[Math.floor(r() * 5)]; c.fillRect(x + 1.5 + r() * 2, p + 0.5, w - 3 - r() * 2, Math.min(sw, y + h - p) - 1); p += sw; }
+  }
+  // spectators along the bottom wall
+  const coats = ['#3c4a5e', '#7a3b33', '#5c6a3e', '#2f3a33', '#8a6d3b', '#4d3f55', '#9a9384', '#a24e2c'];
+  for (let x = 540; x < 1540; x += 10 + r() * 26) {
+    if (r() < 0.25) { x += 40; continue; }
+    const y = 893 + r() * 5;
+    c.fillStyle = COL.shadow; ell(c, x + 3, y + 4, 7, 5);
+    c.fillStyle = coats[Math.floor(r() * coats.length)]; ell(c, x, y, 7, 5);
+    c.fillStyle = r() < 0.4 ? COL.cap : r() < 0.5 ? '#2b2724' : ['#c9b48a', '#6b4a35', '#d8d0bf'][Math.floor(r() * 3)];
+    c.beginPath(); c.arc(x, y - 1, 3.6, 0, Math.PI * 2); c.fill();
+    if (r() < 0.08) { c.fillStyle = COL.dogBlack; ell(c, x + 9, y + 9, 6, 2.6); c.fillStyle = COL.dogWhite; ell(c, x + 12, y + 9, 1.6, 2.6); }
+  }
+  // cars, nose to the wall
+  const cars = ['#3f5b3a', '#a63a2e', '#d9d4c7', '#3d4f6b', '#c9a64a', '#55595e', '#e8e4da', '#6d2f3a'];
+  for (let x = 560; x < 1530; x += 34 + r() * 18) {
+    if (r() < 0.18) continue;
+    const col = cars[Math.floor(r() * cars.length)], lr = r() < 0.25, w = lr ? 24 : 21, h = lr ? 42 : 38, y = 926;
+    c.fillStyle = COL.shadow; c.fillRect(x + 3, y + 4, w, h);
+    c.fillStyle = col; c.fillRect(x, y, w, h);
+    c.fillStyle = 'rgba(30,34,40,0.55)'; c.fillRect(x + 2, y + 8, w - 4, 6); c.fillRect(x + 2, y + h - 9, w - 4, 4);
+    c.fillStyle = 'rgba(255,255,255,0.18)'; c.fillRect(x + 2, y + 15, w - 4, h - 25);
+    if (lr) { c.fillStyle = '#2a2d2a'; c.fillRect(x + w / 2 - 4, y + h - 2, 8, 3); }
+  }
+  // the tea tent and the commentary box
+  const tx = 70, ty = 900, tw = 150, th = 80;
+  c.fillStyle = COL.shadow; c.fillRect(tx + 5, ty + 6, tw, th);
+  c.fillStyle = COL.tent; c.fillRect(tx, ty, tw, th);
+  c.fillStyle = COL.tentStripe; for (let i = 0; i < tw; i += 20) c.fillRect(tx + i, ty, 10, th);
+  c.fillStyle = 'rgba(0,0,0,0.12)'; c.fillRect(tx, ty + th / 2, tw, th / 2);
+  c.fillStyle = COL.ink; c.fillRect(tx, ty + th / 2 - 0.8, tw, 1.6);
+  c.strokeStyle = 'rgba(35,37,30,0.55)'; c.lineWidth = 0.8; c.beginPath();
+  for (const [ax, ay, bx, by] of [[tx, ty, tx - 12, ty - 8], [tx + tw, ty, tx + tw + 12, ty - 8], [tx, ty + th, tx - 12, ty + th + 8], [tx + tw, ty + th, tx + tw + 12, ty + th + 8]]) { c.moveTo(ax, ay); c.lineTo(bx, by); }
+  c.stroke();
+  const bx0 = 262, by0 = 904;
+  c.fillStyle = COL.shadow; c.fillRect(bx0 + 4, by0 + 5, 46, 32);
+  c.fillStyle = '#6f6a5f'; c.fillRect(bx0, by0, 46, 32);
+  c.fillStyle = '#8a8478'; c.fillRect(bx0, by0, 46, 15);
+  c.fillStyle = COL.ink; c.fillRect(bx0 + 52, by0 + 6, 2, 22);
+  c.fillStyle = COL.paper; c.beginPath(); c.arc(bx0 + 53, by0 + 6, 4.5, 0, Math.PI * 2); c.fill();
+  c.fillStyle = COL.ink; c.beginPath(); c.arc(bx0 + 53, by0 + 6, 2, 0, Math.PI * 2); c.fill();
+  // course furniture
+  for (const s of STATIC_SEGS) drawHurdle(c, s);
+  c.fillStyle = COL.shadow; c.fillRect(POST.x - 2 + 3, POST.y - 2 + 4, 5, 5);
+  c.fillStyle = COL.paper; c.fillRect(POST.x - 2.5, POST.y - 2.5, 5, 5);
+  // release stake at the top
+  c.fillStyle = COL.shadow; c.fillRect(RELEASE.x + 40 + 3, RELEASE.y - 2 + 4, 4, 4);
+  c.fillStyle = COL.paper; c.fillRect(RELEASE.x + 40, RELEASE.y - 2, 4, 4);
+}
+
+const clouds = [];
+{
+  const r = mulberry32(77);
+  for (let i = 0; i < 4; i++) {
+    const parts = []; const n = 5 + Math.floor(r() * 4);
+    for (let j = 0; j < n; j++) parts.push([(r() - 0.5) * 260, (r() - 0.5) * 120, 50 + r() * 70]);
+    clouds.push({ x: r() * (W + 800) - 400, y: r() * H, parts, v: 5 + r() * 4 });
+  }
+}
+
+const SHEEP_S = 1.2, DOG_S = 1.25, MAN_S = 1.3;
+// shadows fall the same way for everything (light from the north-west)
+function shadowEll(c, x, y, h, rx, ry) {
+  c.save(); c.translate(x + 3, y + 4); c.rotate(h);
+  c.fillStyle = COL.shadow; ell(c, 0, 0, rx, ry);
+  c.restore();
+}
+function drawSheep(c, s) {
+  const sp = hyp(s.vx, s.vy), grazing = sp < 3 && s.fear < 0.1;
+  shadowEll(c, s.x, s.y, s.h, 10.5 * SHEEP_S, 7.2 * SHEEP_S);
+  c.save(); c.translate(s.x, s.y); c.rotate(s.h); c.scale(SHEEP_S, SHEEP_S);
+  const hx = grazing ? 12.6 + Math.sin(s.bob) * 0.4 : 11.2 + Math.sin(s.bob) * 0.7;
+  c.fillStyle = COL.face;
+  ell(c, hx - 1.3, -3.4, 1.9, 1.1); ell(c, hx - 1.3, 3.4, 1.9, 1.1);
+  ell(c, hx, 0, grazing ? 3.6 : 4.2, grazing ? 2.9 : 3.3);
+  c.fillStyle = COL.muzzle; ell(c, hx + 2.6, 0, 1.6, 1.5);
+  c.strokeStyle = COL.horn; c.lineWidth = 1.4;
+  for (const sg of [-1, 1]) { c.beginPath(); c.arc(hx - 1.6, sg * 3.2, 2, sg < 0 ? Math.PI * 0.2 : -Math.PI * 1.2, sg < 0 ? Math.PI * 1.2 : -Math.PI * 0.2); c.stroke(); }
+  c.fillStyle = COL.wool2; ell(c, 0.6, 0.8, 10, 7);
+  c.fillStyle = COL.wool; ell(c, -0.3, -0.4, 9.5, 6.5);
+  c.fillStyle = COL.smit; c.fillRect(3, -6.2, 2.4, 4.2);
+  if (s.stubborn) { c.fillStyle = COL.raddle; c.beginPath(); c.arc(-4.5, 1.5, 2.6, 0, Math.PI * 2); c.fill(); }
+  c.restore();
+}
+function drawDog(c, d) {
+  const sp = d.run, lying = d.cmd === 'lie' && sp < 25;
+  const len = lying ? 9.5 : sp > 150 ? 12.5 : 11, wid = lying ? 5.4 : sp > 150 ? 4.2 : 4.6;
+  shadowEll(c, d.x, d.y, d.h, len * DOG_S, (wid + 0.6) * DOG_S);
+  c.save(); c.translate(d.x, d.y); c.rotate(d.h); c.scale(DOG_S, DOG_S);
+  const wag = lying ? 0.15 * Math.sin(d.wag * 0.5) : Math.sin(d.wag) * (sp > 150 ? 0.15 : 0.4);
+  c.strokeStyle = COL.dogBlack; c.lineWidth = 2.6; c.lineCap = 'round';
+  const tx1 = -len + 1, tx2 = -len - 8, ty2 = Math.sin(wag) * 7;
+  c.beginPath(); c.moveTo(tx1, 0); c.quadraticCurveTo(tx1 - 4, ty2 * 0.2, tx2, ty2); c.stroke();
+  c.fillStyle = COL.dogWhite; c.beginPath(); c.arc(tx2, ty2, 1.7, 0, Math.PI * 2); c.fill();
+  if (lying) { c.fillStyle = COL.dogWhite; ell(c, len + 3.5, -2.4, 2.6, 1.3); ell(c, len + 3.5, 2.4, 2.6, 1.3); }
+  c.fillStyle = COL.dogBlack; ell(c, 0, 0, len, wid);
+  c.fillStyle = COL.dogWhite; ell(c, len * 0.55, 0, 2.3, wid + 0.5);
+  c.fillStyle = COL.dogBlack;
+  const hx = len * 0.55 + 4.6;
+  ell(c, hx, 0, 3.8, 3.3);
+  c.beginPath(); c.moveTo(hx - 2, -2.2); c.lineTo(hx - 3.6, -4.6); c.lineTo(hx + 0.4, -3); c.fill();
+  c.beginPath(); c.moveTo(hx - 2, 2.2); c.lineTo(hx - 3.6, 4.6); c.lineTo(hx + 0.4, 3); c.fill();
+  c.fillStyle = COL.dogWhite; ell(c, hx + 1.4, 0, 2.6, 0.8); ell(c, hx + 3.3, 0, 1.2, 1.3);
+  c.restore();
+}
+function drawHandler(c, h) {
+  shadowEll(c, h.x, h.y, h.h, 6.5 * MAN_S, 10.5 * MAN_S);
+  c.save(); c.translate(h.x, h.y); c.rotate(h.h); c.scale(MAN_S, MAN_S);
+  c.strokeStyle = COL.crook; c.lineWidth = 1.7; c.lineCap = 'round';
+  c.beginPath(); c.moveTo(4, 9); c.lineTo(12, 13); c.stroke();
+  c.beginPath(); c.arc(13.2, 11.4, 1.9, Math.PI * 0.6, Math.PI * 2.1); c.stroke();
+  c.fillStyle = COL.jacket; ell(c, 0, 0, 6, 10);
+  ell(c, 2.5, -8.6, 3, 2.2); ell(c, 2.5, 8.6, 3, 2.2);
+  c.fillStyle = COL.capDark; ell(c, 3.6, 0, 2.6, 3.9);
+  c.fillStyle = COL.cap; c.beginPath(); c.arc(0, 0, 4.4, 0, Math.PI * 2); c.fill();
+  c.restore();
+}
+function flankGuide(c) {
+  const d = g.dog, f = g.fs;
+  if (g.phase === 'done' || g.phase === 'ready') return;
+  const cmd = d.cmd;
+  c.fillStyle = 'rgba(246,243,234,0.75)';
+  if (cmd === 'bye' || cmd === 'away') {
+    const sg = cmd === 'bye' ? 1 : -1, a0 = Math.atan2(d.y - f.cy, d.x - f.cx);
+    const R = Math.max(d.R, Math.min(hyp(d.x - f.cx, d.y - f.cy), d.R + 200));
+    for (let i = 1; i <= 7; i++) {
+      const a = a0 + sg * i * 0.13, x = f.cx + Math.cos(a) * R, y = f.cy + Math.sin(a) * R;
+      c.save(); c.translate(x, y); c.rotate(a + sg * Math.PI / 2);
+      c.beginPath(); c.moveTo(3.5, 0); c.lineTo(-2.5, -2.6); c.lineTo(-2.5, 2.6); c.closePath(); c.fill();
+      c.restore();
+    }
+  } else if (cmd === 'walk') {
+    const dx = f.cx - d.x, dy = f.cy - d.y, L = hyp(dx, dy) || 1;
+    for (let i = 1; i <= 3; i++) {
+      const t = 10 + i * 9; if (t > L - 30) break;
+      c.save(); c.translate(d.x + dx / L * t, d.y + dy / L * t); c.rotate(Math.atan2(dy, dx));
+      c.beginPath(); c.moveTo(3, 0); c.lineTo(-2.2, -2.4); c.lineTo(-2.2, 2.4); c.closePath(); c.fill();
+      c.restore();
+    }
+  }
+}
+function nextGate() {
+  const G = g.gates;
+  if (g.phase === 'lift' || g.phase === 'fetch' || g.phase === 'outrun' || g.phase === 'ready') return G.fetch.decided ? null : G.fetch;
+  if (g.phase === 'drive') return G.drive;
+  if (g.phase === 'cross') return G.cross;
+  return null;
+}
+function drawFlags(c) {
+  const gt = nextGate();
+  const flag = (x, y) => {
+    c.fillStyle = COL.shadow; c.beginPath(); c.moveTo(x + 3, y + 4); c.lineTo(x + 15, y - 1); c.lineTo(x + 3, y - 6); c.fill();
+    c.fillStyle = COL.red; c.beginPath(); c.moveTo(x, y); c.lineTo(x + 12, y - 5); c.lineTo(x, y - 10); c.fill();
+  };
+  if (gt) for (const s of gt.segs) flag(s.x2, s.y2);
+  if (g.phase === 'pen') flag(PEN.x1, PEN.y0);
+}
+
+function render() {
+  if (!g) return;
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  ctx.drawImage(bg, 0, 0);
+  worldTransform(ctx);
+  drawHurdle(ctx, penGateSeg());
+  drawFlags(ctx);
+  flankGuide(ctx);
+  const sorted = [...g.sheep].sort((a, b) => a.y - b.y);
+  for (const s of sorted) drawSheep(ctx, s);
+  drawHandler(ctx, g.handler);
+  drawDog(ctx, g.dog);
+  // cloud shadows drift over everything
+  ctx.fillStyle = COL.cloud;
+  ctx.beginPath();
+  for (const cl of clouds) for (const [dx, dy, r] of cl.parts) { const x = cl.x + dx, y = cl.y + dy; ctx.moveTo(x + r, y); ctx.arc(x, y, r, 0, Math.PI * 2); }
+  ctx.fill('nonzero');
+  // screen-space labels
+  ctx.setTransform(view.dpr, 0, 0, view.dpr, 0, 0);
+  ctx.textBaseline = 'middle';
+  const shown = g.bubbles.filter(b => g.t >= b.t);
+  for (const b of shown.slice(-1)) {
+    const age = g.t - b.t; if (age > 1.6) continue;
+    const [sx, sy] = toScreen(g.handler.x, g.handler.y);
+    const rise = reduceMotion ? 0 : age * 16;
+    chipText('♪ ' + b.text, sx - 14, sy - 26 - rise, 1 - Math.max(0, age - 1.1) / 0.5, 'italic 600 13px', 'right');
+  }
+  for (const l of g.labels) {
+    const age = g.t - l.t; if (age > 5) continue;
+    const [sx, sy] = toScreen(l.x, l.y);
+    chipText(l.text, sx, sy - 34, 1 - Math.max(0, age - 4) / 1, '700 13px', 'center', l.good ? COL.paper : COL.red, l.good ? COL.ink : COL.paper);
+  }
+}
+function chipText(text, x, y, alpha, font, align, fg = COL.ink, bgc = COL.paper) {
+  ctx.save();
+  ctx.globalAlpha = clamp(alpha, 0, 1);
+  ctx.font = font + ' Cabin, "Gill Sans", Calibri, sans-serif';
+  const w = ctx.measureText(text).width + 14, h = 22;
+  let x0 = align === 'right' ? x - w : align === 'center' ? x - w / 2 : x;
+  x0 = clamp(x0, 4, view.cw - w - 4);
+  const y0 = clamp(y - h / 2, 4, view.ch - h - 4);
+  ctx.fillStyle = COL.ink; ctx.fillRect(x0 + 2, y0 + 2, w, h);
+  ctx.fillStyle = bgc; ctx.fillRect(x0, y0, w, h);
+  ctx.strokeStyle = COL.ink; ctx.lineWidth = 1.5; ctx.strokeRect(x0 + 0.75, y0 + 0.75, w - 1.5, h - 1.5);
+  ctx.fillStyle = fg; ctx.textAlign = 'left'; ctx.fillText(text, x0 + 7, y0 + h / 2 + 0.5);
+  ctx.restore();
+}
+
+/* ---------------- HUD ---------------- */
+const elPhase = document.getElementById('phase-name'), elHint = document.getElementById('phase-hint');
+const elClock = document.getElementById('clock'), elDog = document.getElementById('dogname');
+const padBtns = [...document.querySelectorAll('.k')];
+let hudT = 0;
+function hud() {
+  const [name, hint] = PHASES[g.phase];
+  if (elPhase.textContent !== name) elPhase.textContent = name;
+  const h2 = g.phase === 'done' ? hint : g.attract ? "Last year's winner" : (g.auto ? "Demo: whistle to take over" : hint);
+  if (elHint.textContent !== h2) elHint.textContent = h2;
+  elClock.textContent = fmtClock(TIME_LIMIT - g.clock);
+  elDog.textContent = g.dogName;
+  for (const b of padBtns) b.classList.toggle('on', b.dataset.cmd === g.dog.cmd && g.phase !== 'done');
+}
+
+/* ---------------- flow ---------------- */
+const elIntro = document.getElementById('intro'), elResult = document.getElementById('result');
+let mode = 'attract';
+function loadBest() { try { return +(localStorage.getItem('comebye-best') || 0); } catch (e) { return 0; } }
+function saveBest(v) { try { localStorage.setItem('comebye-best', String(v)); } catch (e) { /* storage off */ } }
+function showBest() {
+  const el = document.getElementById('best-line');
+  el.textContent = best > 0 ? `Your best on this field: ${best} out of 90. Sound: whistles, wind, ewes and the odd curlew.` : 'Sound: whistles, wind, ewes and the odd curlew.';
+}
+
+function startAttract() {
+  mode = 'attract';
+  newGame({ auto: true, attract: true });
+  paReset(); say('attract', 3);
+  elIntro.hidden = false; elResult.hidden = true;
+}
+function startRun(auto) {
+  audioInit();
+  mode = 'play';
+  newGame({ auto });
+  paReset(); say('ready', 3);
+  elIntro.hidden = true; elResult.hidden = true;
+  canvas.focus?.();
+}
+function onRunEnd() {
+  if (g.attract) { setTimeout(() => { if (mode === 'attract') startAttract(); }, 1500); return; }
+  const { total, max } = finalCard();
+  const wasAuto = g.auto;
+  if (!wasAuto && total > best) { best = total; saveBest(best); }
+  buildCard(total, max, wasAuto);
+  elResult.hidden = false;
+  document.getElementById('again').focus();
+}
+
+const FIRST = ['Bob', 'Margaret', 'Alan', 'Jean', 'Tom', 'Sheila', 'Ian', 'Kath', 'Dave', 'Linda', 'Harold', 'Wendy', 'Peter', 'Ruth', 'Gareth', 'Elsie', 'John', 'Sue'];
+const SUR = ['Haworth', 'Duckworth', 'Taylor', 'Holt', 'Pilling', 'Hargreaves', 'Nuttall', 'Lord', 'Whittaker', 'Cunliffe', 'Greenwood', 'Barnes', 'Heap', 'Riley', 'Schofield'];
+const PLACE = ['Waterfoot', 'Bacup', 'Rawtenstall', 'Haslingden', 'Helmshore', 'Whitworth', 'Crawshawbooth', 'Stacksteads', 'Edenfield', 'Todmorden', 'Ramsbottom', 'Holcombe'];
+const RIVAL_DOGS = ['Glen', 'Roy', 'Cap', 'Fly', 'Meg', 'Ben', 'Spot', 'Moss', 'Nell', 'Sweep', 'Bill', 'Jed'];
+const ROSETTE = [['#b3362c', '#8e2a22', '1st'], ['#2f5596', '#244276', '2nd'], ['#d9a92b', '#b58a1d', '3rd'], ['#3f7a46', '#2f5f35', '4th']];
+
+function buildCard(total, max, wasAuto) {
+  const rows = document.getElementById('card-rows');
+  rows.replaceChildren();
+  const addRow = (cells, cls, note) => {
+    const tr = document.createElement('tr'); if (cls) tr.className = cls;
+    cells.forEach((v, i) => {
+      const td = document.createElement('td'); td.textContent = v;
+      if (i === 0 && note) { const sp = document.createElement('span'); sp.className = 'note'; sp.textContent = note; td.appendChild(sp); }
+      tr.appendChild(td);
+    });
+    rows.appendChild(tr);
+  };
+  for (const k of ['outrun', 'lift', 'fetch', 'drive', 'pen']) {
+    const p = g.score[k];
+    const notes = [...new Set(p.notes)];
+    addRow([p.label, p.max, p.lost, p.max - p.lost], '', notes.length ? notes.join(', ') : (p.lost === 0 ? 'clean' : ''));
+  }
+  addRow(['Shed', '', '', ''], 'shed', 'not run today, the judge has a bus to catch');
+  addRow(['Total', max, max - total, total], 'total');
+  const why = g.result === 'penned' ? 'Penned' : g.result === 'time' ? 'Timed out' : 'Retired';
+  document.getElementById('card-meta').textContent = `Judge: Mr H. Ashworth · ${g.dogName} · ${why} at ${fmtClock(g.clock)}${wasAuto ? ' · demo run' : ''}`;
+  // the rest of the field
+  const rr = mulberry32(g.seed ^ 0x5eed);
+  const rivals = [];
+  for (let i = 0; i < 30; i++) {
+    const z = (rr() + rr() + rr() - 1.5) * 2;
+    const sc = rr() < 0.12 ? -1 : Math.round(clamp(52 + z * 15, 8, 84));
+    rivals.push({ name: `${FIRST[Math.floor(rr() * FIRST.length)]} ${SUR[Math.floor(rr() * SUR.length)]} & ${RIVAL_DOGS[Math.floor(rr() * RIVAL_DOGS.length)]}`, place: PLACE[Math.floor(rr() * PLACE.length)], sc });
+  }
+  rivals.sort((a, b) => b.sc - a.sc);
+  const retired = g.result === 'retired';
+  const place = retired ? null : 1 + rivals.filter(r => r.sc > total).length;
+  const top = rivals[0];
+  let txt;
+  if (retired) txt = `Retired. ${top.name} (${top.place}) won it with ${top.sc}.`;
+  else if (place === 1) txt = `You won it, ${total} out of ${max}, from a field of 31. ${top.name.split(' & ')[0]} from ${top.place} came second with ${top.sc} and is not speaking to anyone.`;
+  else txt = `Placed ${ordinal(place)} of 31 with ${total}. Won by ${top.name} (${top.place}) with ${top.sc}.`;
+  document.getElementById('placing-text').textContent = txt;
+  const pct = total / max;
+  const verdict = retired ? 'Back to the trailer, and better luck at Holcombe.' :
+    pct >= 0.9 ? 'Nobody gets that. The judge is checking his pencil.' :
+    pct >= 0.8 ? "That'll take some beating." :
+    pct >= 0.65 ? 'A very respectable run.' :
+    pct >= 0.45 ? 'Some good work in there. And some sheep.' :
+    pct > 0 ? 'The sheep win this round.' : 'The sheep would like to thank everyone for coming.';
+  document.getElementById('verdict').textContent = verdict;
+  drawRosette(place && place <= 4 ? ROSETTE[place - 1] : null);
+}
+function drawRosette(spec) {
+  const c = document.getElementById('rosette').getContext('2d');
+  c.setTransform(2, 0, 0, 2, 0, 0); c.clearRect(0, 0, 72, 102);
+  if (!spec) {
+    c.strokeStyle = COL.ink; c.lineWidth = 1.5; c.setLineDash([3, 3]);
+    c.beginPath(); c.arc(36, 34, 26, 0, Math.PI * 2); c.stroke(); c.setLineDash([]);
+    c.fillStyle = COL.ink; c.font = 'italic 600 10px Cabin, sans-serif'; c.textAlign = 'center'; c.textBaseline = 'middle';
+    c.fillText('no rosette', 36, 31); c.fillText('today', 36, 43);
+    return;
+  }
+  const [col, dark, label] = spec;
+  c.fillStyle = dark;
+  for (const s of [-1, 1]) { c.beginPath(); c.moveTo(36 + s * 4, 50); c.lineTo(36 + s * 20, 96); c.lineTo(36 + s * 13, 90); c.lineTo(36 + s * 7, 99); c.lineTo(36 - s * 4 + s * 2, 54); c.closePath(); c.fill(); }
+  c.fillStyle = col; c.beginPath();
+  for (let i = 0; i <= 40; i++) { const a = i / 40 * Math.PI * 2, r = i % 2 ? 26 : 32; c.lineTo(36 + Math.cos(a) * r, 34 + Math.sin(a) * r); }
+  c.fill();
+  c.fillStyle = dark; c.beginPath(); c.arc(36, 34, 21, 0, Math.PI * 2); c.fill();
+  c.fillStyle = COL.paper; c.beginPath(); c.arc(36, 34, 16, 0, Math.PI * 2); c.fill();
+  c.fillStyle = COL.ink; c.font = '15px "Alfa Slab One", Georgia, serif'; c.textAlign = 'center'; c.textBaseline = 'middle';
+  c.fillText(label, 36, 35);
+}
+
+/* ---------------- input ---------------- */
+const KEYMAP = { ArrowRight: 'bye', KeyD: 'bye', ArrowLeft: 'away', KeyA: 'away', ArrowUp: 'walk', KeyW: 'walk', ArrowDown: 'lie', KeyS: 'lie', Space: 'lie' };
+let retireArm = 0;
+addEventListener('keydown', e => {
+  if (e.ctrlKey || e.metaKey || e.altKey) return;
+  if (!elIntro.hidden) { if (e.code === 'Enter' && document.activeElement?.tagName !== 'BUTTON') { e.preventDefault(); startRun(false); } return; }
+  if (!elResult.hidden) return;
+  const cmd = KEYMAP[e.code];
+  if (cmd) { e.preventDefault(); if (!e.repeat) issue(cmd, true); return; }
+  if (e.code === 'Escape') { e.preventDefault(); armRetire(); }
+});
+for (const b of padBtns) b.addEventListener('pointerdown', e => { e.preventDefault(); if (mode === 'play') { audioInit(); issue(b.dataset.cmd, true); } });
+for (const b of padBtns) b.addEventListener('click', e => { if (e.detail === 0 && mode === 'play') issue(b.dataset.cmd, true); });
+const elRetire = document.getElementById('retire');
+function armRetire() {
+  if (mode !== 'play' || !g || g.phase === 'done') return;
+  if (performance.now() - retireArm < 2500) { retireArm = 0; elRetire.textContent = 'Retire'; endRun('retired'); return; }
+  retireArm = performance.now(); elRetire.textContent = 'Sure?';
+  setTimeout(() => { if (retireArm && performance.now() - retireArm >= 2400) { retireArm = 0; elRetire.textContent = 'Retire'; } }, 2500);
+}
+elRetire.addEventListener('click', armRetire);
+const elMute = document.getElementById('mute');
+elMute.addEventListener('click', () => {
+  audio.on = !audio.on; audioInit();
+  if (audio.master) audio.master.gain.setTargetAtTime(audio.on ? 0.9 : 0, audio.ctx.currentTime, 0.05);
+  elMute.textContent = audio.on ? 'Sound on' : 'Sound off'; elMute.setAttribute('aria-pressed', String(!audio.on));
+});
+document.getElementById('go').addEventListener('click', () => startRun(false));
+document.getElementById('demo').addEventListener('click', () => startRun(true));
+document.getElementById('again').addEventListener('click', () => startRun(false));
+document.getElementById('to-poster').addEventListener('click', () => { startAttract(); showBest(); });
+
+/* ---------------- loop ---------------- */
+let last = performance.now(), acc = 0;
+function frame(now) {
+  const dt = Math.min(0.1, (now - last) / 1000); last = now;
+  if (g && !document.hidden) {
+    acc += dt;
+    while (acc >= STEP) { step(STEP); acc -= STEP; }
+    if (!reduceMotion) for (const cl of clouds) { cl.x += cl.v * dt; if (cl.x > W + 400) cl.x = -400; }
+    render();
+    hudT -= dt; if (hudT <= 0) { hudT = 0.1; hud(); }
+  }
+  requestAnimationFrame(frame);
+}
+
+function boot(data) {
+  best = Math.max(loadBest(), data?.best || 0);
+  showBest();
+  addEventListener('resize', layout);
+  layout();
+  if (document.fonts?.ready) document.fonts.ready.then(() => drawStatic());
+  startAttract();
+  requestAnimationFrame(t => { last = t; frame(t); });
+}
+window.claude?.hot?.snapshot?.(() => ({ best }));
+window.claude?.hot?.ready ? window.claude.hot.ready(boot) : boot(window.claude?.hot?.data ?? {});
+
+// test hooks
+window.__comebye = { newGame: o => { newGame(o); return g; }, step, issue, get g() { return g; }, finalCard, flockStats };
+})();
+</script>
